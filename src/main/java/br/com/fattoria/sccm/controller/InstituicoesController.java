@@ -16,8 +16,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.fattoria.sccm.persistence.model.Equipamento;
-import br.com.fattoria.sccm.persistence.repository.EquipamentoRepository;
+import br.com.fattoria.sccm.persistence.model.Instituicao;
+import br.com.fattoria.sccm.persistence.repository.InstituicaoRepository;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -25,57 +25,57 @@ import io.swagger.annotations.ApiResponses;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
 
 @RestController
-@Api(value = "Equipamentos")
-@RequestMapping(value = "/equipamentos")
-public class EquipamentosController implements CRUDApi<Equipamento, Long> {
+@Api(value = "Instituições")
+@RequestMapping(value = "/instituicoes")
+public class InstituicoesController implements CRUDApi<Instituicao, Long> {
 
-    private static final Logger log = LoggerFactory.getLogger(EquipamentosController.class);
+    private static final Logger log = LoggerFactory.getLogger(InstituicoesController.class);
 
-    private final EquipamentoRepository equipamentoRepository;
+    private final InstituicaoRepository instituicaoRepository;
 
     @org.springframework.beans.factory.annotation.Autowired
-    public EquipamentosController(EquipamentoRepository equipamentoRepository) {
-        this.equipamentoRepository = equipamentoRepository;
+    public InstituicoesController(InstituicaoRepository instituicaoRepository) {
+        this.instituicaoRepository = instituicaoRepository;
     }
 
     @RolesAllowed("user")
     @GetMapping(value = "/listar", produces = MediaType.APPLICATION_JSON_VALUE)
-    @ApiOperation(value = "Retorna uma lista de equipamentos")
+    @ApiOperation(value = "Retorna uma lista de instituições")
     @ApiResponses(value = {
-        @ApiResponse(code = 200, message = "Retorna a lista de equipamentos"),
+        @ApiResponse(code = 200, message = "Retorna a lista de instituicoes"),
     })
-	public List<Equipamento> getAll() {
+	public List<Instituicao> getAll() {
     	 
-    	 List<Equipamento> lista = (List<Equipamento>) equipamentoRepository.findAll();
+    	 List<Instituicao> lista = (List<Instituicao>) instituicaoRepository.findAll();
     	 
          return lista;
 	}
     
     @RolesAllowed("user")
-    @GetMapping(value = "/equipamentos/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    @ApiOperation(value = "Retorna um equipamento")
+    @GetMapping(value = "/instituicoes/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiOperation(value = "Retorna uma instituição")
     @ApiResponses(value = {
-        @ApiResponse(code = 200, message = "Retorna um equipamento"),
+        @ApiResponse(code = 200, message = "Retorna uma instituição"),
     })
-	public Optional<Equipamento> getById(@PathVariable Long id) {
+	public Optional<Instituicao> getById(@PathVariable Long id) {
     	 
-    	Optional<Equipamento> equipamento = equipamentoRepository.findById(id);
+    	Optional<Instituicao> optional = instituicaoRepository.findById(id);
     	 
-         return equipamento;
+         return optional;
 	}
     
     @RolesAllowed("user")
     @PostMapping(value = "/salvar", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-    @ApiOperation(value = "Salva um equipamento")
-    public Equipamento save(@Valid @RequestBody Equipamento equipamento){
-    	return equipamentoRepository.save(equipamento);
+    @ApiOperation(value = "Salva uma instituição")
+    public Instituicao save(@Valid @RequestBody Instituicao instituicao){
+    	return instituicaoRepository.save(instituicao);
     }
     
     @RolesAllowed("user")
     @DeleteMapping(value = "/deletar", produces = MediaType.APPLICATION_JSON_VALUE)
-    @ApiOperation(value = "Deleta um equipamento")
+    @ApiOperation(value = "Deleta uma instituição")
     public void delete(@PathVariable Long id){
-    	equipamentoRepository.deleteById(id);
+    	instituicaoRepository.deleteById(id);
     }
 
 }

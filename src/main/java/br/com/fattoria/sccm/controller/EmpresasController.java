@@ -16,8 +16,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.fattoria.sccm.persistence.model.Equipamento;
-import br.com.fattoria.sccm.persistence.repository.EquipamentoRepository;
+import br.com.fattoria.sccm.persistence.model.Empresa;
+import br.com.fattoria.sccm.persistence.repository.EmpresaRepository;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -25,57 +25,57 @@ import io.swagger.annotations.ApiResponses;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
 
 @RestController
-@Api(value = "Equipamentos")
-@RequestMapping(value = "/equipamentos")
-public class EquipamentosController implements CRUDApi<Equipamento, Long> {
+@Api(value = "Empresas")
+@RequestMapping(value = "/empresas")
+public class EmpresasController implements CRUDApi<Empresa, Long> {
 
-    private static final Logger log = LoggerFactory.getLogger(EquipamentosController.class);
+    private static final Logger log = LoggerFactory.getLogger(EmpresasController.class);
 
-    private final EquipamentoRepository equipamentoRepository;
+    private final EmpresaRepository empresaRepository;
 
     @org.springframework.beans.factory.annotation.Autowired
-    public EquipamentosController(EquipamentoRepository equipamentoRepository) {
-        this.equipamentoRepository = equipamentoRepository;
+    public EmpresasController(EmpresaRepository EmpresaRepository) {
+        this.empresaRepository = EmpresaRepository;
     }
 
     @RolesAllowed("user")
     @GetMapping(value = "/listar", produces = MediaType.APPLICATION_JSON_VALUE)
-    @ApiOperation(value = "Retorna uma lista de equipamentos")
+    @ApiOperation(value = "Retorna uma lista de tipos de empresa")
     @ApiResponses(value = {
-        @ApiResponse(code = 200, message = "Retorna a lista de equipamentos"),
+        @ApiResponse(code = 200, message = "Retorna a lista de empresas"),
     })
-	public List<Equipamento> getAll() {
+	public List<Empresa> getAll() {
     	 
-    	 List<Equipamento> lista = (List<Equipamento>) equipamentoRepository.findAll();
+    	 List<Empresa> lista = (List<Empresa>) empresaRepository.findAll();
     	 
          return lista;
 	}
     
     @RolesAllowed("user")
-    @GetMapping(value = "/equipamentos/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    @ApiOperation(value = "Retorna um equipamento")
+    @GetMapping(value = "/empresas/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiOperation(value = "Retorna um tipo de empresa")
     @ApiResponses(value = {
-        @ApiResponse(code = 200, message = "Retorna um equipamento"),
+        @ApiResponse(code = 200, message = "Retorna uma empresa"),
     })
-	public Optional<Equipamento> getById(@PathVariable Long id) {
+	public Optional<Empresa> getById(@PathVariable Long id) {
     	 
-    	Optional<Equipamento> equipamento = equipamentoRepository.findById(id);
+    	Optional<Empresa> optional = empresaRepository.findById(id);
     	 
-         return equipamento;
+         return optional;
 	}
     
     @RolesAllowed("user")
     @PostMapping(value = "/salvar", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-    @ApiOperation(value = "Salva um equipamento")
-    public Equipamento save(@Valid @RequestBody Equipamento equipamento){
-    	return equipamentoRepository.save(equipamento);
+    @ApiOperation(value = "Salva um tipo de empresa")
+    public Empresa save(@Valid @RequestBody Empresa Empresa){
+    	return empresaRepository.save(Empresa);
     }
     
     @RolesAllowed("user")
     @DeleteMapping(value = "/deletar", produces = MediaType.APPLICATION_JSON_VALUE)
-    @ApiOperation(value = "Deleta um equipamento")
+    @ApiOperation(value = "Deleta um tipo empresa")
     public void delete(@PathVariable Long id){
-    	equipamentoRepository.deleteById(id);
+    	empresaRepository.deleteById(id);
     }
 
 }

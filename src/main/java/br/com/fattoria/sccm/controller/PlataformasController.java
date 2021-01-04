@@ -16,8 +16,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.fattoria.sccm.persistence.model.Equipamento;
-import br.com.fattoria.sccm.persistence.repository.EquipamentoRepository;
+import br.com.fattoria.sccm.persistence.model.Plataforma;
+import br.com.fattoria.sccm.persistence.repository.PlataformaRepository;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -25,57 +25,57 @@ import io.swagger.annotations.ApiResponses;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
 
 @RestController
-@Api(value = "Equipamentos")
-@RequestMapping(value = "/equipamentos")
-public class EquipamentosController implements CRUDApi<Equipamento, Long> {
+@Api(value = "Plataformas")
+@RequestMapping(value = "/plataformas")
+public class PlataformasController implements CRUDApi<Plataforma, Long> {
 
-    private static final Logger log = LoggerFactory.getLogger(EquipamentosController.class);
+    private static final Logger log = LoggerFactory.getLogger(PlataformasController.class);
 
-    private final EquipamentoRepository equipamentoRepository;
+    private final PlataformaRepository plataformaRepository;
 
     @org.springframework.beans.factory.annotation.Autowired
-    public EquipamentosController(EquipamentoRepository equipamentoRepository) {
-        this.equipamentoRepository = equipamentoRepository;
+    public PlataformasController(PlataformaRepository PlataformaRepository) {
+        this.plataformaRepository = PlataformaRepository;
     }
 
     @RolesAllowed("user")
     @GetMapping(value = "/listar", produces = MediaType.APPLICATION_JSON_VALUE)
-    @ApiOperation(value = "Retorna uma lista de equipamentos")
+    @ApiOperation(value = "Retorna uma lista de plataformas")
     @ApiResponses(value = {
-        @ApiResponse(code = 200, message = "Retorna a lista de equipamentos"),
+        @ApiResponse(code = 200, message = "Retorna a lista de plataformas"),
     })
-	public List<Equipamento> getAll() {
+	public List<Plataforma> getAll() {
     	 
-    	 List<Equipamento> lista = (List<Equipamento>) equipamentoRepository.findAll();
+    	 List<Plataforma> lista = (List<Plataforma>) plataformaRepository.findAll();
     	 
          return lista;
 	}
     
     @RolesAllowed("user")
-    @GetMapping(value = "/equipamentos/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    @ApiOperation(value = "Retorna um equipamento")
+    @GetMapping(value = "/plataformas/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiOperation(value = "Retorna uma plataforma")
     @ApiResponses(value = {
-        @ApiResponse(code = 200, message = "Retorna um equipamento"),
+        @ApiResponse(code = 200, message = "Retorna uma plataforma"),
     })
-	public Optional<Equipamento> getById(@PathVariable Long id) {
+	public Optional<Plataforma> getById(@PathVariable Long id) {
     	 
-    	Optional<Equipamento> equipamento = equipamentoRepository.findById(id);
+    	Optional<Plataforma> optional = plataformaRepository.findById(id);
     	 
-         return equipamento;
+         return optional;
 	}
     
     @RolesAllowed("user")
     @PostMapping(value = "/salvar", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-    @ApiOperation(value = "Salva um equipamento")
-    public Equipamento save(@Valid @RequestBody Equipamento equipamento){
-    	return equipamentoRepository.save(equipamento);
+    @ApiOperation(value = "Salva uma plataforma")
+    public Plataforma save(@Valid @RequestBody Plataforma Plataforma){
+    	return plataformaRepository.save(Plataforma);
     }
     
     @RolesAllowed("user")
     @DeleteMapping(value = "/deletar", produces = MediaType.APPLICATION_JSON_VALUE)
-    @ApiOperation(value = "Deleta um equipamento")
+    @ApiOperation(value = "Deleta uma plataforma")
     public void delete(@PathVariable Long id){
-    	equipamentoRepository.deleteById(id);
+    	plataformaRepository.deleteById(id);
     }
 
 }
