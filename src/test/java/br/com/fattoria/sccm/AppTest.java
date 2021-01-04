@@ -1,4 +1,4 @@
-package br.com.fattoria.fitoteca;
+package br.com.fattoria.sccm;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

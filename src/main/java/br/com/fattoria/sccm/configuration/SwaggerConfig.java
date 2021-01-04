@@ -1,8 +1,12 @@
 package br.com.fattoria.sccm.configuration;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.util.StringUtils;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
@@ -10,8 +14,10 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupp
 
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.RequestHandlerSelectors;
+import springfox.documentation.builders.ResponseBuilder;
 import springfox.documentation.service.ApiInfo;
 import springfox.documentation.service.Contact;
+import springfox.documentation.service.Response;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
@@ -20,14 +26,17 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @EnableSwagger2
 public class SwaggerConfig extends WebMvcConfigurationSupport {
 
-//	private List<Response> responseMessageForGET() {
-//		return new ArrayList<Response>() {
-//			{
-//				add(new ResponseBuilder().code("500").description("500 message").build());
-//				add(new ResponseBuilder().code("403").description("Forbidden!").build());
-//			}
-//		};
-//	}
+	private List<Response> responseMessageForGET() {
+		List<Response> arrayList = new ArrayList();
+		
+		arrayList.add(new ResponseBuilder().code("200").description("OK").build());
+		arrayList.add(new ResponseBuilder().code("401").description("Unauthorized!").build());
+		arrayList.add(new ResponseBuilder().code("403").description("Forbidden!").build());
+		arrayList.add(new ResponseBuilder().code("404").description("Not Found!").build());
+		arrayList.add(new ResponseBuilder().code("500").description("500 message").build());
+		
+		return arrayList;
+	}
 
 	private final String baseUrl;
 
@@ -73,6 +82,8 @@ public class SwaggerConfig extends WebMvcConfigurationSupport {
 	public Docket customImplementation() {
 		return new Docket(DocumentationType.SWAGGER_2).select()
 				.apis(RequestHandlerSelectors.basePackage("br.com.fattoria.sccm.controller")).build()
+				.useDefaultResponseMessages(false)
+		        .globalResponses(HttpMethod.GET, responseMessageForGET())
 				.apiInfo(apiInfo());
 	}
 

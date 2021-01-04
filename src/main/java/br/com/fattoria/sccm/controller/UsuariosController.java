@@ -2,6 +2,7 @@ package br.com.fattoria.sccm.controller;
 
 import java.util.List;
 
+import javax.annotation.security.RolesAllowed;
 import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
@@ -16,7 +17,6 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
-
 
 @RestController
 @Api(value = "Usuarios")
@@ -33,13 +33,14 @@ public class UsuariosController {
         this.usuarioRepository = usuarioRepository;
     }
 
+    @RolesAllowed("user")
+    @GetMapping(value = "/usuarios", produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "Retorna uma lista de usuarios")
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "Retorna a lista de usuarios"),
         @ApiResponse(code = 403, message = "Você não tem permissão para acessar este recurso"),
         @ApiResponse(code = 500, message = "Foi gerada uma exceção"),
     })
-    @GetMapping(value = "/usuarios", produces = MediaType.APPLICATION_JSON_VALUE)
 	public List<Usuario> getAllUsers() {
     	 
     	 List<Usuario> lista = (List<Usuario>) usuarioRepository.findAll();
