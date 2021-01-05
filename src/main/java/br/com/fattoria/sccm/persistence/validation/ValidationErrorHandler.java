@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 
@@ -27,7 +26,7 @@ public class ValidationErrorHandler {
 	
 	@ResponseStatus(code = HttpStatus.BAD_REQUEST)
 	@ExceptionHandler(MethodArgumentNotValidException.class)
-	public List<ValidationMessage> handlerMethodArgumentNotValid(MethodArgumentNotValidException argumentNotValidException){
+	public List<ValidationMessage> handlerMethodArgumentNotValid(final MethodArgumentNotValidException argumentNotValidException){
 		
 		List<ValidationMessage> validationMessages = new ArrayList<ValidationMessage>();
 		
@@ -45,7 +44,7 @@ public class ValidationErrorHandler {
 	
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
     @ExceptionHandler(ConstraintViolationException.class)
-    public @ResponseBody List<ValidationMessage> handleConstraintViolation(HttpServletRequest req, final ConstraintViolationException exception) {
+    public @ResponseBody List<ValidationMessage> handleConstraintViolation(final ConstraintViolationException exception) {
     	
        List<ValidationMessage> validationMessages = new ArrayList<ValidationMessage>();
        
