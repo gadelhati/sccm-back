@@ -38,8 +38,8 @@ public class PlataformasController implements CRUDApi<Plataforma, Long> {
         this.plataformaRepository = PlataformaRepository;
     }
 
-    @RolesAllowed("user")
-    @GetMapping(value = "/listar", produces = MediaType.APPLICATION_JSON_VALUE)
+//    @RolesAllowed("user")
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "Retorna uma lista de plataformas")
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "Retorna a lista de plataformas"),
@@ -51,8 +51,8 @@ public class PlataformasController implements CRUDApi<Plataforma, Long> {
          return lista;
 	}
     
-    @RolesAllowed("user")
-    @GetMapping(value = "/plataformas/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+//    @RolesAllowed("user")
+    @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "Retorna uma plataforma")
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "Retorna uma plataforma"),
@@ -64,15 +64,15 @@ public class PlataformasController implements CRUDApi<Plataforma, Long> {
          return optional;
 	}
     
-    @RolesAllowed("user")
-    @PostMapping(value = "/salvar", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+//    @RolesAllowed("user")
+    @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "Salva uma plataforma")
     public Plataforma save(@Valid @RequestBody Plataforma Plataforma){
     	return plataformaRepository.save(Plataforma);
     }
     
-    @RolesAllowed("user")
-    @DeleteMapping(value = "/deletar", produces = MediaType.APPLICATION_JSON_VALUE)
+//    @RolesAllowed("user")
+    @DeleteMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "Deleta uma plataforma")
     public void delete(@PathVariable Long id){
     	plataformaRepository.deleteById(id);

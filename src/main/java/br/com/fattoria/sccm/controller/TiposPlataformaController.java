@@ -38,9 +38,9 @@ public class TiposPlataformaController implements CRUDApi<TipoPlataforma, Long> 
         this.tipoPlataformaRepository = tipoPlataformaRepository;
     }
 
-    @RolesAllowed("user")
-    @GetMapping(value = "/listar", produces = MediaType.APPLICATION_JSON_VALUE)
-    @ApiOperation(value = "Retorna uma lista de instituições")
+//    @RolesAllowed("user")
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiOperation(value = "Retorna uma lista de tipos de plataforma")
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "Retorna a lista de tipos de plataformas"),
     })
@@ -51,11 +51,11 @@ public class TiposPlataformaController implements CRUDApi<TipoPlataforma, Long> 
          return lista;
 	}
     
-    @RolesAllowed("user")
-    @GetMapping(value = "/tipos_plataformas/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+//    @RolesAllowed("user")
+    @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "Retorna um tipo de plataforma")
     @ApiResponses(value = {
-        @ApiResponse(code = 200, message = "Retorna uma plataforma"),
+        @ApiResponse(code = 200, message = "Retorna um tipo de plataforma"),
     })
 	public Optional<TipoPlataforma> getById(@PathVariable Long id) {
     	 
@@ -64,15 +64,15 @@ public class TiposPlataformaController implements CRUDApi<TipoPlataforma, Long> 
          return optional;
 	}
     
-    @RolesAllowed("user")
-    @PostMapping(value = "/salvar", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+//    @RolesAllowed("user")
+    @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "Salva um tipo de plataforma")
     public TipoPlataforma save(@Valid @RequestBody TipoPlataforma tipoPlataforma){
     	return tipoPlataformaRepository.save(tipoPlataforma);
     }
     
-    @RolesAllowed("user")
-    @DeleteMapping(value = "/deletar", produces = MediaType.APPLICATION_JSON_VALUE)
+//    @RolesAllowed("user")
+    @DeleteMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "Deleta um tipo de plataforma")
     public void delete(@PathVariable Long id){
     	tipoPlataformaRepository.deleteById(id);

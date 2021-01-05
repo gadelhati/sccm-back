@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpMethod;
 import org.springframework.util.StringUtils;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
@@ -24,10 +25,11 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 @Configuration
 @EnableSwagger2
+@Import({springfox.documentation.spring.data.rest.configuration.SpringDataRestConfiguration.class})
 public class SwaggerConfig extends WebMvcConfigurationSupport {
 
 	private List<Response> responseMessageForGET() {
-		List<Response> arrayList = new ArrayList();
+		List<Response> arrayList = new ArrayList<Response>();
 		
 		arrayList.add(new ResponseBuilder().code("200").description("OK").build());
 		arrayList.add(new ResponseBuilder().code("401").description("Unauthorized!").build());
@@ -81,7 +83,7 @@ public class SwaggerConfig extends WebMvcConfigurationSupport {
 	@Bean
 	public Docket customImplementation() {
 		return new Docket(DocumentationType.SWAGGER_2).select()
-				.apis(RequestHandlerSelectors.basePackage("br.com.fattoria.sccm.controller")).build()
+				.apis(RequestHandlerSelectors.any()).build()//basePackage("br.com.fattoria.sccm.controller")
 				.useDefaultResponseMessages(false)
 		        .globalResponses(HttpMethod.GET, responseMessageForGET())
 				.apiInfo(apiInfo());

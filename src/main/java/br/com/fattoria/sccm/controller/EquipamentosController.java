@@ -3,9 +3,6 @@ package br.com.fattoria.sccm.controller;
 import java.util.List;
 import java.util.Optional;
 
-import javax.annotation.security.RolesAllowed;
-import javax.validation.Valid;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
@@ -27,7 +24,7 @@ import io.swagger.v3.oas.annotations.parameters.RequestBody;
 @RestController
 @Api(value = "Equipamentos")
 @RequestMapping(value = "/equipamentos")
-public class EquipamentosController implements CRUDApi<Equipamento, Long> {
+public class EquipamentosController {
 
     private static final Logger log = LoggerFactory.getLogger(EquipamentosController.class);
 
@@ -38,8 +35,8 @@ public class EquipamentosController implements CRUDApi<Equipamento, Long> {
         this.equipamentoRepository = equipamentoRepository;
     }
 
-    @RolesAllowed("user")
-    @GetMapping(value = "/listar", produces = MediaType.APPLICATION_JSON_VALUE)
+//    @RolesAllowed("user")
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "Retorna uma lista de equipamentos")
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "Retorna a lista de equipamentos"),
@@ -51,8 +48,8 @@ public class EquipamentosController implements CRUDApi<Equipamento, Long> {
          return lista;
 	}
     
-    @RolesAllowed("user")
-    @GetMapping(value = "/equipamentos/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+//    @RolesAllowed("user")
+    @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "Retorna um equipamento")
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "Retorna um equipamento"),
@@ -64,15 +61,16 @@ public class EquipamentosController implements CRUDApi<Equipamento, Long> {
          return equipamento;
 	}
     
-    @RolesAllowed("user")
-    @PostMapping(value = "/salvar", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+//    @RolesAllowed("user")
+    @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "Salva um equipamento")
-    public Equipamento save(@Valid @RequestBody Equipamento equipamento){
+    public Equipamento save(@RequestBody Equipamento equipamento){
+    	log.info(equipamento.toString());
     	return equipamentoRepository.save(equipamento);
     }
     
-    @RolesAllowed("user")
-    @DeleteMapping(value = "/deletar", produces = MediaType.APPLICATION_JSON_VALUE)
+//    @RolesAllowed("user")
+    @DeleteMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "Deleta um equipamento")
     public void delete(@PathVariable Long id){
     	equipamentoRepository.deleteById(id);

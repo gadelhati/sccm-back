@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 import br.com.fattoria.sccm.persistence.model.Plataforma;
 
 @Repository
-@RepositoryRestResource(collectionResourceRel = "plataformas", path = "plataformas")
+@RepositoryRestResource(collectionResourceRel = "plataformas", path="plataformas")
 public interface PlataformaRepository extends PagingAndSortingRepository<Plataforma, Long> {
 	
 	Plataforma findByNome(String nome);

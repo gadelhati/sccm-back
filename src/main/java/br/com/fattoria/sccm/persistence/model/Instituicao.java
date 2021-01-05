@@ -12,10 +12,10 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
-@Data
-@EqualsAndHashCode
-@NoArgsConstructor
-@AllArgsConstructor
+//@Data
+//@EqualsAndHashCode
+//@NoArgsConstructor
+//@AllArgsConstructor
 @Entity
 @Table(name = "instituicao")
 @SequenceGenerator(name="instituicao_generator", sequenceName="instituicao_seq", allocationSize = 1)
@@ -27,4 +27,51 @@ public class Instituicao {
 
 	private String nome;
 
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public String getNome() {
+		return nome;
+	}
+
+	public void setNome(String nome) {
+		this.nome = nome;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Instituicao other = (Instituicao) obj;
+		if (id == null) {
+			if (other.id != null)
+				return false;
+		} else if (!id.equals(other.id))
+			return false;
+		return true;
+	}
+
+	@Override
+	public String toString() {
+		return "Instituicao [id=" + id + ", nome=" + nome + "]";
+	}
+
+	
 }

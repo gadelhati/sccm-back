@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 import br.com.fattoria.sccm.persistence.model.Equipamento;
 
 @Repository
-@RepositoryRestResource(collectionResourceRel = "equipamentos", path = "equipamentos")
+@RepositoryRestResource(collectionResourceRel = "equipamentos", path="equipamentos", exported = false)
 public interface EquipamentoRepository extends PagingAndSortingRepository<Equipamento, Long> {
 	
 	Equipamento findByDescricao(String descricao);

@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 import br.com.fattoria.sccm.persistence.model.Empresa;
 
 @Repository
-@RepositoryRestResource(collectionResourceRel = "empresas", path = "empreasas")
+@RepositoryRestResource(collectionResourceRel = "empresas", path="empresas")
 public interface EmpresaRepository extends PagingAndSortingRepository<Empresa, Long> {
 	
 	Empresa findByNome(String nome);

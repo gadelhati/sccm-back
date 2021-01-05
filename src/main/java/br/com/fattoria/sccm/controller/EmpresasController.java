@@ -3,7 +3,6 @@ package br.com.fattoria.sccm.controller;
 import java.util.List;
 import java.util.Optional;
 
-import javax.annotation.security.RolesAllowed;
 import javax.validation.Valid;
 
 import org.slf4j.Logger;
@@ -14,6 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.fattoria.sccm.persistence.model.Empresa;
@@ -38,8 +38,8 @@ public class EmpresasController implements CRUDApi<Empresa, Long> {
         this.empresaRepository = EmpresaRepository;
     }
 
-    @RolesAllowed("user")
-    @GetMapping(value = "/listar", produces = MediaType.APPLICATION_JSON_VALUE)
+//    @RolesAllowed("user")
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "Retorna uma lista de tipos de empresa")
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "Retorna a lista de empresas"),
@@ -51,31 +51,33 @@ public class EmpresasController implements CRUDApi<Empresa, Long> {
          return lista;
 	}
     
-    @RolesAllowed("user")
-    @GetMapping(value = "/empresas/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    @ApiOperation(value = "Retorna um tipo de empresa")
-    @ApiResponses(value = {
-        @ApiResponse(code = 200, message = "Retorna uma empresa"),
-    })
-	public Optional<Empresa> getById(@PathVariable Long id) {
-    	 
-    	Optional<Empresa> optional = empresaRepository.findById(id);
-    	 
-         return optional;
-	}
-    
-    @RolesAllowed("user")
-    @PostMapping(value = "/salvar", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+//    @RolesAllowed("user")
+    @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "Salva um tipo de empresa")
-    public Empresa save(@Valid @RequestBody Empresa Empresa){
-    	return empresaRepository.save(Empresa);
+    public Empresa save(@Valid @RequestBody Empresa empresa){
+    	log.info(empresa.toString());
+    	return empresaRepository.save(empresa);
     }
     
-    @RolesAllowed("user")
-    @DeleteMapping(value = "/deletar", produces = MediaType.APPLICATION_JSON_VALUE)
+//    @RolesAllowed("user")
+    @DeleteMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "Deleta um tipo empresa")
     public void delete(@PathVariable Long id){
     	empresaRepository.deleteById(id);
     }
+    
+    
+//  @RolesAllowed("user")
+  @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+  @ApiOperation(value = "Retorna um tipo de empresa")
+  @ApiResponses(value = {
+      @ApiResponse(code = 200, message = "Retorna uma empresa"),
+  })
+	public Optional<Empresa> getById(@PathVariable Long id) {
+  	 
+  	Optional<Empresa> optional = empresaRepository.findById(id);
+  	 
+       return optional;
+	}
 
 }

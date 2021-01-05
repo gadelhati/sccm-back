@@ -38,8 +38,8 @@ public class InstituicoesController implements CRUDApi<Instituicao, Long> {
         this.instituicaoRepository = instituicaoRepository;
     }
 
-    @RolesAllowed("user")
-    @GetMapping(value = "/listar", produces = MediaType.APPLICATION_JSON_VALUE)
+//    @RolesAllowed("user")
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "Retorna uma lista de instituições")
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "Retorna a lista de instituicoes"),
@@ -51,8 +51,8 @@ public class InstituicoesController implements CRUDApi<Instituicao, Long> {
          return lista;
 	}
     
-    @RolesAllowed("user")
-    @GetMapping(value = "/instituicoes/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+//    @RolesAllowed("user")
+    @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "Retorna uma instituição")
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "Retorna uma instituição"),
@@ -64,15 +64,15 @@ public class InstituicoesController implements CRUDApi<Instituicao, Long> {
          return optional;
 	}
     
-    @RolesAllowed("user")
-    @PostMapping(value = "/salvar", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+//    @RolesAllowed("user")
+    @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "Salva uma instituição")
     public Instituicao save(@Valid @RequestBody Instituicao instituicao){
     	return instituicaoRepository.save(instituicao);
     }
     
-    @RolesAllowed("user")
-    @DeleteMapping(value = "/deletar", produces = MediaType.APPLICATION_JSON_VALUE)
+//    @RolesAllowed("user")
+    @DeleteMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "Deleta uma instituição")
     public void delete(@PathVariable Long id){
     	instituicaoRepository.deleteById(id);
