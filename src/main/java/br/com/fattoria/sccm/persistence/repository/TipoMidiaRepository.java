@@ -1,5 +1,7 @@
 package br.com.fattoria.sccm.persistence.repository;
 
+import java.util.List;
+
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 import org.springframework.stereotype.Repository;
@@ -11,5 +13,7 @@ import br.com.fattoria.sccm.persistence.model.TipoMidia;
 public interface TipoMidiaRepository extends CrudRepository<TipoMidia, Long> {
 	
 	TipoMidia findByDescricao(String descricao);
+	
+	List<TipoMidia> findAllByAtivoTrue();
 
 }
