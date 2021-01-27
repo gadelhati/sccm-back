@@ -1,6 +1,8 @@
 package br.com.fattoria.sccm.persistence.validation;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -58,5 +60,12 @@ public class ValidationErrorHandler {
         }
         return validationMessages;
     }
-
+    
+    @ResponseStatus(value = HttpStatus.CONFLICT)
+    @ExceptionHandler(org.hibernate.exception.ConstraintViolationException.class)
+    public @ResponseBody List<ValidationMessage> handleConstraintViolation(final org.hibernate.exception.ConstraintViolationException exception) {
+    	
+        return (List<ValidationMessage>) Collections.singleton(new ValidationMessage(exception.getConstraintName(), exception.getMessage()));
+    }
+   
 }
