@@ -4,12 +4,10 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 import org.springframework.stereotype.Repository;
 
-import br.com.fattoria.sccm.persistence.model.Empresa;
+import br.com.fattoria.sccm.persistence.model.Pais;
 
 @Repository
-@RepositoryRestResource(collectionResourceRel = "empresas", path="empresas")
-public interface EmpresaRepository extends CrudRepository<Empresa, Long> {
-	
-	Empresa findByNome(String nome);
+@RepositoryRestResource(collectionResourceRel = "pais", path="pais")
+public interface PaisRepository extends CrudRepository<Pais, Long>{
 
 }
