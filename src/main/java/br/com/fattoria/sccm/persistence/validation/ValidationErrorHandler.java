@@ -65,7 +65,23 @@ public class ValidationErrorHandler {
     @ExceptionHandler(org.hibernate.exception.ConstraintViolationException.class)
     public @ResponseBody List<ValidationMessage> handleConstraintViolation(final org.hibernate.exception.ConstraintViolationException exception) {
     	
-        return (List<ValidationMessage>) Collections.singleton(new ValidationMessage(exception.getConstraintName(), exception.getMessage()));
+    	List<ValidationMessage> validationMessages = new ArrayList<ValidationMessage>();
+    	
+    	String [] constraint = exception.getConstraintName().split("_");
+    	
+    	if(constraint != null && constraint.length == 3) {
+        	String tabela = constraint[0];
+	    	String campo = constraint[1];
+	    	String tipo = constraint[2];
+	    	
+	    	String mensagem = tipo.contains("unique") ? "Já existe "+tabela+" com "+campo+" informada" : exception.getConstraintName();
+	    	
+	    	validationMessages.add(new ValidationMessage(campo , mensagem));
+    	}else {
+    		validationMessages.add(new ValidationMessage(exception.getConstraintName(), exception.getMessage()));
+    	}
+    	
+        return validationMessages;
     }
    
 }
