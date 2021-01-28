@@ -27,4 +27,7 @@ public class TipoMidia {
 
 	private String descricao;
 
+
+	private boolean ativo;	
+
 }
