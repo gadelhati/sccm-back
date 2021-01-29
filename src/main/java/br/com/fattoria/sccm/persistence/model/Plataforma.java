@@ -30,9 +30,10 @@ public class Plataforma {
 	
 	private String nome;
 
-	@Column(name = "indicativo_visual")
-	private String indicativoVisual;
+	@Column(name = "identificador_visual")
+	private String identificadorVisual;
 	
+	@ManyToOne
 	@JoinColumn(name = "bandeira")
 	private Pais bandeira;
 	
