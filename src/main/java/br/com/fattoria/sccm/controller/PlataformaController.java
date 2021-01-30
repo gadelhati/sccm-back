@@ -11,6 +11,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.Link;
+import org.springframework.hateoas.mediatype.hal.HalModelBuilder;
+import org.springframework.hateoas.server.EntityLinks;
+import org.springframework.hateoas.server.TypedEntityLinks;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -49,10 +52,13 @@ public class PlataformaController {
 	private TipoPlataformaRepository tipoPlataformaRepository;
 	private PaisRepository paisRepository;
 	
-	public PlataformaController(PlataformaRepository plataformaRepository, TipoPlataformaRepository tipoPlataformaRepository, PaisRepository paisRepository) {
+	private final TypedEntityLinks<PlataformaModel> links;
+	
+	public PlataformaController(PlataformaRepository plataformaRepository, TipoPlataformaRepository tipoPlataformaRepository, PaisRepository paisRepository, EntityLinks entityLinks) {
 		this.plataformaRepository = plataformaRepository;
 		this.tipoPlataformaRepository = tipoPlataformaRepository;
 		this.paisRepository = paisRepository;
+		this.links = entityLinks.forType(PlataformaModel::getId);
 	}
 	
 	@PostMapping("/plataformas")
@@ -68,7 +74,7 @@ public class PlataformaController {
         
         Optional<Pais> bandeira = paisRepository.findById(plataforma.getIdBandeira());
         
-        Plataforma plataformaEntity = plataforma.toPlataformaEntity();
+        Plataforma plataformaEntity = plataforma.toEntity();
         
         plataformaEntity.setTipoPlataforma(tipoPlataforma.get());
         
@@ -101,7 +107,7 @@ public class PlataformaController {
         
         Optional<Pais> bandeira = paisRepository.findById(plataforma.getIdBandeira());
         
-        Plataforma plataformaEntity = plataforma.toPlataformaEntity();
+        Plataforma plataformaEntity = plataforma.toEntity();
         
         plataformaEntity.setTipoPlataforma(tipoPlataforma.get());
         
@@ -130,7 +136,7 @@ public class PlataformaController {
     	CollectionModel<PlataformaModel> listPlataformaResource = assembler.toCollectionModel(lista);
     	
     	final String uriString = ServletUriComponentsBuilder.fromCurrentRequest().build().toUriString();
-    	listPlataformaResource.add(new Link(uriString, "self"));
+    	listPlataformaResource.add(Link.of(uriString, "self"));
     	
 	    return ResponseEntity.ok(listPlataformaResource);
 	}

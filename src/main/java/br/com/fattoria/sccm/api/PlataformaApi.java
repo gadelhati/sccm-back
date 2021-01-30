@@ -24,7 +24,7 @@ public class PlataformaApi {
 	
 	private boolean ativo;
 
-	public Plataforma toPlataformaEntity() {
+	public Plataforma toEntity() {
 		return new Plataforma(id, nome, identificadorVisual, null, null, ativo);
 	}
 	
