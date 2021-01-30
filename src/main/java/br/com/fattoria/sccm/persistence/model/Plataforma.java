@@ -1,5 +1,7 @@
 package br.com.fattoria.sccm.persistence.model;
 
+import java.io.Serializable;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -22,7 +24,12 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name = "plataforma")
 @SequenceGenerator(name="plataforma_generator", sequenceName="plataforma_seq", allocationSize = 1)
-public class Plataforma {
+public class Plataforma implements Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator="plataforma_generator")
@@ -30,9 +37,10 @@ public class Plataforma {
 	
 	private String nome;
 
-	@Column(name = "indicativo_visual")
-	private String indicativoVisual;
+	@Column(name = "identificador_visual")
+	private String identificadorVisual;
 	
+	@ManyToOne
 	@JoinColumn(name = "bandeira")
 	private Pais bandeira;
 	

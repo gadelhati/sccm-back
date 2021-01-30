@@ -2,47 +2,75 @@ package br.com.fattoria.sccm.persistence.model;
 
 import java.io.Serializable;
 
+import javax.persistence.Column;
 import javax.persistence.Embeddable;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 
 @Embeddable
 public class EquipamentoDadosPK implements Serializable {
-	
+
 	private static final long serialVersionUID = 1L;
-	
-	public EquipamentoDadosPK() {}
 
-	public EquipamentoDadosPK(Equipamento equipamento, TipoDado tipoDado) {
-		this.equipamento = equipamento;
-		this.tipoDado = tipoDado;
-	}
-	
-	@ManyToOne
-	@JoinColumn(name = "fk_equipamento")
-	private Equipamento equipamento;
-	
-	@ManyToOne
-	@JoinColumn(name = "fk_tipo_dados")
-	private TipoDado tipoDado;
-	
-	
-	public Equipamento getEquipamento() {
-		return equipamento;
+	public EquipamentoDadosPK() {
 	}
 
-	public void setEquipamento(Equipamento equipamento) {
-		this.equipamento = equipamento;
+	public EquipamentoDadosPK(Long idEquipamento, Long idTipoDado) {
+		super();
+		this.idEquipamento = idEquipamento;
+		this.idTipoDado = idTipoDado;
 	}
 
-	public TipoDado getTipoDado() {
-		return tipoDado;
+	@Column(name = "fk_equipamento")
+	private Long idEquipamento;
+
+	@Column(name = "fk_tipo_dados")
+	private Long idTipoDado;
+
+	public Long getIdEquipamento() {
+		return idEquipamento;
 	}
 
-	public void setTipoDado(TipoDado tipoDado) {
-		this.tipoDado = tipoDado;
+	public void setIdEquipamento(Long idEquipamento) {
+		this.idEquipamento = idEquipamento;
 	}
+
+	public Long getIdTipoDado() {
+		return idTipoDado;
+	}
+
+	public void setIdTipoDado(Long idTipoDado) {
+		this.idTipoDado = idTipoDado;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((idEquipamento == null) ? 0 : idEquipamento.hashCode());
+		result = prime * result + ((idTipoDado == null) ? 0 : idTipoDado.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		EquipamentoDadosPK other = (EquipamentoDadosPK) obj;
+		if (idEquipamento == null) {
+			if (other.idEquipamento != null)
+				return false;
+		} else if (!idEquipamento.equals(other.idEquipamento))
+			return false;
+		if (idTipoDado == null) {
+			if (other.idTipoDado != null)
+				return false;
+		} else if (!idTipoDado.equals(other.idTipoDado))
+			return false;
+		return true;
+	}
+
 	
-	
-
 }

@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 import br.com.fattoria.sccm.persistence.model.Pais;
 
 @Repository
-@RepositoryRestResource(collectionResourceRel = "pais", path="pais")
+@RepositoryRestResource(collectionResourceRel = "pais", path="pais", exported = false)
 public interface PaisRepository extends CrudRepository<Pais, Long>{
 
 }
