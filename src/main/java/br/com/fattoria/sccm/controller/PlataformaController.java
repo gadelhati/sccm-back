@@ -174,5 +174,26 @@ public class PlataformaController {
     	            }).orElseThrow(() -> new NotFoundException("Plataforma não encontrada"));
     	
     }
+    
+	@PutMapping("/plataformas/active/{id}")
+	@ApiOperation(value = "Atualiza uma plataforma")
+    @ApiResponses(value = {
+        @ApiResponse(code = 200, message = "Plataforma atualizada"),
+    })
+	ResponseEntity<PlataformaModel> active(@Valid @PathVariable Long id){
+		
+		log.info("alterando plataforma");
+		
+		Optional<Plataforma> plataforma = plataformaRepository.findById(id);
+		
+		PlataformaModelAssembler assembler = new PlataformaModelAssembler(); 
+		
+    	return plataforma.map(response -> {
+    		response.setAtivo(!response.isAtivo());
+    		plataformaRepository.save(response);
+    		return ResponseEntity.ok().body(assembler.toModel(response));
+    	}).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+
+	}
 
 }
