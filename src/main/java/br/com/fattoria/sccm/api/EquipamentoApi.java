@@ -1,7 +1,8 @@
 package br.com.fattoria.sccm.api;
 
+import java.util.List;
+
 import br.com.fattoria.sccm.persistence.model.Equipamento;
-import br.com.fattoria.sccm.persistence.model.Plataforma;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -30,6 +31,8 @@ public class EquipamentoApi {
 	private Long idMetodoAmostragem;
 
 	private Long idUnidadeMedida;
+	
+	private List<Long> idsAreaTecnica;
 	
 	public Equipamento toEntity() {
 		return new Equipamento(id, nome, ativo, sigla, codigo, descricao, null, null, null);
