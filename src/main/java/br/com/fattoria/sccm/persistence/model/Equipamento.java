@@ -1,8 +1,10 @@
 package br.com.fattoria.sccm.persistence.model;
 
+import java.io.Serializable;
 import java.util.List;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -28,22 +30,36 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name = "equipamento")
 @SequenceGenerator(name = "equipamento_generator", sequenceName = "equipamento_seq", allocationSize = 1)
-public class Equipamento {
+public class Equipamento implements Serializable {
+
+	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "equipamento_generator")
 	private Long id;
 
-	@NotNull @NotBlank @NotEmpty
-	private String descricao;
+	@Column(name = "nome")
+	private String nome;
 
+	@Column(name = "ativo")
 	private boolean ativo;
 	
-	@ManyToMany(cascade = CascadeType.ALL)
-	@JoinTable(name = "area_conhecimento_equipamento", 
-			   joinColumns = {@JoinColumn(name = "fk_equipamento")},
-			   inverseJoinColumns = {@JoinColumn(name = "fk_area_conhecimento")}
-	)
-	private List<AreaConhecimento> listaAreaConhecimento;
-
+	@Column(name = "sigla")
+	private String sigla;
+	
+	@Column(name = "codigo")
+	private String codigo;
+	
+	@NotNull @NotBlank @NotEmpty
+	private String descricao;
+	
+	@JoinColumn(name = "fk_area_tecnica")
+	private AreaTecnica areaTecnica;
+	
+	@JoinColumn(name = "fk_metodo_amostragem")
+	private MetodoAmostragem metodoAmostragem;
+	
+	@JoinColumn(name = "fk_unidade_medida")
+	private UnidadeMedida unidadeMedida;
+		
 }
