@@ -8,7 +8,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -16,7 +15,6 @@ import lombok.NoArgsConstructor;
 @Data
 @EqualsAndHashCode
 @NoArgsConstructor
-@AllArgsConstructor
 @Entity
 @Table(name = "area_conhecimento_equipamento")
 public class AreaConhecimentoEquipamento implements Serializable {
@@ -29,10 +27,14 @@ public class AreaConhecimentoEquipamento implements Serializable {
 	@ManyToOne
 	@JoinColumn(name = "fk_area_conhecimento", insertable = false, updatable = false)
 	private AreaConhecimento areaConhecimento;
-	
+
 	@ManyToOne
 	@JoinColumn(name = "fk_equipamento", insertable = false, updatable = false)
 	private Equipamento equipamento;
-	
-	
+
+	public AreaConhecimentoEquipamento(AreaConhecimentoEquipamentoPK pk) {
+		super();
+		this.pk = pk;
+	}
+
 }
