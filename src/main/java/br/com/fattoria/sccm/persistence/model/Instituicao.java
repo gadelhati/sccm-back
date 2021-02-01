@@ -50,7 +50,7 @@ public class Instituicao {
 	@JoinColumn(name = "fk_pais")
 	private Pais pais;
 
-	
+	private boolean ativo;
 
 	
 }
