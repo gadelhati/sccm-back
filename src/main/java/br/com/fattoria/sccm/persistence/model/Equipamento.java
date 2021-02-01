@@ -12,6 +12,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
@@ -53,12 +54,15 @@ public class Equipamento implements Serializable {
 	@NotNull @NotBlank @NotEmpty
 	private String descricao;
 	
+	@ManyToOne
 	@JoinColumn(name = "fk_area_tecnica")
 	private AreaTecnica areaTecnica;
 	
+	@ManyToOne
 	@JoinColumn(name = "fk_metodo_amostragem")
 	private MetodoAmostragem metodoAmostragem;
 	
+	@ManyToOne
 	@JoinColumn(name = "fk_unidade_medida")
 	private UnidadeMedida unidadeMedida;
 		
