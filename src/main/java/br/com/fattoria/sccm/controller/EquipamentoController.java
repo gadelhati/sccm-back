@@ -138,7 +138,7 @@ public class EquipamentoController {
     	
     	equipamentoEntity = equipamentoRepository.save(equipamentoEntity);
     	
-    	List<AreaConhecimentoEquipamento> findAllByIdEquipamento = areaConhecimentoEquipamentoRepository.findAllByIdEquipamento(equipamentoEntity.getId());
+    	List<AreaConhecimentoEquipamento> findAllByIdEquipamento = areaConhecimentoEquipamentoRepository.findAllByEquipamentoId(equipamentoEntity.getId());
     	
     	if(findAllByIdEquipamento != null && findAllByIdEquipamento.size() > 0) {
     		areaConhecimentoEquipamentoRepository.deleteAll(findAllByIdEquipamento);

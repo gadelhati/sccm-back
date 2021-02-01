@@ -16,6 +16,6 @@ import br.com.fattoria.sccm.persistence.model.AreaConhecimentoEquipamentoPK;
 public interface AreaConhecimentoEquipamentoRepository extends CrudRepository<AreaConhecimentoEquipamento, AreaConhecimentoEquipamentoPK> {
 
 	@Query("select ac from AreaConhecimentoEquipamento ac where ac.areaConhecimento.id =:id")
-	List<AreaConhecimentoEquipamento> findAllByIdEquipamento(@Param("id") Long id);
+	List<AreaConhecimentoEquipamento> findAllByEquipamentoId(@Param("id") Long id);
 
 }
