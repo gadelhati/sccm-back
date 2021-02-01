@@ -141,7 +141,7 @@ public class PaisController {
     	            p -> {
     	            	paisRepository.deleteById(id);
     	              return ResponseEntity.noContent().build();
-    	            }).orElseThrow(() -> new NotFoundException("Plataforma não encontrada"));
+    	            }).orElseThrow(() -> new NotFoundException("País não encontrado"));
     	
     }
 
