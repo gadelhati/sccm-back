@@ -16,7 +16,7 @@ public class AreaTecnicaApi {
 	
 	private String descricao;
 	
-	public AreaTecnica getEntity() {
+	public AreaTecnica toEntity() {
 		return new AreaTecnica(id, descricao);
 	}
 
