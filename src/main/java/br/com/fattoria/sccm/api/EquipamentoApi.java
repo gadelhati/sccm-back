@@ -32,7 +32,7 @@ public class EquipamentoApi {
 
 	private Long idUnidadeMedida;
 	
-	private List<Long> idsAreaTecnica;
+	private List<Long> idsAreaConhecimento;
 	
 	public Equipamento toEntity() {
 		return new Equipamento(id, nome, ativo, sigla, codigo, descricao, null, null, null);
