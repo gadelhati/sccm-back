@@ -6,7 +6,9 @@ import org.springframework.hateoas.RepresentationModel;
 
 import br.com.fattoria.sccm.controller.UnidadeMedidaController;
 import br.com.fattoria.sccm.persistence.model.UnidadeMedida;
+import lombok.Getter;
 
+@Getter
 public class UnidadeMedidaModel extends RepresentationModel<UnidadeMedidaModel> {
 
 	private Long id;

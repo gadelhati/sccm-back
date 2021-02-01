@@ -92,13 +92,13 @@ public class UnidadeMedidaController {
         @ApiResponse(code = 200, message = "Retorna a Unidade de Medidas"),
     })
 	public ResponseEntity<CollectionModel<UnidadeMedidaModel>> getAll() {
-    	
-    	log.info("listando Area Técnicas");
     	 
     	Collection<UnidadeMedida> lista = (Collection<UnidadeMedida>) unidadeMedidaRepository.findAll();
     	
     	UnidadeMedidaModelAssembler assembler = new UnidadeMedidaModelAssembler(); 
     	CollectionModel<UnidadeMedidaModel> listResource = assembler.toCollectionModel(lista);
+    	
+    	log.info("listando Unidade de Medidas ");    	
     	
     	final String uriString = ServletUriComponentsBuilder.fromCurrentRequest().build().toUriString();
     	listResource.add(new Link(uriString, "self"));
