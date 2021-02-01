@@ -2,6 +2,7 @@ package br.com.fattoria.sccm.persistence.model;
 
 import java.io.Serializable;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -29,6 +30,7 @@ public class AreaTecnica implements Serializable {
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator="area_tecnica_generator")
 	private Long id;
 	
+	@Column(name = "descricao")
 	private String descricao;
 
 }

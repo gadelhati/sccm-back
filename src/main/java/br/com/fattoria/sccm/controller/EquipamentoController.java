@@ -5,22 +5,21 @@ import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.fattoria.sccm.persistence.repository.AreaTecnicaRepository;
 import br.com.fattoria.sccm.persistence.repository.EquipamentoRepository;
 import io.swagger.annotations.Api;
 
-@Api(value = "AreaTecnica")
+@Api(value = "equipamento")
 @RestController
 @RequestMapping(value = "/api", produces = "application/hal+json")
-public class AreaTecnicaController {
+public class EquipamentoController {
 	
-	private final Logger log = LoggerFactory.getLogger(AreaTecnicaController.class);
-	private AreaTecnicaRepository areaTecnicaRepository;
-		
-	public AreaTecnicaController(AreaTecnicaRepository areaTecnicaRepository) {
-		this.areaTecnicaRepository = areaTecnicaRepository;
+	private final Logger log = LoggerFactory.getLogger(EquipamentoController.class);
+	private EquipamentoRepository equipamentoRepository;
+	
+	public EquipamentoController(EquipamentoRepository equipamentoRepository) {
+		this.equipamentoRepository = equipamentoRepository;
 	}
+	
+	
 
-	
-	
 }

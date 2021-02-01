@@ -9,7 +9,7 @@ import br.com.fattoria.sccm.persistence.model.AreaTecnica;
 public class AreaTecnicaModelAssembler extends RepresentationModelAssemblerSupport<AreaTecnica, AreaTecnicaModel> {
 
 	public AreaTecnicaModelAssembler() {
-		super(AreaTecnicaController.class, AreaTecnica.class);		
+		super(AreaTecnicaController.class, AreaTecnicaModel.class);		
 	}
 
 	@Override
