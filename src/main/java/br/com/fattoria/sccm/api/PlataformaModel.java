@@ -18,7 +18,7 @@ public class PlataformaModel extends RepresentationModel<PlataformaModel> {
 	
 	private String nome;
 
-	private String identificadorVisual;
+	private String indicativoVisual;
 	
 	private boolean ativo;
 	
@@ -29,7 +29,7 @@ public class PlataformaModel extends RepresentationModel<PlataformaModel> {
     public PlataformaModel(Plataforma plataforma) {
     	this.id = plataforma.getId();
     	this.nome = plataforma.getNome();
-    	this.identificadorVisual = plataforma.getIdentificadorVisual();
+    	this.indicativoVisual = plataforma.getIndicativoVisual();
     	this.ativo = plataforma.isAtivo();
     	this.tipoPlataforma = plataforma.getTipoPlataforma() != null ? new TipoPlataformaModel(plataforma.getTipoPlataforma()) : null;
     	this.bandeira = plataforma.getBandeira() != null ? new PaisModel(plataforma.getBandeira()) : null;

@@ -37,8 +37,8 @@ public class Plataforma implements Serializable {
 	
 	private String nome;
 
-	@Column(name = "identificador_visual")
-	private String identificadorVisual;
+	@Column(name = "indicativo_visual")
+	private String indicativoVisual;
 	
 	@ManyToOne
 	@JoinColumn(name = "bandeira")

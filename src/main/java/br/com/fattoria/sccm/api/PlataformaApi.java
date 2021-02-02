@@ -16,7 +16,7 @@ public class PlataformaApi {
 	
 	private String nome;
 
-	private String identificadorVisual;
+	private String indicativoVisual;
 	
 	private Long idBandeira;
 	
@@ -25,7 +25,7 @@ public class PlataformaApi {
 	private boolean ativo;
 
 	public Plataforma toEntity() {
-		return new Plataforma(id, nome, identificadorVisual, null, null, ativo);
+		return new Plataforma(id, nome, indicativoVisual, null, null, ativo);
 	}
 	
 
