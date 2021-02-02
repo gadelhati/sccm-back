@@ -31,8 +31,12 @@ public class TipoDado {
 
 	private boolean ativo;
 	
-	@JoinColumn(name = "fk_equipamento")
 	@ManyToOne
+	@JoinColumn(name = "fk_equipamento")
 	private Equipamento equipamento;
+	
+	@ManyToOne
+	@JoinColumn(name = "fk_unidade_medida")
+	private UnidadeMedida unidadeMedida;
 	
 }

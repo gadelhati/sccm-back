@@ -13,17 +13,17 @@ public class TipoPlataformaModelAssembler extends RepresentationModelAssemblerSu
 	}
 
 	@Override
-	public TipoPlataformaModel toModel(TipoPlataforma plataforma) {
+	public TipoPlataformaModel toModel(TipoPlataforma tipoPlataforma) {
 
-		TipoPlataformaModel resource = createResource(plataforma);
+		TipoPlataformaModel resource = createResource(tipoPlataforma);
 		return resource;
 	}
 	
 	TipoPlataformaModel createResource(TipoPlataforma tipoPlataforma){
 		
-		TipoPlataformaModel plataformaModel = new TipoPlataformaModel(tipoPlataforma);
+		TipoPlataformaModel tipoPlataformaModel = new TipoPlataformaModel(tipoPlataforma);
 
-		return plataformaModel;
+		return tipoPlataformaModel;
 	}
 
 	@Override
