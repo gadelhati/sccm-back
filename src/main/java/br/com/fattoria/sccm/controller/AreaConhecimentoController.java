@@ -28,8 +28,6 @@ import br.com.fattoria.sccm.api.AreaConhecimentoApi;
 import br.com.fattoria.sccm.api.AreaConhecimentoModel;
 import br.com.fattoria.sccm.api.AreaConhecimentoModelAssembler;
 import br.com.fattoria.sccm.persistence.model.AreaConhecimento;
-import br.com.fattoria.sccm.persistence.model.Pais;
-import br.com.fattoria.sccm.persistence.repository.AreaConhecimentoEquipamentoRepository;
 import br.com.fattoria.sccm.persistence.repository.AreaConhecimentoRepository;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -49,7 +47,7 @@ public class AreaConhecimentoController {
 		this.areaConhecimentoRepository = areaConhecimentoRepository;		
 	}
 	
-	@PostMapping("/areaConhecimento")
+	@PostMapping("/areas_conhecimento")
 	@ApiOperation(value = "Cria uma Area de Conhecimento")
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "Area Conhecimento criada"),
@@ -74,7 +72,7 @@ public class AreaConhecimentoController {
                 .body(paisModel);
 	}
 	
-	@PutMapping("/areaConhecimento/{id}")
+	@PutMapping("/areas_conhecimento/{id}")
 	@ApiOperation(value = "Atualiza um pais")
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "Area Conhecimento atualizada"),
@@ -91,7 +89,7 @@ public class AreaConhecimentoController {
 
 	}
 	
-	@GetMapping("/areaConhecimento")
+	@GetMapping("/areas_conhecimento")
     @ApiOperation(value = "Retorna uma lista de Area de Conhecimento")
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "Retorna a lista de Area de Conhecimento"),
@@ -104,12 +102,12 @@ public class AreaConhecimentoController {
     	CollectionModel<AreaConhecimentoModel> listPlataformaResource = assembler.toCollectionModel(lista);
     	
     	final String uriString = ServletUriComponentsBuilder.fromCurrentRequest().build().toUriString();
-    	listPlataformaResource.add(new Link(uriString, "self"));
+    	listPlataformaResource.add(Link.of(uriString, "self"));
     	
 	    return ResponseEntity.ok(listPlataformaResource);
 	}
     
-    @GetMapping("/areaConhecimento/{id}")
+    @GetMapping("/areas_conhecimento/{id}")
     @ApiOperation(value = "Retorna um areaConhecimento")
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "Retorna uma areaConhecimento"),
@@ -126,7 +124,7 @@ public class AreaConhecimentoController {
                 .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
 	}
     
-    @DeleteMapping("/areaConhecimento/{id}")
+    @DeleteMapping("/areas_conhecimento/{id}")
     @ApiOperation(value = "Deleta um areaConhecimento")
     public ResponseEntity<?> delete(@PathVariable Long id) throws NotFoundException{
     	

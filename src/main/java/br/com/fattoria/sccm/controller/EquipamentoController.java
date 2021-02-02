@@ -66,7 +66,7 @@ public class EquipamentoController {
 		this.unidadeMedidaRepository = unidadeMedidaRepository;
 	}
 	
-	@PostMapping("/equipamento")
+	@PostMapping("/equipamentos")
 	@ApiOperation(value = "Add um Equipamento")
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "Equipamento incluido com sucesso"),
@@ -110,7 +110,7 @@ public class EquipamentoController {
                 .body(paisModel);
 	}
 	
-	@PutMapping("/equipamento/{id}")
+	@PutMapping("/equipamentos/{id}")
 	@ApiOperation(value = "Atualiza um Equipamento")
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "Equipamento atualizado"),
@@ -159,7 +159,7 @@ public class EquipamentoController {
 
 	}
 	
-	@GetMapping("/equipamento")
+	@GetMapping("/equipamentos")
     @ApiOperation(value = "Retorna uma lista de equipamento")
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "Retorna a lista de equipamento"),
@@ -179,7 +179,7 @@ public class EquipamentoController {
 	    return ResponseEntity.ok(listPlataformaResource);
 	}
     
-    @GetMapping("/equipamento/{id}")
+    @GetMapping("/equipamentos/{id}")
     @ApiOperation(value = "Retorna um equipamento")
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "Retorna uma equipamento"),
@@ -196,7 +196,7 @@ public class EquipamentoController {
                 .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
 	}
     
-    @DeleteMapping("/equipamento/{id}")
+    @DeleteMapping("/equipamentos/{id}")
     @ApiOperation(value = "Deleta um equipamento")
     public ResponseEntity<?> delete(@PathVariable Long id) throws NotFoundException{
     	
@@ -208,5 +208,26 @@ public class EquipamentoController {
     	 return pais.map(p -> {equipamentoRepository.deleteById(id); 
     	 return ResponseEntity.noContent().build();}).orElseThrow(() -> new NotFoundException("Equipamento não encontrada"));    	
     }
+    
+	@PutMapping("/equipamentos/active/{id}")
+	@ApiOperation(value = "Ativa/Desativa um equipamento")
+    @ApiResponses(value = {
+        @ApiResponse(code = 200, message = "Plataforma atualizada"),
+    })
+	ResponseEntity<EquipamentoModel> active(@Valid @PathVariable Long id){
+		
+		log.info("alterando plataforma");
+		
+		Optional<Equipamento> equipamento = equipamentoRepository.findById(id);
+		
+		EquipamentoModelAssembler assembler = new EquipamentoModelAssembler(); 
+		
+    	return equipamento.map(response -> {
+    		response.setAtivo(!response.isAtivo());
+    		equipamentoRepository.save(response);
+    		return ResponseEntity.ok().body(assembler.toModel(response));
+    	}).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+
+	}
 
 }

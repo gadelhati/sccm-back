@@ -24,11 +24,9 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import br.com.fattoria.sccm.api.EquipamentoApi;
-import br.com.fattoria.sccm.api.MetodoAmostragemModel;
-import br.com.fattoria.sccm.api.MetodoAmostragemModelAssembler;
 import br.com.fattoria.sccm.api.MetodoAmostragemApi;
 import br.com.fattoria.sccm.api.MetodoAmostragemModel;
+import br.com.fattoria.sccm.api.MetodoAmostragemModelAssembler;
 import br.com.fattoria.sccm.persistence.model.MetodoAmostragem;
 import br.com.fattoria.sccm.persistence.repository.MetodoAmostragemRepository;
 import io.swagger.annotations.Api;
@@ -69,7 +67,7 @@ public class MetodoAmostragemController {
                 .body(model);
 	}
 	
-	@PutMapping("/metodoAmostragem/{id}")
+	@PutMapping("/metodos_amostragem/{id}")
 	@ApiOperation(value = "Atualiza uma Amostragem")
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "Metodo Amostragem atualizado"),
@@ -88,7 +86,7 @@ public class MetodoAmostragemController {
 
 	}
 	
-	@GetMapping("/metodoAmostragem")
+	@GetMapping("/metodos_amostragem")
     @ApiOperation(value = "Retorna uma lista de Metodo Amostragem")
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "Retorna a lista de Metodo Amostragem"),
@@ -103,12 +101,12 @@ public class MetodoAmostragemController {
     	CollectionModel<MetodoAmostragemModel> listPlataformaResource = assembler.toCollectionModel(lista);
     	
     	final String uriString = ServletUriComponentsBuilder.fromCurrentRequest().build().toUriString();
-    	listPlataformaResource.add(new Link(uriString, "self"));
+    	listPlataformaResource.add(Link.of(uriString, "self"));
     	
 	    return ResponseEntity.ok(listPlataformaResource);
 	}
     
-    @GetMapping("/metodoAmostragem/{id}")
+    @GetMapping("/metodos_amostragem/{id}")
     @ApiOperation(value = "Retorna um Metodo Amostragem")
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "Retorna uma Metodo Amostragem"),
@@ -125,7 +123,7 @@ public class MetodoAmostragemController {
                 .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
 	}
     
-    @DeleteMapping("/metodoAmostragem/{id}")
+    @DeleteMapping("/metodos_amostragem/{id}")
     @ApiOperation(value = "Deleta um Amostragem")
     public ResponseEntity<?> delete(@PathVariable Long id) throws NotFoundException {
     	

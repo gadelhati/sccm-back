@@ -27,7 +27,6 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import br.com.fattoria.sccm.api.UnidadeMedidaApi;
 import br.com.fattoria.sccm.api.UnidadeMedidaModel;
 import br.com.fattoria.sccm.api.UnidadeMedidaModelAssembler;
-import br.com.fattoria.sccm.persistence.model.AreaTecnica;
 import br.com.fattoria.sccm.persistence.model.UnidadeMedida;
 import br.com.fattoria.sccm.persistence.repository.UnidadeMedidaRepository;
 import io.swagger.annotations.Api;
@@ -48,7 +47,7 @@ public class UnidadeMedidaController {
 		this.unidadeMedidaRepository = unidadeMedidaRepository;
 	}
 	
-	@PostMapping("/unidadeMedida")
+	@PostMapping("/unidades_medida")
 	@ApiOperation(value = "Add uma Unidade de Medida")
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "Unidade de Medida Criada"),
@@ -67,7 +66,7 @@ public class UnidadeMedidaController {
         return ResponseEntity.created(uri).body(UnidadeMedidaModel);
 	}
 	
-	@PutMapping("/unidadeMedida/{id}")
+	@PutMapping("/unidades_medida/{id}")
 	@ApiOperation(value = "Atualiza uma Unidade de Medida")
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "Unidade Medida Atualizada"),
@@ -86,7 +85,7 @@ public class UnidadeMedidaController {
 
 	}
 	
-	@GetMapping("/unidadeMedida")
+	@GetMapping("/unidades_medida")
     @ApiOperation(value = "Retorna lista de Unidade Medidas")
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "Retorna a Unidade de Medidas"),
@@ -101,12 +100,12 @@ public class UnidadeMedidaController {
     	CollectionModel<UnidadeMedidaModel> listResource = assembler.toCollectionModel(lista);
     	
     	final String uriString = ServletUriComponentsBuilder.fromCurrentRequest().build().toUriString();
-    	listResource.add(new Link(uriString, "self"));
+    	listResource.add(Link.of(uriString, "self"));
     	
 	    return ResponseEntity.ok(listResource);
 	}
     
-    @GetMapping("/unidadeMedida/{id}")
+    @GetMapping("/unidades_medida/{id}")
     @ApiOperation(value = "Retorna uma Unidade de Medida")
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "Retorna uma Unidade Medida"),
@@ -122,7 +121,7 @@ public class UnidadeMedidaController {
     	return areaTecnica.map(response -> ResponseEntity.ok().body(assembler.toModel(response))).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
 	}
     
-    @DeleteMapping("/unidadeMedida/{id}")
+    @DeleteMapping("/unidades_medida/{id}")
     @ApiOperation(value = "Deleta uma Area Técnica")
     public ResponseEntity<?> delete(@PathVariable Long id) throws NotFoundException{
     	

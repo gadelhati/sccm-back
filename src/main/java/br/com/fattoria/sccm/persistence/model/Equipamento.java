@@ -1,7 +1,6 @@
 package br.com.fattoria.sccm.persistence.model;
 
 import java.io.Serializable;
-import java.util.Collection;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
