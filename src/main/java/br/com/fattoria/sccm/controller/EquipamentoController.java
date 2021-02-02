@@ -33,12 +33,10 @@ import br.com.fattoria.sccm.persistence.model.AreaConhecimentoEquipamentoPK;
 import br.com.fattoria.sccm.persistence.model.AreaTecnica;
 import br.com.fattoria.sccm.persistence.model.Equipamento;
 import br.com.fattoria.sccm.persistence.model.MetodoAmostragem;
-import br.com.fattoria.sccm.persistence.model.UnidadeMedida;
 import br.com.fattoria.sccm.persistence.repository.AreaConhecimentoEquipamentoRepository;
 import br.com.fattoria.sccm.persistence.repository.AreaTecnicaRepository;
 import br.com.fattoria.sccm.persistence.repository.EquipamentoRepository;
 import br.com.fattoria.sccm.persistence.repository.MetodoAmostragemRepository;
-import br.com.fattoria.sccm.persistence.repository.UnidadeMedidaRepository;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -55,15 +53,13 @@ public class EquipamentoController {
 	private AreaConhecimentoEquipamentoRepository areaConhecimentoEquipamentoRepository;
 	private AreaTecnicaRepository areaTecnicaRepository;
 	private MetodoAmostragemRepository metodoAmostragemRepository;
-	private UnidadeMedidaRepository unidadeMedidaRepository;
 	
 	public EquipamentoController(EquipamentoRepository equipamentoRepository, AreaConhecimentoEquipamentoRepository areaConhecimentoEquipamentoRepository, 
-			AreaTecnicaRepository areaTecnicaRepository, MetodoAmostragemRepository metodoAmostragemRepository, UnidadeMedidaRepository unidadeMedidaRepository) {
+			AreaTecnicaRepository areaTecnicaRepository, MetodoAmostragemRepository metodoAmostragemRepository) {
 		this.equipamentoRepository = equipamentoRepository;
 		this.areaConhecimentoEquipamentoRepository = areaConhecimentoEquipamentoRepository;
 		this.areaTecnicaRepository = areaTecnicaRepository;
 		this.metodoAmostragemRepository = metodoAmostragemRepository;
-		this.unidadeMedidaRepository = unidadeMedidaRepository;
 	}
 	
 	@PostMapping("/equipamentos")
@@ -85,11 +81,6 @@ public class EquipamentoController {
     	if(equipamento.getIdMetodoAmostragem() != null) {
     		Optional<MetodoAmostragem> metodoAmostragem = metodoAmostragemRepository.findById(equipamento.getIdMetodoAmostragem());
     		equipamentoEntity.setMetodoAmostragem(metodoAmostragem.get());
-    	}
-    	
-    	if(equipamento.getIdUnidadeMedida() != null) {
-    		Optional<UnidadeMedida> unidadeMedida = unidadeMedidaRepository.findById(equipamento.getIdUnidadeMedida());
-    		equipamentoEntity.setUnidadeMedida(unidadeMedida.get());
     	}
     	
     	equipamentoEntity = equipamentoRepository.save(equipamentoEntity);
@@ -131,11 +122,6 @@ public class EquipamentoController {
     		equipamentoEntity.setMetodoAmostragem(metodoAmostragem.get());
     	}
     	
-    	if(equipamento.getIdUnidadeMedida() != null) {
-    		Optional<UnidadeMedida> unidadeMedida = unidadeMedidaRepository.findById(equipamento.getIdUnidadeMedida());
-    		equipamentoEntity.setUnidadeMedida(unidadeMedida.get());
-    	}
-    	
     	equipamentoEntity = equipamentoRepository.save(equipamentoEntity);
     	
     	List<AreaConhecimentoEquipamento> findAllByIdEquipamento = areaConhecimentoEquipamentoRepository.findAllByEquipamentoId(equipamentoEntity.getId());
@@ -171,12 +157,12 @@ public class EquipamentoController {
     	Collection<Equipamento> lista = (Collection<Equipamento>) equipamentoRepository.findAll();
     	
     	EquipamentoModelAssembler assembler = new EquipamentoModelAssembler(); 
-    	CollectionModel<EquipamentoModel> listPlataformaResource = assembler.toCollectionModel(lista);
+    	CollectionModel<EquipamentoModel> listEquipamentoResource = assembler.toCollectionModel(lista);
     	
     	final String uriString = ServletUriComponentsBuilder.fromCurrentRequest().build().toUriString();
-    	listPlataformaResource.add(Link.of(uriString, "self"));
+    	listEquipamentoResource.add(Link.of(uriString, "self"));
     	
-	    return ResponseEntity.ok(listPlataformaResource);
+	    return ResponseEntity.ok(listEquipamentoResource);
 	}
     
     @GetMapping("/equipamentos/{id}")
@@ -212,11 +198,11 @@ public class EquipamentoController {
 	@PutMapping("/equipamentos/active/{id}")
 	@ApiOperation(value = "Ativa/Desativa um equipamento")
     @ApiResponses(value = {
-        @ApiResponse(code = 200, message = "Plataforma atualizada"),
+        @ApiResponse(code = 200, message = "Equipamento atualizada"),
     })
 	ResponseEntity<EquipamentoModel> active(@Valid @PathVariable Long id){
 		
-		log.info("alterando plataforma");
+		log.info("alterando Equipamento");
 		
 		Optional<Equipamento> equipamento = equipamentoRepository.findById(id);
 		

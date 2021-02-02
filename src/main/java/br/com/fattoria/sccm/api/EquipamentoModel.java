@@ -8,7 +8,6 @@ import org.springframework.hateoas.RepresentationModel;
 import br.com.fattoria.sccm.controller.AreaTecnicaController;
 import br.com.fattoria.sccm.controller.EquipamentoController;
 import br.com.fattoria.sccm.controller.MetodoAmostragemController;
-import br.com.fattoria.sccm.controller.UnidadeMedidaController;
 import br.com.fattoria.sccm.persistence.model.Equipamento;
 import lombok.Getter;
 
@@ -42,7 +41,6 @@ public class EquipamentoModel extends RepresentationModel<EquipamentoModel> {
 		this.descricao = equipamento.getDescricao();
 		this.areaTecnica  = equipamento.getAreaTecnica() != null ? new AreaTecnicaModel(equipamento.getAreaTecnica()) : null;
 		this.metodoAmostragem = equipamento.getMetodoAmostragem() != null ? new MetodoAmostragemModel(equipamento.getMetodoAmostragem()) : null;
-		this.unidadeMedida = equipamento.getUnidadeMedida() != null ? new UnidadeMedidaModel(equipamento.getUnidadeMedida()) : null;
 		
 		add(linkTo(EquipamentoController.class).withRel("equipamentos"));
     	if (equipamento.getAreaTecnica() != null && equipamento.getAreaTecnica() != null) {
@@ -53,9 +51,6 @@ public class EquipamentoModel extends RepresentationModel<EquipamentoModel> {
     		add(linkTo(methodOn(MetodoAmostragemController.class).getById(equipamento.getMetodoAmostragem().getId())).withRel("metodoAmostragem"));
     	}
     	
-    	if (equipamento != null && equipamento.getUnidadeMedida() != null) {    	
-    		add(linkTo(methodOn(UnidadeMedidaController.class).getById(equipamento.getUnidadeMedida().getId())).withRel("unidadeMedida"));
-    	}
 	}
 
 }

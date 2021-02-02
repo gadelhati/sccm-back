@@ -30,11 +30,11 @@ public class EquipamentoApi {
 	
 	private Long idMetodoAmostragem;
 
-	private Long idUnidadeMedida;
-	
 	private List<Long> idsAreaConhecimento;
 	
+	private List<Long> idsTipoDado;
+	
 	public Equipamento toEntity() {
-		return new Equipamento(id, nome, ativo, sigla, codigo, descricao, null, null, null);
+		return new Equipamento(id, nome, ativo, sigla, codigo, descricao, null, null);
 	}
 }

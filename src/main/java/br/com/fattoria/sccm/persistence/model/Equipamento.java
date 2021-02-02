@@ -57,9 +57,5 @@ public class Equipamento implements Serializable {
 	@ManyToOne
 	@JoinColumn(name = "fk_metodo_amostragem")
 	private MetodoAmostragem metodoAmostragem;
-	
-	@ManyToOne
-	@JoinColumn(name = "fk_unidade_medida")
-	private UnidadeMedida unidadeMedida;
 		
 }
