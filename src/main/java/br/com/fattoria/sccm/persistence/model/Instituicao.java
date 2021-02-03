@@ -51,6 +51,14 @@ public class Instituicao {
 	private Pais pais;
 
 	private boolean ativo;
+	
+	private String email;
+	
+	private String site;
+	
+	@ManyToOne
+	@JoinColumn(name = "fk_endereco")
+	private Endereco endereco;
 
 	
 }
