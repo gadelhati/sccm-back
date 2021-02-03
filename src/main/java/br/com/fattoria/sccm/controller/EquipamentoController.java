@@ -33,10 +33,13 @@ import br.com.fattoria.sccm.persistence.model.AreaConhecimentoEquipamentoPK;
 import br.com.fattoria.sccm.persistence.model.AreaTecnica;
 import br.com.fattoria.sccm.persistence.model.Equipamento;
 import br.com.fattoria.sccm.persistence.model.MetodoAmostragem;
+import br.com.fattoria.sccm.persistence.model.TipoDadoEquipamento;
+import br.com.fattoria.sccm.persistence.model.TipoDadoEquipamentoPK;
 import br.com.fattoria.sccm.persistence.repository.AreaConhecimentoEquipamentoRepository;
 import br.com.fattoria.sccm.persistence.repository.AreaTecnicaRepository;
 import br.com.fattoria.sccm.persistence.repository.EquipamentoRepository;
 import br.com.fattoria.sccm.persistence.repository.MetodoAmostragemRepository;
+import br.com.fattoria.sccm.persistence.repository.TipoDadoEquipamentoRepository;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -51,15 +54,17 @@ public class EquipamentoController {
 	private final Logger log = LoggerFactory.getLogger(EquipamentoController.class);
 	private EquipamentoRepository equipamentoRepository;
 	private AreaConhecimentoEquipamentoRepository areaConhecimentoEquipamentoRepository;
+	private TipoDadoEquipamentoRepository tipoDadoEquipamentoRepository;
 	private AreaTecnicaRepository areaTecnicaRepository;
 	private MetodoAmostragemRepository metodoAmostragemRepository;
 	
 	public EquipamentoController(EquipamentoRepository equipamentoRepository, AreaConhecimentoEquipamentoRepository areaConhecimentoEquipamentoRepository, 
-			AreaTecnicaRepository areaTecnicaRepository, MetodoAmostragemRepository metodoAmostragemRepository) {
+			TipoDadoEquipamentoRepository tipoDadoEquipamentoRepository, AreaTecnicaRepository areaTecnicaRepository, MetodoAmostragemRepository metodoAmostragemRepository) {
 		this.equipamentoRepository = equipamentoRepository;
 		this.areaConhecimentoEquipamentoRepository = areaConhecimentoEquipamentoRepository;
 		this.areaTecnicaRepository = areaTecnicaRepository;
 		this.metodoAmostragemRepository = metodoAmostragemRepository;
+		this.tipoDadoEquipamentoRepository = tipoDadoEquipamentoRepository;
 	}
 	
 	@PostMapping("/equipamentos")
@@ -89,6 +94,13 @@ public class EquipamentoController {
     		for (Long idAreaConhecimento : equipamento.getIdsAreaConhecimento()) {
     			AreaConhecimentoEquipamento areaConhecimentoEquipamento = new AreaConhecimentoEquipamento(new AreaConhecimentoEquipamentoPK(idAreaConhecimento, equipamentoEntity.getId()));
     			areaConhecimentoEquipamentoRepository.save(areaConhecimentoEquipamento);
+			}
+    	}
+    	
+    	if(equipamento.getIdsTipoDado() != null && equipamento.getIdsTipoDado().size() > 0) {
+    		for (Long idTipoDado : equipamento.getIdsTipoDado()) {
+    			TipoDadoEquipamento tipoDadoEquipamento = new TipoDadoEquipamento(new TipoDadoEquipamentoPK(idTipoDado, equipamentoEntity.getId()));
+    			tipoDadoEquipamentoRepository.save(tipoDadoEquipamento);
 			}
     	}
         
@@ -137,6 +149,13 @@ public class EquipamentoController {
 			}
     	}
         
+    	if(equipamento.getIdsTipoDado() != null && equipamento.getIdsTipoDado().size() > 0) {
+    		for (Long idTipoDado : equipamento.getIdsTipoDado()) {
+    			TipoDadoEquipamento tipoDadoEquipamento = new TipoDadoEquipamento(new TipoDadoEquipamentoPK(idTipoDado, equipamentoEntity.getId()));
+    			tipoDadoEquipamentoRepository.save(tipoDadoEquipamento);
+			}
+    	}
+    	
     	EquipamentoModelAssembler assembler = new EquipamentoModelAssembler(); 
     	EquipamentoModel equipamentoModel = assembler.toModel(equipamentoRepository.save(equipamentoEntity));
         

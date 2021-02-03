@@ -47,7 +47,7 @@ public class AreaTecnicaController {
 		this.areaTecnicaRepository = areaTecnicaRepository;
 	}
 	
-	@PostMapping("/areaTecnica")
+	@PostMapping("/areas_tecnica")
 	@ApiOperation(value = "Add uma área técnica")
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "Área Técnica criada"),
@@ -65,7 +65,7 @@ public class AreaTecnicaController {
         return ResponseEntity.created(uri).body(areaTecnicaModel);
 	}
 	
-	@PutMapping("/areaTecnica/{id}")
+	@PutMapping("/areas_tecnica/{id}")
 	@ApiOperation(value = "Atualiza uma area tecnica")
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "Área Técnica Atualizada"),
@@ -84,7 +84,7 @@ public class AreaTecnicaController {
 
 	}
 	
-	@GetMapping("/areaTecnica")
+	@GetMapping("/areas_tecnica")
     @ApiOperation(value = "Retorna lista de Area Técnicas")
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "Retorna a lista de Area Técnicas"),
@@ -99,12 +99,12 @@ public class AreaTecnicaController {
     	CollectionModel<AreaTecnicaModel> listPlataformaResource = assembler.toCollectionModel(lista);
     	
     	final String uriString = ServletUriComponentsBuilder.fromCurrentRequest().build().toUriString();
-    	listPlataformaResource.add(new Link(uriString, "self"));
+    	listPlataformaResource.add(Link.of(uriString, "self"));
     	
 	    return ResponseEntity.ok(listPlataformaResource);
 	}
     
-    @GetMapping("/areaTecnica/{id}")
+    @GetMapping("/areas_tecnica/{id}")
     @ApiOperation(value = "Retorna um Area Tecnica")
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "Retorna uma Area Tecnica"),
@@ -120,7 +120,7 @@ public class AreaTecnicaController {
     	return areaTecnica.map(response -> ResponseEntity.ok().body(assembler.toModel(response))).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
 	}
     
-    @DeleteMapping("/areaTecnica/{id}")
+    @DeleteMapping("/areas_tecnica/{id}")
     @ApiOperation(value = "Deleta uma Area Técnica")
     public ResponseEntity<?> delete(@PathVariable Long id) throws NotFoundException{
     	

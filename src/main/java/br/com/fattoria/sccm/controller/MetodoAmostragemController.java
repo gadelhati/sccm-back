@@ -47,7 +47,7 @@ public class MetodoAmostragemController {
 		this.metodoAmostragemRepository = metodoAmostragemRepository;
 	}
 	
-	@PostMapping("/medotoAmostragem")
+	@PostMapping("/metodos_amostragem")
 	@ApiOperation(value = "Add um Metodo de Amostragem")
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "Equipamento incluido com sucesso"),
