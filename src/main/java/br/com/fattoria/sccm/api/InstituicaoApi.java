@@ -1,5 +1,9 @@
 package br.com.fattoria.sccm.api;
 
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+
+import br.com.fattoria.sccm.persistence.model.Endereco;
 import br.com.fattoria.sccm.persistence.model.Instituicao;
 import br.com.fattoria.sccm.persistence.model.TipoInstituicao;
 import lombok.AllArgsConstructor;
@@ -29,8 +33,14 @@ public class InstituicaoApi {
 	
 	private boolean ativo;
 	
+	private String email;
+	
+	private String site;
+	
+	private Long idEndereco;
+	
 	public Instituicao toEntity() {
-		return new Instituicao(id, nome, sigla, tipoInstituicao, numeroInscricao, numeroControle, null, ativo);
+		return new Instituicao(id, nome, sigla, tipoInstituicao, numeroInscricao, numeroControle, null, ativo, email, site, null);
 	}
 
 }

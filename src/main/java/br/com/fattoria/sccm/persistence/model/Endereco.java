@@ -2,7 +2,6 @@ package br.com.fattoria.sccm.persistence.model;
 
 import java.io.Serializable;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -22,30 +21,28 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "plataforma")
-@SequenceGenerator(name="plataforma_generator", sequenceName="plataforma_seq", allocationSize = 1)
-public class Plataforma implements Serializable {
-
+@Table(name = "endereco")
+@SequenceGenerator(name = "endereco_generator", sequenceName = "endereco_seq", allocationSize = 1)
+public class Endereco implements Serializable {
+	
 	private static final long serialVersionUID = 1L;
-
+	
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator="plataforma_generator")
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator="endereco_generator")
 	private Long id;
 	
-	private String nome;
-
-	@Column(name = "indicativo_visual")
-	private String indicativoVisual;
-	
 	@ManyToOne
-	@JoinColumn(name = "bandeira")
-	private Pais bandeira;
+	@JoinColumn(name = "fk_tipo_endereco")
+	private TipoEndereco tipoEndereco;
 	
-	@ManyToOne
-	@JoinColumn(name = "FK_TIPO_PLATAFORMA")
-	private TipoPlataforma tipoPlataforma;
+	private String logradouro;
 	
-	private boolean ativo;
+	private String numero;
+	
+	private String complemento;
+	
+	private String cidade;
+	
+	private String cep;
 
-	
 }
