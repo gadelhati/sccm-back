@@ -23,7 +23,7 @@ public class TipoDadoApi {
 	private UnidadeMedidaApi unidadeMedidaApi;
 	
 	public TipoDado toEntity() {
-		return new TipoDado(id, descricao, ativo, null, null);
+		return new TipoDado(id, descricao, ativo, null);
 	}
 
 }

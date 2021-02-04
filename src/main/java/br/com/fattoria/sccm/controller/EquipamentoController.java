@@ -25,21 +25,29 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import br.com.fattoria.sccm.api.AreaConhecimentoModel;
+import br.com.fattoria.sccm.api.AreaConhecimentoModelAssembler;
 import br.com.fattoria.sccm.api.EquipamentoApi;
 import br.com.fattoria.sccm.api.EquipamentoModel;
 import br.com.fattoria.sccm.api.EquipamentoModelAssembler;
+import br.com.fattoria.sccm.api.TipoDadoModel;
+import br.com.fattoria.sccm.api.TipoDadoModelAssembler;
+import br.com.fattoria.sccm.persistence.model.AreaConhecimento;
 import br.com.fattoria.sccm.persistence.model.AreaConhecimentoEquipamento;
 import br.com.fattoria.sccm.persistence.model.AreaConhecimentoEquipamentoPK;
 import br.com.fattoria.sccm.persistence.model.AreaTecnica;
 import br.com.fattoria.sccm.persistence.model.Equipamento;
+import br.com.fattoria.sccm.persistence.model.EquipamentoDados;
+import br.com.fattoria.sccm.persistence.model.EquipamentoDadosPK;
 import br.com.fattoria.sccm.persistence.model.MetodoAmostragem;
-import br.com.fattoria.sccm.persistence.model.TipoDadoEquipamento;
-import br.com.fattoria.sccm.persistence.model.TipoDadoEquipamentoPK;
+import br.com.fattoria.sccm.persistence.model.TipoDado;
 import br.com.fattoria.sccm.persistence.repository.AreaConhecimentoEquipamentoRepository;
+import br.com.fattoria.sccm.persistence.repository.AreaConhecimentoRepository;
 import br.com.fattoria.sccm.persistence.repository.AreaTecnicaRepository;
+import br.com.fattoria.sccm.persistence.repository.EquipamentoDadosRepository;
 import br.com.fattoria.sccm.persistence.repository.EquipamentoRepository;
 import br.com.fattoria.sccm.persistence.repository.MetodoAmostragemRepository;
-import br.com.fattoria.sccm.persistence.repository.TipoDadoEquipamentoRepository;
+import br.com.fattoria.sccm.persistence.repository.TipoDadoRepository;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -54,17 +62,22 @@ public class EquipamentoController {
 	private final Logger log = LoggerFactory.getLogger(EquipamentoController.class);
 	private EquipamentoRepository equipamentoRepository;
 	private AreaConhecimentoEquipamentoRepository areaConhecimentoEquipamentoRepository;
-	private TipoDadoEquipamentoRepository tipoDadoEquipamentoRepository;
+	private EquipamentoDadosRepository equipamentoDadosRepository;
 	private AreaTecnicaRepository areaTecnicaRepository;
 	private MetodoAmostragemRepository metodoAmostragemRepository;
+	private TipoDadoRepository tipoDadoRepository;
+	private AreaConhecimentoRepository areaConhecimentoRepository;
 	
 	public EquipamentoController(EquipamentoRepository equipamentoRepository, AreaConhecimentoEquipamentoRepository areaConhecimentoEquipamentoRepository, 
-			TipoDadoEquipamentoRepository tipoDadoEquipamentoRepository, AreaTecnicaRepository areaTecnicaRepository, MetodoAmostragemRepository metodoAmostragemRepository) {
+			EquipamentoDadosRepository equipamentoDadosRepository, AreaTecnicaRepository areaTecnicaRepository, MetodoAmostragemRepository metodoAmostragemRepository, 
+			TipoDadoRepository tipoDadoRepository, AreaConhecimentoRepository areaConhecimentoRepository) {
 		this.equipamentoRepository = equipamentoRepository;
 		this.areaConhecimentoEquipamentoRepository = areaConhecimentoEquipamentoRepository;
 		this.areaTecnicaRepository = areaTecnicaRepository;
 		this.metodoAmostragemRepository = metodoAmostragemRepository;
-		this.tipoDadoEquipamentoRepository = tipoDadoEquipamentoRepository;
+		this.equipamentoDadosRepository = equipamentoDadosRepository;
+		this.tipoDadoRepository = tipoDadoRepository;
+		this.areaConhecimentoRepository = areaConhecimentoRepository;
 	}
 	
 	@PostMapping("/equipamentos")
@@ -99,8 +112,8 @@ public class EquipamentoController {
     	
     	if(equipamento.getIdsTipoDado() != null && equipamento.getIdsTipoDado().size() > 0) {
     		for (Long idTipoDado : equipamento.getIdsTipoDado()) {
-    			TipoDadoEquipamento tipoDadoEquipamento = new TipoDadoEquipamento(new TipoDadoEquipamentoPK(idTipoDado, equipamentoEntity.getId()));
-    			tipoDadoEquipamentoRepository.save(tipoDadoEquipamento);
+    			EquipamentoDados equipamentoDados = new EquipamentoDados(new EquipamentoDadosPK(equipamentoEntity.getId(), idTipoDado));
+    			equipamentoDadosRepository.save(equipamentoDados);
 			}
     	}
         
@@ -136,10 +149,10 @@ public class EquipamentoController {
     	
     	equipamentoEntity = equipamentoRepository.save(equipamentoEntity);
     	
-    	List<AreaConhecimentoEquipamento> findAllByIdEquipamento = areaConhecimentoEquipamentoRepository.findAllByEquipamentoId(equipamentoEntity.getId());
+    	List<AreaConhecimentoEquipamento> areasConhecimento = areaConhecimentoEquipamentoRepository.findAllByEquipamentoId(equipamentoEntity.getId());
     	
-    	if(findAllByIdEquipamento != null && findAllByIdEquipamento.size() > 0) {
-    		areaConhecimentoEquipamentoRepository.deleteAll(findAllByIdEquipamento);
+    	if(areasConhecimento != null && areasConhecimento.size() > 0) {
+    		areaConhecimentoEquipamentoRepository.deleteAll(areasConhecimento);
     	}
     	
     	if(equipamento.getIdsAreaConhecimento() != null && equipamento.getIdsAreaConhecimento().size() > 0) {
@@ -148,11 +161,17 @@ public class EquipamentoController {
     			areaConhecimentoEquipamentoRepository.save(areaConhecimentoEquipamento);
 			}
     	}
+    	
+    	List<EquipamentoDados> dadosEquipamentos = equipamentoDadosRepository.findAllByEquipamentoId(equipamentoEntity.getId());
         
+    	if(dadosEquipamentos != null && dadosEquipamentos.size() > 0) {
+    		equipamentoDadosRepository.deleteAll(dadosEquipamentos);
+    	}
+    	
     	if(equipamento.getIdsTipoDado() != null && equipamento.getIdsTipoDado().size() > 0) {
     		for (Long idTipoDado : equipamento.getIdsTipoDado()) {
-    			TipoDadoEquipamento tipoDadoEquipamento = new TipoDadoEquipamento(new TipoDadoEquipamentoPK(idTipoDado, equipamentoEntity.getId()));
-    			tipoDadoEquipamentoRepository.save(tipoDadoEquipamento);
+    			EquipamentoDados equipamentoDados = new EquipamentoDados(new EquipamentoDadosPK(equipamentoEntity.getId(), idTipoDado));
+    			equipamentoDadosRepository.save(equipamentoDados);
 			}
     	}
     	
@@ -233,6 +252,46 @@ public class EquipamentoController {
     		return ResponseEntity.ok().body(assembler.toModel(response));
     	}).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
 
+	}
+	
+	@GetMapping("/equipamentos/{id}/tipo_dados")
+    @ApiOperation(value = "Retorna uma lista de equipamento")
+    @ApiResponses(value = {
+        @ApiResponse(code = 200, message = "Retorna a lista de dados de um equipamento"),
+    })
+	public ResponseEntity<CollectionModel<TipoDadoModel>> getAllTipoDadosByIdEquipamento(@PathVariable Long id) {
+    	
+    	log.info("listando equipamento");
+    	 
+    	Collection<TipoDado> lista = (Collection<TipoDado>) tipoDadoRepository.findAllByEquipamentoId(id);
+    	
+    	TipoDadoModelAssembler assembler = new TipoDadoModelAssembler(); 
+    	CollectionModel<TipoDadoModel> listTipoDadoResource = assembler.toCollectionModel(lista);
+    	
+    	final String uriString = ServletUriComponentsBuilder.fromCurrentRequest().build().toUriString();
+    	listTipoDadoResource.add(Link.of(uriString, "self"));
+    	
+	    return ResponseEntity.ok(listTipoDadoResource);
+	}
+	
+	@GetMapping("/equipamentos/{id}/areas_conhecimento")
+    @ApiOperation(value = "Retorna uma lista de equipamento")
+    @ApiResponses(value = {
+        @ApiResponse(code = 200, message = "Retorna a lista de dados de um equipamento"),
+    })
+	public ResponseEntity<CollectionModel<AreaConhecimentoModel>> getAllAreaConhecimentoByIdEquipamento(@PathVariable Long id) {
+    	
+    	log.info("listando equipamento");
+    	 
+    	Collection<AreaConhecimento> lista = (Collection<AreaConhecimento>) areaConhecimentoRepository.findAllByEquipamentoId(id);
+    	
+    	AreaConhecimentoModelAssembler assembler = new AreaConhecimentoModelAssembler(); 
+    	CollectionModel<AreaConhecimentoModel> listAreaConhcimentoResource = assembler.toCollectionModel(lista);
+    	
+    	final String uriString = ServletUriComponentsBuilder.fromCurrentRequest().build().toUriString();
+    	listAreaConhcimentoResource.add(Link.of(uriString, "self"));
+    	
+	    return ResponseEntity.ok(listAreaConhcimentoResource);
 	}
 
 }

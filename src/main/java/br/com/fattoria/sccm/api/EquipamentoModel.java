@@ -42,7 +42,7 @@ public class EquipamentoModel extends RepresentationModel<EquipamentoModel> {
 		this.areaTecnica  = equipamento.getAreaTecnica() != null ? new AreaTecnicaModel(equipamento.getAreaTecnica()) : null;
 		this.metodoAmostragem = equipamento.getMetodoAmostragem() != null ? new MetodoAmostragemModel(equipamento.getMetodoAmostragem()) : null;
 		
-		add(linkTo(EquipamentoController.class).withRel("equipamentos"));
+		add(linkTo(methodOn(EquipamentoController.class).getAll()).withRel("equipamentos"));
     	if (equipamento.getAreaTecnica() != null && equipamento.getAreaTecnica() != null) {
     		add(linkTo(methodOn(AreaTecnicaController.class).getById(equipamento.getAreaTecnica().getId())).withRel("areaTecnica"));
     	}
@@ -50,6 +50,9 @@ public class EquipamentoModel extends RepresentationModel<EquipamentoModel> {
     	if (equipamento != null && equipamento.getMetodoAmostragem() != null) {
     		add(linkTo(methodOn(MetodoAmostragemController.class).getById(equipamento.getMetodoAmostragem().getId())).withRel("metodoAmostragem"));
     	}
+    	
+    	add(linkTo(methodOn(EquipamentoController.class).getAllTipoDadosByIdEquipamento(equipamento.getId())).withRel("tipo_dados"));
+    	add(linkTo(methodOn(EquipamentoController.class).getAllAreaConhecimentoByIdEquipamento(equipamento.getId())).withRel("areas_conhecimento"));
     	
 	}
 
