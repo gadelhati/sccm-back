@@ -5,7 +5,6 @@ import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSuppor
 
 import br.com.fattoria.sccm.controller.MetodoAmostragemController;
 import br.com.fattoria.sccm.persistence.model.MetodoAmostragem;
-import br.com.fattoria.sccm.persistence.model.Pais;
 
 public class MetodoAmostragemModelAssembler extends RepresentationModelAssemblerSupport<MetodoAmostragem, MetodoAmostragemModel> {
 

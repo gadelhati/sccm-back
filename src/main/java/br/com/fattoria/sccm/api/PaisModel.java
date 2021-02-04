@@ -5,7 +5,6 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 import org.springframework.hateoas.RepresentationModel;
 
-import br.com.fattoria.sccm.controller.PlataformaController;
 import br.com.fattoria.sccm.controller.PaisController;
 import br.com.fattoria.sccm.persistence.model.Pais;
 import lombok.Getter;
@@ -24,7 +23,7 @@ public class PaisModel extends RepresentationModel<PaisModel> {
     	this.nome = pais.getNome();
     	this.nomeIngles = pais.getNomeIngles();
     	add(linkTo(PaisController.class).withRel("paises"));
-        add(linkTo(methodOn(PlataformaController.class).getById(pais.getId())).withSelfRel());
+        add(linkTo(methodOn(PaisController.class).getById(pais.getId())).withSelfRel());
 	}
 
 }
