@@ -5,7 +5,6 @@ import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSuppor
 
 import br.com.fattoria.sccm.controller.EquipamentoController;
 import br.com.fattoria.sccm.persistence.model.Equipamento;
-import br.com.fattoria.sccm.persistence.model.Plataforma;
 
 public class EquipamentoModelAssembler extends RepresentationModelAssemblerSupport<Equipamento, EquipamentoModel> {
 	
