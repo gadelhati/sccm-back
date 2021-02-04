@@ -22,7 +22,7 @@ public class EquipamentoDadosPK implements Serializable {
 	@Column(name = "fk_equipamento")
 	private Long idEquipamento;
 
-	@Column(name = "fk_tipo_dados")
+	@Column(name = "fk_tipo_dado")
 	private Long idTipoDado;
 
 	public Long getIdEquipamento() {
