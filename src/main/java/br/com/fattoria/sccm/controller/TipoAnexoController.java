@@ -27,6 +27,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import br.com.fattoria.sccm.api.TipoAnexoApi;
 import br.com.fattoria.sccm.api.TipoAnexoModel;
 import br.com.fattoria.sccm.api.TipoAnexoModelAssembler;
+import br.com.fattoria.sccm.persistence.model.TipoAnexo;
 import br.com.fattoria.sccm.persistence.repository.TipoAnexoRepository;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;

@@ -4,9 +4,9 @@ import java.io.Serializable;
 import java.util.Calendar;
 
 import javax.persistence.Entity;
+import javax.persistence.Id;
 import javax.persistence.Table;
 
-import br.com.fattoria.sccm.controller.TipoAnexo;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -20,6 +20,12 @@ import lombok.NoArgsConstructor;
 @Table(name = "documentos")
 public class Documentos implements Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	@Id
 	private Long id;
 	
 	private String anexo;

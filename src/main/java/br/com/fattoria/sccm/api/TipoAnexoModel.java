@@ -4,8 +4,8 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 
 import org.springframework.hateoas.RepresentationModel;
 
-import br.com.fattoria.sccm.controller.TipoAnexo;
 import br.com.fattoria.sccm.controller.TipoAnexoController;
+import br.com.fattoria.sccm.persistence.model.TipoAnexo;
 import lombok.Getter;
 
 @Getter
