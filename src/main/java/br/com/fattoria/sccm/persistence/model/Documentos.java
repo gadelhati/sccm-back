@@ -2,6 +2,7 @@ package br.com.fattoria.sccm.persistence.model;
 
 import java.io.Serializable;
 import java.util.Calendar;
+import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -20,9 +21,6 @@ import lombok.NoArgsConstructor;
 @Table(name = "documentos")
 public class Documentos implements Serializable {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 
 	@Id
@@ -35,5 +33,10 @@ public class Documentos implements Serializable {
 	private TipoAnexo tipoAnexo;
 	
 	private Destino destino;
+	
+	private PesquisaCientifica pesquisaCientifica;
+	
+	private String observacoes;
+		
 	
 }
