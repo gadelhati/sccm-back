@@ -7,9 +7,9 @@ import java.util.Calendar;
 import org.springframework.hateoas.RepresentationModel;
 
 import br.com.fattoria.sccm.controller.DocumentosController;
-import br.com.fattoria.sccm.controller.TipoAnexo;
 import br.com.fattoria.sccm.persistence.model.Destino;
 import br.com.fattoria.sccm.persistence.model.Documentos;
+import br.com.fattoria.sccm.persistence.model.TipoAnexo;
 import lombok.Getter;
 
 @Getter

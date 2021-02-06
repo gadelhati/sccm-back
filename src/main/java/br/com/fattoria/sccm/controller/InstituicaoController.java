@@ -29,8 +29,10 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import br.com.fattoria.sccm.api.InstituicaoApi;
 import br.com.fattoria.sccm.api.InstituicaoModel;
 import br.com.fattoria.sccm.api.InstituicaoModelAssembler;
+import br.com.fattoria.sccm.persistence.model.Endereco;
 import br.com.fattoria.sccm.persistence.model.Instituicao;
 import br.com.fattoria.sccm.persistence.model.Pais;
+import br.com.fattoria.sccm.persistence.repository.EnderecoRepository;
 import br.com.fattoria.sccm.persistence.repository.InstituicaoRepository;
 import br.com.fattoria.sccm.persistence.repository.PaisRepository;
 import io.swagger.annotations.Api;
@@ -47,12 +49,14 @@ public class InstituicaoController {
 	private final Logger log = LoggerFactory.getLogger(InstituicaoController.class);
 	private InstituicaoRepository instituicaoRepository;
 	private PaisRepository paisRepository;
+	private EnderecoRepository enderecoRepository;
 	
 	private final TypedEntityLinks<InstituicaoModel> links;
 	
-	public InstituicaoController(InstituicaoRepository instituicaoRepository, PaisRepository paisRepository, EntityLinks entityLinks) {
+	public InstituicaoController(InstituicaoRepository instituicaoRepository, PaisRepository paisRepository, EnderecoRepository enderecoRepository, EntityLinks entityLinks) {
 		this.instituicaoRepository = instituicaoRepository;
 		this.paisRepository = paisRepository;
+		this.enderecoRepository = enderecoRepository;
 		this.links = entityLinks.forType(InstituicaoModel::getId);
 	}
 	
@@ -70,6 +74,10 @@ public class InstituicaoController {
         Instituicao instituicaoEntity = instituicao.toEntity();
         
         instituicaoEntity.setPais(pais.get());
+        
+        if(instituicaoEntity.getEndereco() != null) {
+        	instituicaoEntity.setEndereco(enderecoRepository.save(instituicaoEntity.getEndereco()));
+        }
 
     	InstituicaoModelAssembler assembler = new InstituicaoModelAssembler(); 
     	InstituicaoModel instituicaoModel = assembler.toModel(instituicaoRepository.save(instituicaoEntity));
@@ -99,6 +107,13 @@ public class InstituicaoController {
         Instituicao instituicaoEntity = instituicao.toEntity();
         
         instituicaoEntity.setPais(pais.get());
+        
+        if(instituicaoEntity.getEndereco() != null) {
+        	Endereco endereco = instituicaoEntity.getEndereco();
+        	Endereco enderecoByIdInstituicao = enderecoRepository.getEnderecoByIdInstituicao(instituicaoEntity.getId());
+        	endereco.setId(enderecoByIdInstituicao != null ? enderecoByIdInstituicao.getId() : null);
+        	instituicaoEntity.setEndereco(enderecoRepository.save(endereco));
+        }
         
     	InstituicaoModelAssembler assembler = new InstituicaoModelAssembler(); 
     	InstituicaoModel instituicaoModel = assembler.toModel(instituicaoRepository.save(instituicaoEntity));

@@ -4,7 +4,6 @@ import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSupport;
 
 import br.com.fattoria.sccm.controller.TipoEnderecoController;
-import br.com.fattoria.sccm.persistence.model.Pais;
 import br.com.fattoria.sccm.persistence.model.TipoEndereco;
 
 public class TipoEnderecoModelAssembler extends RepresentationModelAssemblerSupport<TipoEndereco, TipoEnderecoModel> {

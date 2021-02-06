@@ -20,6 +20,10 @@ public class InstituicaoModel extends RepresentationModel<InstituicaoModel> {
 	
 	private String sigla;
 	
+	private String email;
+	
+	private String site;
+	
 	private TipoInstituicao tipoInstituicao;
 	
 	private Long numeroInscricao;
@@ -27,6 +31,8 @@ public class InstituicaoModel extends RepresentationModel<InstituicaoModel> {
 	private Long numeroControle;
 	
 	private PaisModel pais;
+	
+	private EnderecoModel endereco;
 	
 	private boolean ativo;
     
@@ -37,7 +43,10 @@ public class InstituicaoModel extends RepresentationModel<InstituicaoModel> {
     	this.tipoInstituicao = instituicao.getTipoInstituicao();
     	this.numeroInscricao = instituicao.getNumeroInscricao();
     	this.numeroControle = instituicao.getNumeroControle();
+    	this.email = instituicao.getEmail();
+    	this.site = instituicao.getSite();
     	this.pais = instituicao.getPais() != null ? new PaisModel(instituicao.getPais()) : null;
+    	this.endereco = instituicao.getEndereco() != null ? new EnderecoModel(instituicao.getEndereco()) : null;
     	this.ativo = instituicao.isAtivo();
     	
     	add(linkTo(InstituicaoController.class).withRel("instituicoes"));

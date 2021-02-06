@@ -3,8 +3,8 @@ package br.com.fattoria.sccm.api;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSupport;
 
-import br.com.fattoria.sccm.controller.TipoAnexo;
 import br.com.fattoria.sccm.controller.TipoAnexoController;
+import br.com.fattoria.sccm.persistence.model.TipoAnexo;
 
 public class TipoAnexoModelAssembler  extends RepresentationModelAssemblerSupport<TipoAnexo, TipoAnexoModel> {
 

@@ -1,6 +1,6 @@
 package br.com.fattoria.sccm.api;
 
-import br.com.fattoria.sccm.controller.TipoAnexo;
+import br.com.fattoria.sccm.persistence.model.TipoAnexo;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
