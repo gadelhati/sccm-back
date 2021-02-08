@@ -10,7 +10,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -37,19 +39,19 @@ public class PesquisaCientifica implements Serializable {
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator="pesquisa_cientifica_generator")
 	private Long id;
 	
-	@OneToMany
+	@ManyToOne
 	@JoinColumn(name = "fk_sigilo")
 	private Sigilo sigilo;
 	
-	@OneToMany
+	@OneToOne
 	@JoinColumn(name = "fk_comissao")
 	private Comissao comissao;
 	
-	@OneToMany
+	@ManyToOne
 	@JoinColumn(name = "fk_instituicao")
 	private Instituicao instituicao;
 	
-	@OneToMany
+	@ManyToOne
 	@JoinColumn(name = "fk_plataforma")
 	private Plataforma plataforma;
 	
@@ -61,11 +63,11 @@ public class PesquisaCientifica implements Serializable {
 	private String comandante;
 	
 	
-	private List<PesquisaCientificaAreaConhecimento> listaAreaConhecimento;
+//	private List<PesquisaCientificaAreaConhecimento> listaAreaConhecimento;
 	
-	private List<PesquisaCientificaDados> listaDados;
+//	private List<PesquisaCientificaDados> listaDados;
 	
-	private List<PesquisaCientificaEquipamento> listaEquipamentos;
+//	private List<PesquisaCientificaEquipamento> listaEquipamentos;
 	
 	private List<PesquisaCientificaDocumento> listaDocumentos;
 	
