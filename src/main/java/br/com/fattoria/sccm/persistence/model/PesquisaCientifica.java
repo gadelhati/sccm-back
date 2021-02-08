@@ -39,7 +39,7 @@ public class PesquisaCientifica implements Serializable {
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator="pesquisa_cientifica_generator")
 	private Long id;
 	
-	@ManyToOne
+	@ManyToOne()
 	@JoinColumn(name = "fk_sigilo")
 	private Sigilo sigilo;
 	
