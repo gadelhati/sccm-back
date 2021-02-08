@@ -27,7 +27,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import br.com.fattoria.sccm.api.DocumentosApi;
 import br.com.fattoria.sccm.api.DocumentosModel;
 import br.com.fattoria.sccm.api.DocumentosModelAssembler;
-import br.com.fattoria.sccm.persistence.model.Documentos;
+import br.com.fattoria.sccm.persistence.model.Documento;
 import br.com.fattoria.sccm.persistence.repository.DocumentosRepository;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -54,7 +54,7 @@ public class DocumentosController {
     })
 	ResponseEntity<DocumentosModel> create(@Valid @RequestBody DocumentosApi api) throws URISyntaxException{
 		
-        Documentos entity = api.toEntity();
+        Documento entity = api.toEntity();
         
     	DocumentosModelAssembler assembler = new DocumentosModelAssembler(); 
     	DocumentosModel model = assembler.toModel(documentosRepository.save(entity));
@@ -77,7 +77,7 @@ public class DocumentosController {
     })
 	ResponseEntity<DocumentosModel> update(@Valid @RequestBody DocumentosApi pais){
 		
-        Documentos paisEntity = pais.toEntity();
+        Documento paisEntity = pais.toEntity();
         
     	DocumentosModelAssembler assembler = new DocumentosModelAssembler(); 
     	DocumentosModel paisModel = assembler.toModel(documentosRepository.save(paisEntity));
@@ -94,7 +94,7 @@ public class DocumentosController {
     })
 	public ResponseEntity<CollectionModel<DocumentosModel>> getAll() {
     	
-    	Collection<Documentos> lista = (Collection<Documentos>) documentosRepository.findAll();
+    	Collection<Documento> lista = (Collection<Documento>) documentosRepository.findAll();
     	
     	DocumentosModelAssembler assembler = new DocumentosModelAssembler(); 
     	CollectionModel<DocumentosModel> listPlataformaResource = assembler.toCollectionModel(lista);
@@ -112,7 +112,7 @@ public class DocumentosController {
     })
 	public ResponseEntity<DocumentosModel> getById(@PathVariable Long id) {
     	 
-    	Optional<Documentos> pais = documentosRepository.findById(id);
+    	Optional<Documento> pais = documentosRepository.findById(id);
     	
     	DocumentosModelAssembler assembler = new DocumentosModelAssembler(); 
     	 
@@ -125,7 +125,7 @@ public class DocumentosController {
     public ResponseEntity<?> delete(@PathVariable Long id) throws NotFoundException{
     	
     	 documentosRepository.deleteById(id);
-    	 Optional<Documentos> pais = documentosRepository.findById(id);
+    	 Optional<Documento> pais = documentosRepository.findById(id);
     	 
     	 return pais.map(
     	            p -> {

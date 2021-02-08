@@ -10,7 +10,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -26,7 +28,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "pesquisaCientifica")
+@Table(name = "pesquisa_cientifica")
 @SequenceGenerator(name="pesquisa_cientifica_generator", sequenceName="pesquisa_cientifica_seq", allocationSize = 1)
 public class PesquisaCientifica implements Serializable {
 
@@ -37,19 +39,19 @@ public class PesquisaCientifica implements Serializable {
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator="pesquisa_cientifica_generator")
 	private Long id;
 	
-	@OneToMany
+	@OneToOne
 	@JoinColumn(name = "fk_sigilo")
 	private Sigilo sigilo;
 	
-	@OneToMany
+	@OneToOne
 	@JoinColumn(name = "fk_comissao")
 	private Comissao comissao;
 	
-	@OneToMany
+	@OneToOne
 	@JoinColumn(name = "fk_instituicao")
 	private Instituicao instituicao;
 	
-	@OneToMany
+	@OneToOne
 	@JoinColumn(name = "fk_plataforma")
 	private Plataforma plataforma;
 	
@@ -60,14 +62,23 @@ public class PesquisaCientifica implements Serializable {
 	@Column(name = "comandante")
 	private String comandante;
 	
+	@ManyToMany
+    @JoinTable(name = "pesquisa_cientifica_area_conhecimento", 
+    joinColumns = {@JoinColumn(name="fk_pesquisa_cientifica")}, 
+    inverseJoinColumns = {@JoinColumn(name="fk_area_conhecimento")})
+	private List<AreaConhecimento> listaAreaConhecimento;
 	
-	private List<PesquisaCientificaAreaConhecimento> listaAreaConhecimento;
+	@ManyToMany
+    @JoinTable(name = "pesquisa_cientifica_equipamento", 
+    joinColumns = {@JoinColumn(name="fk_pesquisa_cientifica")}, 
+    inverseJoinColumns = {@JoinColumn(name="fk_equipamento")})
+	private List<Equipamento> listaEquipamentos;
 	
-	private List<PesquisaCientificaDados> listaDados;
-	
-	private List<PesquisaCientificaEquipamento> listaEquipamentos;
-	
-	private List<PesquisaCientificaDocumento> listaDocumentos;
+	@ManyToMany
+    @JoinTable(name = "pesquisa_cientifica_equipamento", 
+    joinColumns = {@JoinColumn(name="fk_pesquisa_cientifica")}, 
+    inverseJoinColumns = {@JoinColumn(name="fk_equipamento")})
+	private List<Documento> listaDocumentos;
 	
 	
 }

@@ -8,7 +8,7 @@ import org.springframework.hateoas.RepresentationModel;
 
 import br.com.fattoria.sccm.controller.DocumentosController;
 import br.com.fattoria.sccm.persistence.model.Destino;
-import br.com.fattoria.sccm.persistence.model.Documentos;
+import br.com.fattoria.sccm.persistence.model.Documento;
 import br.com.fattoria.sccm.persistence.model.TipoAnexo;
 import lombok.Getter;
 
@@ -25,7 +25,7 @@ public class DocumentosModel extends RepresentationModel<DocumentosModel> {
 	
 	private Destino destino;
 	
-	public DocumentosModel(Documentos documentos) {		
+	public DocumentosModel(Documento documentos) {		
 		this.id = documentos.getId();
 		this.anexo = documentos.getAnexo();
 		this.dataRecebimento = documentos.getDataRecebimento();

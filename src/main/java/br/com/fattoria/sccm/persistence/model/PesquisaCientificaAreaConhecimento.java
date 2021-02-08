@@ -1,9 +1,7 @@
 package br.com.fattoria.sccm.persistence.model;
 
 import java.io.Serializable;
-import java.util.Calendar;
 
-import javax.persistence.Embedded;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
@@ -26,13 +24,21 @@ public class PesquisaCientificaAreaConhecimento implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	@EmbeddedId
-	private PesquisaCientificaAreaConhecimentoPk pesquisaCientificaAreaConhecimentoPk;
+	private PesquisaCientificaAreaConhecimentoPk pk;
 	
 	@ManyToOne
-	@JoinColumn(name = "fk_pesquisa_cientifica")
+	@JoinColumn(name = "fk_pesquisa_cientifica", insertable = false, updatable = false)
 	private PesquisaCientifica pesquisaCientifica;
 	
 	@ManyToOne
-	@JoinColumn(name = "fk_area_conhecimento")
+	@JoinColumn(name = "fk_area_conhecimento", insertable = false, updatable = false)
 	private AreaConhecimento areaConhecimento;
+
+	public PesquisaCientificaAreaConhecimento(
+			PesquisaCientificaAreaConhecimentoPk pk) {
+		super();
+		this.pk = pk;
+	}
+	
+	
 }
