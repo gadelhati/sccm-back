@@ -2,7 +2,6 @@ package br.com.fattoria.sccm.persistence.model;
 
 import java.io.Serializable;
 import java.util.Calendar;
-import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -19,7 +18,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Entity
 @Table(name = "documentos")
-public class Documentos implements Serializable {
+public class Documento implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 

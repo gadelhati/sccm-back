@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 import br.com.fattoria.sccm.persistence.model.Destino;
 
 @Repository
-@RepositoryRestResource(collectionResourceRel = "destino", path="destino", exported = false)
+@RepositoryRestResource(collectionResourceRel = "destinos", path="destinos", exported = false)
 public interface DestinoRepository extends CrudRepository<Destino, Long> {
 
 }

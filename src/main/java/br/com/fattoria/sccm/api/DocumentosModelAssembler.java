@@ -4,9 +4,9 @@ import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSupport;
 
 import br.com.fattoria.sccm.controller.DocumentosController;
-import br.com.fattoria.sccm.persistence.model.Documentos;
+import br.com.fattoria.sccm.persistence.model.Documento;
 
-public class DocumentosModelAssembler extends RepresentationModelAssemblerSupport<Documentos, DocumentosModel> {
+public class DocumentosModelAssembler extends RepresentationModelAssemblerSupport<Documento, DocumentosModel> {
 
 
 
@@ -15,14 +15,14 @@ public class DocumentosModelAssembler extends RepresentationModelAssemblerSuppor
 	}
 
 	@Override
-	public DocumentosModel toModel(Documentos entity) {
+	public DocumentosModel toModel(Documento entity) {
 		
 		DocumentosModel resource = createResource(entity);
 		
 		return resource;
 	}
 	
-	DocumentosModel createResource(Documentos documentos){
+	DocumentosModel createResource(Documento documentos){
 		
 		DocumentosModel model = new DocumentosModel(documentos);
 
@@ -30,7 +30,7 @@ public class DocumentosModelAssembler extends RepresentationModelAssemblerSuppor
 	}
 
 	@Override
-	public CollectionModel<DocumentosModel> toCollectionModel(Iterable<? extends Documentos> entities) {
+	public CollectionModel<DocumentosModel> toCollectionModel(Iterable<? extends Documento> entities) {
 		return super.toCollectionModel(entities);
 	}
 	
