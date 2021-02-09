@@ -7,7 +7,6 @@ import org.springframework.hateoas.RepresentationModel;
 
 import br.com.fattoria.sccm.controller.MidiaDiversaController;
 import br.com.fattoria.sccm.persistence.model.MidiaDiversaTipoMidia;
-import br.com.fattoria.sccm.persistence.repository.TipoMidiaRepository;
 import lombok.Getter;
 
 @Getter
@@ -22,8 +21,8 @@ public class MidiaDiversaTipoMidiaModel extends RepresentationModel<MidiaDiversa
     	this.tipoMidia = midiaDiversaTipoMidia.getTipoMidia() != null ? new TipoMidiaModel(midiaDiversaTipoMidia.getTipoMidia()) : null;
     	this.quantidade = midiaDiversaTipoMidia.getQuantidade();
     	add(linkTo(MidiaDiversaController.class).withRel("midias_diversas"));
-    	if(tipoMidia != null)
-    		add(linkTo(methodOn(TipoMidiaRepository.class).findById(tipoMidia.getId())).withSelfRel());
+//    	if(tipoMidia != null)
+//    		add(linkTo(methodOn(TipoMidiaRepository.class).findById(tipoMidia.getId())).withSelfRel());
     	if(midiaDiversa != null)
     		add(linkTo(methodOn(MidiaDiversaController.class).getById(midiaDiversa.getId())).withSelfRel());
 	}
