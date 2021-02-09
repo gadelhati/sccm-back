@@ -34,9 +34,7 @@ public class PesquisaCientificaAreaConhecimento implements Serializable {
 	@JoinColumn(name = "fk_area_conhecimento", insertable = false, updatable = false)
 	private AreaConhecimento areaConhecimento;
 
-	public PesquisaCientificaAreaConhecimento(
-			PesquisaCientificaAreaConhecimentoPk pk) {
-		super();
+	public PesquisaCientificaAreaConhecimento(PesquisaCientificaAreaConhecimentoPk pk) {		
 		this.pk = pk;
 	}
 	

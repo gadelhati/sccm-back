@@ -31,10 +31,7 @@ public class Comissao implements Serializable {
 	@Column(name = "id")
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator="plataforma_generator")
 	private Long id;
-	
-	@Column(name = "numero_pc")
-	private String numeroPC;
-	
+		
 	@Column(name = "nome_comissao")
 	private String nomeComissao;
 	

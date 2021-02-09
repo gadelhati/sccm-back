@@ -8,9 +8,6 @@ import javax.persistence.Embeddable;
 @Embeddable
 public class PesquisaCientificaDocumentoPk implements Serializable {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 
 	@Column(name = "fk_pesquisa_cientifica")

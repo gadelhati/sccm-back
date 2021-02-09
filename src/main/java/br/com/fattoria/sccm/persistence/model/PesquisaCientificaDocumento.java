@@ -21,9 +21,6 @@ import lombok.NoArgsConstructor;
 @Table(name = "pesquisa_cientifica_documento")
 public class PesquisaCientificaDocumento  implements Serializable {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	
 	@EmbeddedId
