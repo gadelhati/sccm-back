@@ -212,11 +212,11 @@ public class EquipamentoController {
     	
     	log.info("Equipamento por id "+id);
     	 
-    	Optional<Equipamento> pais = equipamentoRepository.findById(id);
+    	Optional<Equipamento> equipamento = equipamentoRepository.findById(id);
     	
     	EquipamentoModelAssembler assembler = new EquipamentoModelAssembler(); 
     	 
-    	return pais.map(response -> ResponseEntity.ok().body(assembler.toModel(response)))
+    	return equipamento.map(response -> ResponseEntity.ok().body(assembler.toModel(response)))
                 .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
 	}
     
