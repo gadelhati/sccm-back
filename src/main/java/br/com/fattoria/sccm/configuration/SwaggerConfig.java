@@ -135,8 +135,8 @@ public class SwaggerConfig extends WebMvcConfigurationSupport {
 	}
 
 	private AuthorizationScope[] scopes() {
-		AuthorizationScope[] scopes = { new AuthorizationScope("user", "for CRUD operations"),
-				new AuthorizationScope("admin", "for admind operations")
+		AuthorizationScope[] scopes = { new AuthorizationScope("user", "for users operations"),
+				new AuthorizationScope("admin", "for admin operations")
 				};
 		return scopes;
 	}
