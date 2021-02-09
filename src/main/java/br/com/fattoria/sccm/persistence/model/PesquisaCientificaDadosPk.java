@@ -8,9 +8,6 @@ import javax.persistence.Embeddable;
 @Embeddable
 public class PesquisaCientificaDadosPk implements Serializable {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 
 	@Column(name = "fk_pesquisa_cientifica")
@@ -19,12 +16,9 @@ public class PesquisaCientificaDadosPk implements Serializable {
 	@Column(name = "fk_tipo_dados")
 	private Long idTipoDado;
 
-	public PesquisaCientificaDadosPk() {
-		super();
-	}
+	public PesquisaCientificaDadosPk() {}
 
 	public PesquisaCientificaDadosPk(Long idPesquisaCientifica, Long idTipoDado) {
-		super();
 		this.idPesquisaCientifica = idPesquisaCientifica;
 		this.idTipoDado = idTipoDado;
 	}

@@ -38,8 +38,7 @@ public class PesquisaCientifica implements Serializable {
 	@Id
 	@Column(name = "id")
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator="pesquisa_cientifica_generator")
-	private Long id;
-	
+	private Long id;	
 
 	@ManyToOne
 	@JoinColumn(name = "fk_sigilo")
@@ -52,7 +51,6 @@ public class PesquisaCientifica implements Serializable {
 	@OneToOne
 	@JoinColumn(name = "fk_instituicao")
 	private Instituicao instituicao;
-	
 
 	@OneToOne
 	@JoinColumn(name = "fk_plataforma")
@@ -64,6 +62,27 @@ public class PesquisaCientifica implements Serializable {
 	
 	@Column(name = "comandante")
 	private String comandante;
+	
+	@Column(name = "chefe_cientifico")
+	private String chefeCientifico;
+	
+	@Column(name = "carta_nautica")
+	private String cartaNautica;
+	
+	@Column(name = "limite_norte_latitude")
+	private String limiteNorteLatitude;
+	
+	@Column(name = "limite_sul_latitude")
+	private String limiteSulLatitude;
+	
+	@Column(name = "limite_leste_longitude")
+	private String limiteLesteLongitude;
+	
+	@Column(name = "limite_oeste_longitude")
+	private String limiteOesteLongitude;
+	
+	@Column(name = "numero_pc")
+	private String numeroPC;
 	
 	@ManyToMany
     @JoinTable(name = "pesquisa_cientifica_area_conhecimento", 
