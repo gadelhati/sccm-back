@@ -48,6 +48,7 @@ public class PesquisaCientificaModel  extends RepresentationModel<PesquisaCienti
 	
 	public PesquisaCientificaModel(PesquisaCientifica pesquisaCientifica) {		
 		this.id                   = pesquisaCientifica.getId();
+		this.numeroPC             = pesquisaCientifica.getNumeroPC();
 		this.sigilo               = pesquisaCientifica.getSigilo(); 
 		this.comissao             = pesquisaCientifica.getComissao() != null ? new ComissaoModel(pesquisaCientifica.getComissao()) : null;
 		this.instituicao          = pesquisaCientifica.getInstituicao() != null ? new InstituicaoModel(pesquisaCientifica.getInstituicao()) : null;
@@ -61,18 +62,18 @@ public class PesquisaCientificaModel  extends RepresentationModel<PesquisaCienti
 		this.limiteLesteLongitude = pesquisaCientifica.getLimiteLesteLongitude();
 		this.limiteOesteLongitude = pesquisaCientifica.getLimiteOesteLongitude();
 		
-		add(linkTo(PesquisaCientificaController.class).withRel("pesquisaCientifica"));
+		add(linkTo(PesquisaCientificaController.class).withRel("pesquisas_cientificas"));
 		
 		if (pesquisaCientifica.getComissao() != null && pesquisaCientifica.getComissao().getId() != null) {
     		add(linkTo(methodOn(ComissaoController.class).getById(pesquisaCientifica.getComissao().getId())).withRel("comissao"));
     	}
 		
 		if (pesquisaCientifica.getInstituicao() != null && pesquisaCientifica.getInstituicao().getId() != null) {
-			add(linkTo(methodOn(InstituicaoController.class).getById(pesquisaCientifica.getInstituicao().getId())).withRel("instituicao"));
+			add(linkTo(methodOn(InstituicaoController.class).getById(pesquisaCientifica.getInstituicao().getId())).withRel("instituicoes"));
 		}
 		
 		if (pesquisaCientifica.getPlataforma() != null && pesquisaCientifica.getPlataforma().getId() != null) {
-			add(linkTo(methodOn(PlataformaController.class).getById(pesquisaCientifica.getPlataforma().getId())).withRel("plataforma"));
+			add(linkTo(methodOn(PlataformaController.class).getById(pesquisaCientifica.getPlataforma().getId())).withRel("plataformas"));
 		}
     	    	
 	}

@@ -47,7 +47,7 @@ public class ComissaoController {
 		this.comissaoRepository = comissaoRepository;
 	}
 	
-	@PostMapping("/comissao")
+	@PostMapping("/comissoes")
 	@ApiOperation(value = "Cria uma Comissão")
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "Comissão criada"),
@@ -70,7 +70,7 @@ public class ComissaoController {
                 .body(model);
 	}
 	
-	@PutMapping("/comissao/{id}")
+	@PutMapping("/comissoes/{id}")
 	@ApiOperation(value = "Atualiza uma Comissão")
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "Comissão atualizada"),
@@ -87,7 +87,7 @@ public class ComissaoController {
 
 	}
 	
-	@GetMapping("/comissao")
+	@GetMapping("/comissoes")
     @ApiOperation(value = "Retorna uma lista de comissões")
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "Comissões"),
@@ -100,12 +100,12 @@ public class ComissaoController {
     	CollectionModel<ComissaoModel> listResource = assembler.toCollectionModel(lista);
     	
     	final String uriString = ServletUriComponentsBuilder.fromCurrentRequest().build().toUriString();
-    	listResource.add(new Link(uriString, "self"));
+    	listResource.add(Link.of(uriString, "self"));
     	
 	    return ResponseEntity.ok(listResource);
 	}
     
-    @GetMapping("/comissao/{id}")
+    @GetMapping("/comissoes/{id}")
     @ApiOperation(value = "Retorna uma Comissão")
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "Retorna uma comissão"),
@@ -120,7 +120,7 @@ public class ComissaoController {
                 .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
 	}
     
-    @DeleteMapping("/comissao/{id}")
+    @DeleteMapping("/comissoes/{id}")
     @ApiOperation(value = "Deleta uma comissão")
     public ResponseEntity<?> delete(@PathVariable Long id) throws NotFoundException{
     	
