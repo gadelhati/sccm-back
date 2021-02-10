@@ -34,8 +34,10 @@ public class ComissaoApi {
 	
 	private String imagem;
 	
+	private Long idTipoComissao;
+	
 	public Comissao toEntity() {
-		return new Comissao(id, nomeComissao, nomeCruzeiro, pernada, dataEntrada, dataOficial, dataInicio, dataFim, observacoes, imagem);
+		return new Comissao(id, null, nomeComissao, nomeCruzeiro, pernada, dataEntrada, dataOficial, dataInicio, dataFim, observacoes, imagem);
 	}
 
 }
