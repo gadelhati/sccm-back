@@ -293,5 +293,25 @@ public class EquipamentoController {
     	
 	    return ResponseEntity.ok(listAreaConhcimentoResource);
 	}
+	
+	@GetMapping("/equipamentos/ativos")
+    @ApiOperation(value = "Retorna uma lista de equipamento ativos")
+    @ApiResponses(value = {
+        @ApiResponse(code = 200, message = "Retorna a lista de equipamentos ativos"),
+    })
+	public ResponseEntity<CollectionModel<EquipamentoModel>> getAllAtivos() {
+    	
+    	log.info("listando equipamento");
+    	 
+    	Collection<Equipamento> lista = (Collection<Equipamento>) equipamentoRepository.findAllByAtivoTrue();
+    	
+    	EquipamentoModelAssembler assembler = new EquipamentoModelAssembler(); 
+    	CollectionModel<EquipamentoModel> listEquipamentoResource = assembler.toCollectionModel(lista);
+    	
+    	final String uriString = ServletUriComponentsBuilder.fromCurrentRequest().build().toUriString();
+    	listEquipamentoResource.add(Link.of(uriString, "self"));
+    	
+	    return ResponseEntity.ok(listEquipamentoResource);
+	}
 
 }

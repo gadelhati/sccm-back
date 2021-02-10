@@ -197,5 +197,25 @@ public class InstituicaoController {
     	}).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
 
 	}
+	
+	@GetMapping("/instituicoes/ativas")
+    @ApiOperation(value = "Retorna uma lista de instituicoes ativas")
+    @ApiResponses(value = {
+        @ApiResponse(code = 200, message = "Retorna a lista de instituicoes ativas"),
+    })
+	public ResponseEntity<CollectionModel<InstituicaoModel>> getAllAtivas() {
+    	
+    	log.info("listando instituicao");
+    	 
+    	Collection<Instituicao> lista = (Collection<Instituicao>) instituicaoRepository.findAllByAtivoTrue();
+    	
+    	InstituicaoModelAssembler assembler = new InstituicaoModelAssembler(); 
+    	CollectionModel<InstituicaoModel> listInstituicaoResource = assembler.toCollectionModel(lista);
+    	
+    	final String uriString = ServletUriComponentsBuilder.fromCurrentRequest().build().toUriString();
+    	listInstituicaoResource.add(Link.of(uriString, "self"));
+    	
+	    return ResponseEntity.ok(listInstituicaoResource);
+	}
 
 }
