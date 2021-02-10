@@ -27,34 +27,63 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import br.com.fattoria.sccm.api.PesquisaCientificaApi;
 import br.com.fattoria.sccm.api.PesquisaCientificaModel;
 import br.com.fattoria.sccm.api.PesquisaCientificaModelAssembler;
+import br.com.fattoria.sccm.persistence.model.Instituicao;
 import br.com.fattoria.sccm.persistence.model.PesquisaCientifica;
+import br.com.fattoria.sccm.persistence.model.Plataforma;
+import br.com.fattoria.sccm.persistence.model.Sigilo;
+import br.com.fattoria.sccm.persistence.repository.ComissaoRepository;
+import br.com.fattoria.sccm.persistence.repository.InstituicaoRepository;
 import br.com.fattoria.sccm.persistence.repository.PesquisaCientificaRepository;
+import br.com.fattoria.sccm.persistence.repository.PlataformaRepository;
+import br.com.fattoria.sccm.persistence.repository.SigiloRepository;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import javassist.NotFoundException;
 
-@Api(value = "pesquisaCientifica")
+@Api(value = "Pesquisa Cientifica")
 @RestController
 @RequestMapping(value = "/api", produces = "application/hal+json")
 public class PesquisaCientificaController {
 
 	private final Logger log = LoggerFactory.getLogger(PesquisaCientificaController.class);
 	private PesquisaCientificaRepository pesquisaCientificaRepository;
+	private PlataformaRepository plataformaRepository;
+	private SigiloRepository sigiloRepository;
+	private InstituicaoRepository instituicaoRepository;
+	private ComissaoRepository comissaoRepository;
 	
-	public PesquisaCientificaController(PesquisaCientificaRepository pesquisaCientificaRepository) {
+	public PesquisaCientificaController(PesquisaCientificaRepository pesquisaCientificaRepository, PlataformaRepository plataformaRepository, SigiloRepository sigiloRepository, InstituicaoRepository instituicaoRepository, ComissaoRepository comissaoRepository) {
 		this.pesquisaCientificaRepository = pesquisaCientificaRepository;
+		this.plataformaRepository = plataformaRepository;
+		this.sigiloRepository = sigiloRepository;
+		this.instituicaoRepository = instituicaoRepository;
+		this.comissaoRepository = comissaoRepository;
 	}
 	
-	@PostMapping("/pesquisaCientifica")
+	@PostMapping("/pesquisas_cientificas")
 	@ApiOperation(value = "Cria uma Comissão")
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "Comissão criada"),
     })
 	ResponseEntity<PesquisaCientificaModel> create(@Valid @RequestBody PesquisaCientificaApi api) throws URISyntaxException {
 		
+		log.info("Salvando "+api);
+		
+		Optional<Plataforma> plataforma = plataformaRepository.findById(api.getIdPlataforma());
+		
+		Optional<Instituicao> instituicao = instituicaoRepository.findById(api.getIdInstituicao());
+		
+		Optional<Sigilo> sigilo = sigiloRepository.findById(api.getIdSigilo());
+		
         PesquisaCientifica entity = api.toEntity();
+        
+        entity.setPlataforma(plataforma.get());
+        entity.setInstituicao(instituicao.get());
+        entity.setSigilo(sigilo.get());
+        
+        //entity.setComissao(comissaoRepository.save(entity.getComissao()));
         
     	PesquisaCientificaModelAssembler assembler = new PesquisaCientificaModelAssembler(); 
     	PesquisaCientificaModel model = assembler.toModel(pesquisaCientificaRepository.save(entity));
@@ -70,10 +99,10 @@ public class PesquisaCientificaController {
                 .body(model);
 	}
 	
-	@PutMapping("/pesquisaCientifica/{id}")
-	@ApiOperation(value = "Atualiza uma Comissão")
+	@PutMapping("/pesquisas_cientificas/{id}")
+	@ApiOperation(value = "Atualiza uma Pesquisa Cientifica")
     @ApiResponses(value = {
-        @ApiResponse(code = 200, message = "Comissão atualizada"),
+        @ApiResponse(code = 200, message = "Pesquisa Cientifica atualizada"),
     })
 	ResponseEntity<PesquisaCientificaModel> update(@Valid @RequestBody PesquisaCientificaApi api){
 		
@@ -87,10 +116,10 @@ public class PesquisaCientificaController {
 
 	}
 	
-	@GetMapping("/pesquisaCientifica")
-    @ApiOperation(value = "Retorna uma lista de comissões")
+	@GetMapping("/pesquisas_cientificas")
+    @ApiOperation(value = "Retorna uma lista de Pesquisa Cientifica")
     @ApiResponses(value = {
-        @ApiResponse(code = 200, message = "Comissões"),
+        @ApiResponse(code = 200, message = "Pesquisa Cientifica"),
     })
 	public ResponseEntity<CollectionModel<PesquisaCientificaModel>> getAll() {
     	
@@ -100,15 +129,15 @@ public class PesquisaCientificaController {
     	CollectionModel<PesquisaCientificaModel> listResource = assembler.toCollectionModel(lista);
     	
     	final String uriString = ServletUriComponentsBuilder.fromCurrentRequest().build().toUriString();
-    	listResource.add(new Link(uriString, "self"));
+    	listResource.add(Link.of(uriString, "self"));
     	
 	    return ResponseEntity.ok(listResource);
 	}
     
-    @GetMapping("/pesquisaCientifica/{id}")
-    @ApiOperation(value = "Retorna uma Comissão")
+    @GetMapping("/pesquisas_cientificas/{id}")
+    @ApiOperation(value = "Retorna uma Pesquisa Cientifica")
     @ApiResponses(value = {
-        @ApiResponse(code = 200, message = "Retorna uma comissão"),
+        @ApiResponse(code = 200, message = "Retorna uma Pesquisa Cientifica"),
     })
 	public ResponseEntity<PesquisaCientificaModel> getById(@PathVariable Long id) {
     	 
@@ -120,8 +149,8 @@ public class PesquisaCientificaController {
                 .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
 	}
     
-    @DeleteMapping("/pesquisaCientifica/{id}")
-    @ApiOperation(value = "Deleta uma comissão")
+    @DeleteMapping("/pesquisas_cientificas/{id}")
+    @ApiOperation(value = "Deleta uma Pesquisa Cientifica")
     public ResponseEntity<?> delete(@PathVariable Long id) throws NotFoundException {
     	
     	 pesquisaCientificaRepository.deleteById(id);
@@ -131,7 +160,7 @@ public class PesquisaCientificaController {
     	            p -> {
     	            	pesquisaCientificaRepository.deleteById(id);
     	              return ResponseEntity.noContent().build();
-    	            }).orElseThrow(() -> new NotFoundException("Comissão não encontrado"));
+    	            }).orElseThrow(() -> new NotFoundException("Pesquisa Cientifica não encontrado"));
     	
     }
 	

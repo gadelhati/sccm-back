@@ -16,8 +16,6 @@ public class ComissaoApi {
 	
 	private Long id;
 	
-	private String numeroPC;
-	
 	private String nomeComissao;
 	
 	private String nomeCruzeiro;

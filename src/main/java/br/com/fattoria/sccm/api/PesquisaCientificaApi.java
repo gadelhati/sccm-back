@@ -2,13 +2,7 @@ package br.com.fattoria.sccm.api;
 
 import java.util.Calendar;
 
-import javax.persistence.Column;
-
-import br.com.fattoria.sccm.persistence.model.Comissao;
-import br.com.fattoria.sccm.persistence.model.Instituicao;
 import br.com.fattoria.sccm.persistence.model.PesquisaCientifica;
-import br.com.fattoria.sccm.persistence.model.Plataforma;
-import br.com.fattoria.sccm.persistence.model.Sigilo;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -48,8 +42,10 @@ public class PesquisaCientificaApi {
 	
 	private String numeroPC;
 	
+	private ComissaoApi comissao;
+	
 	public PesquisaCientifica toEntity() {
-		return new PesquisaCientifica(id, null, null, null, null, dataCadastro, comandante, chefeCientifico, cartaNautica, limiteNorteLatitude, limiteSulLatitude, limiteLesteLongitude, limiteOesteLongitude, numeroPC, null, null, null);
+		return new PesquisaCientifica(id, null, comissao != null ? comissao.toEntity() : null, null, null, dataCadastro, comandante, chefeCientifico, cartaNautica, limiteNorteLatitude, limiteSulLatitude, limiteLesteLongitude, limiteOesteLongitude, numeroPC, null, null, null);
 	}
 	
 }
