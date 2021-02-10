@@ -3,6 +3,7 @@ package br.com.fattoria.sccm.api;
 import java.util.Calendar;
 
 import br.com.fattoria.sccm.persistence.model.Comissao;
+import br.com.fattoria.sccm.persistence.model.TipoComissao;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -37,7 +38,7 @@ public class ComissaoApi {
 	private Long idTipoComissao;
 	
 	public Comissao toEntity() {
-		return new Comissao(id, null, nomeComissao, nomeCruzeiro, pernada, dataEntrada, dataOficial, dataInicio, dataFim, observacoes, imagem);
+		return new Comissao(id, idTipoComissao != null ? new TipoComissao(idTipoComissao) : null, nomeComissao, nomeCruzeiro, pernada, dataEntrada, dataOficial, dataInicio, dataFim, observacoes, imagem);
 	}
 
 }

@@ -29,5 +29,9 @@ public class TipoComissao {
 
 	private boolean ativo;
 
-	
+	public TipoComissao(Long id) {
+		super();
+		this.id = id;
+	}
+
 }
