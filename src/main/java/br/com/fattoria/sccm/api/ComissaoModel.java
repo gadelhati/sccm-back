@@ -6,9 +6,8 @@ import java.util.Calendar;
 
 import org.springframework.hateoas.RepresentationModel;
 
-import br.com.fattoria.sccm.controller.DestinoController;
+import br.com.fattoria.sccm.controller.ComissaoController;
 import br.com.fattoria.sccm.persistence.model.Comissao;
-import br.com.fattoria.sccm.persistence.model.Destino;
 import lombok.Getter;
 
 @Getter
@@ -36,6 +35,8 @@ public class ComissaoModel extends RepresentationModel<ComissaoModel> {
 	
 	private String imagem;
 	
+	private TipoComissaoModel tipoComissao;
+	
 	public ComissaoModel(Comissao comissao) {		
 		this.id           = comissao.getId();		
 		this.nomeComissao = comissao.getNomeComissao();
@@ -47,8 +48,9 @@ public class ComissaoModel extends RepresentationModel<ComissaoModel> {
 		this.dataFim      = comissao.getDataFim();
 		this.observacoes  = comissao.getObservacoes();
 		this.imagem       = comissao.getImagem();
+		this.tipoComissao = comissao.getTipoComissao() != null ? new TipoComissaoModel(comissao.getTipoComissao()) : null;
 		
-		add(linkTo(DestinoController.class).withRel("comissao"));
+		add(linkTo(ComissaoController.class).withRel("comissoes"));
     	    	
 	}
 	
