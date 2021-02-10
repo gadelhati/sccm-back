@@ -140,5 +140,23 @@ public class AreaConhecimentoController {
     	            }).orElseThrow(() -> new NotFoundException("País não encontrado"));
     	
     }
+    
+	@GetMapping("/areas_conhecimento/ativas")
+    @ApiOperation(value = "Retorna uma lista de Area de Conhecimento ativas")
+    @ApiResponses(value = {
+        @ApiResponse(code = 200, message = "Retorna a lista de Area de Conhecimento"),
+    })
+	public ResponseEntity<CollectionModel<AreaConhecimentoModel>> getAllAtivas() {
+    	 
+    	Collection<AreaConhecimento> lista = (Collection<AreaConhecimento>) areaConhecimentoRepository.findAllByAtivoTrue();
+    	
+    	AreaConhecimentoModelAssembler assembler = new AreaConhecimentoModelAssembler(); 
+    	CollectionModel<AreaConhecimentoModel> listPlataformaResource = assembler.toCollectionModel(lista);
+    	
+    	final String uriString = ServletUriComponentsBuilder.fromCurrentRequest().build().toUriString();
+    	listPlataformaResource.add(Link.of(uriString, "self"));
+    	
+	    return ResponseEntity.ok(listPlataformaResource);
+	}
 
 }

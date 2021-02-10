@@ -194,5 +194,25 @@ public class PlataformaController {
     	}).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
 
 	}
+	
+	@GetMapping("/plataformas/ativas")
+    @ApiOperation(value = "Retorna uma lista de plataformas")
+    @ApiResponses(value = {
+        @ApiResponse(code = 200, message = "Retorna a lista de plataformas ativas"),
+    })
+	public ResponseEntity<CollectionModel<PlataformaModel>> getAllAtivas() {
+    	
+    	log.info("listando plataforma");
+    	 
+    	Collection<Plataforma> lista = (Collection<Plataforma>) plataformaRepository.findAllByAtivoTrue();
+    	
+    	PlataformaModelAssembler assembler = new PlataformaModelAssembler(); 
+    	CollectionModel<PlataformaModel> listPlataformaResource = assembler.toCollectionModel(lista);
+    	
+    	final String uriString = ServletUriComponentsBuilder.fromCurrentRequest().build().toUriString();
+    	listPlataformaResource.add(Link.of(uriString, "self"));
+    	
+	    return ResponseEntity.ok(listPlataformaResource);
+	}
 
 }
