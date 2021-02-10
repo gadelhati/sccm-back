@@ -12,8 +12,6 @@ import br.com.fattoria.sccm.persistence.model.TipoComissao;
 @RepositoryRestResource(collectionResourceRel = "tipos_comissao", path="tipos_comissao")
 public interface TipoComissaoRepository extends CrudRepository<TipoComissao, Long> {
 	
-	TipoComissao findByDescricao(String descricao);
-	
 	List<TipoComissao> findAllByAtivoTrue();
 
 }
