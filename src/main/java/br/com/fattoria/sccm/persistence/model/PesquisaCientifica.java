@@ -14,6 +14,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
@@ -97,10 +98,7 @@ public class PesquisaCientifica implements Serializable {
     inverseJoinColumns = {@JoinColumn(name="fk_equipamento")})
 	private List<Equipamento> listaEquipamentos;
 
-	@ManyToMany
-    @JoinTable(name = "pesquisa_cientifica_equipamento", 
-    joinColumns = {@JoinColumn(name="fk_pesquisa_cientifica")}, 
-    inverseJoinColumns = {@JoinColumn(name="fk_equipamento")})
+	@OneToMany(mappedBy = "pesquisaCientifica")
 	private List<Documento> listaDocumentos;
 
 	
