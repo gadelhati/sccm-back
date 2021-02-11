@@ -18,25 +18,20 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "pesquisa_cientifica_area_conhecimento")
-public class PesquisaCientificaAreaConhecimento implements Serializable {
-
+@Table(name = "pesquisa_cientifica_co_autor")
+public class PesquisaCientificaCoAutor implements Serializable {
+	
 	private static final long serialVersionUID = 1L;
 	
 	@EmbeddedId
-	private PesquisaCientificaAreaConhecimentoPk pk;
+	private PesquisaCientificaCoAutorPk pk;
 	
 	@ManyToOne
-	@JoinColumn(name = "fk_pesquisa_cientifica", insertable = false, updatable = false)
+	@JoinColumn(name = "fk_pesquisa_cientifica")
 	private PesquisaCientifica pesquisaCientifica;
 	
 	@ManyToOne
-	@JoinColumn(name = "fk_area_conhecimento", insertable = false, updatable = false)
-	private AreaConhecimento areaConhecimento;
+	@JoinColumn(name = "fk_instituicao")
+	private Instituicao instituicao;
 
-	public PesquisaCientificaAreaConhecimento(PesquisaCientificaAreaConhecimentoPk pk) {		
-		this.pk = pk;
-	}
-	
-	
 }
