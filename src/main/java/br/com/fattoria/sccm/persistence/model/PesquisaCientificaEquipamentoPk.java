@@ -16,7 +16,7 @@ public class PesquisaCientificaEquipamentoPk implements Serializable {
 	@Column(name = "fk_pesquisa_cientifica")
 	private Long idPesquisaCientifica;
 
-	@Column(name = "fk_documento")
+	@Column(name = "fk_equipamento")
 	private Long idEquipamento;
 
 	public PesquisaCientificaEquipamentoPk() {

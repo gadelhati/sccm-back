@@ -1,6 +1,7 @@
 package br.com.fattoria.sccm.api;
 
 import java.util.Calendar;
+import java.util.List;
 
 import br.com.fattoria.sccm.persistence.model.PesquisaCientifica;
 import lombok.AllArgsConstructor;
@@ -43,6 +44,10 @@ public class PesquisaCientificaApi {
 	private String numeroPC;
 	
 	private ComissaoApi comissao;
+	
+	private List<Long> idsEquipamentos;
+	
+	private List<Long> idsAreasConhecimento;
 	
 	public PesquisaCientifica toEntity() {
 		return new PesquisaCientifica(id, null, comissao != null ? comissao.toEntity() : null, null, null, dataCadastro, comandante, chefeCientifico, cartaNautica, limiteNorteLatitude, limiteSulLatitude, limiteLesteLongitude, limiteOesteLongitude, numeroPC, null, null, null);

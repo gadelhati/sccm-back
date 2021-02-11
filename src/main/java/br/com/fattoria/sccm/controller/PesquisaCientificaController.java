@@ -27,12 +27,22 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import br.com.fattoria.sccm.api.PesquisaCientificaApi;
 import br.com.fattoria.sccm.api.PesquisaCientificaModel;
 import br.com.fattoria.sccm.api.PesquisaCientificaModelAssembler;
+import br.com.fattoria.sccm.persistence.model.AreaConhecimento;
+import br.com.fattoria.sccm.persistence.model.Equipamento;
 import br.com.fattoria.sccm.persistence.model.Instituicao;
 import br.com.fattoria.sccm.persistence.model.PesquisaCientifica;
+import br.com.fattoria.sccm.persistence.model.PesquisaCientificaAreaConhecimento;
+import br.com.fattoria.sccm.persistence.model.PesquisaCientificaAreaConhecimentoPk;
+import br.com.fattoria.sccm.persistence.model.PesquisaCientificaEquipamento;
+import br.com.fattoria.sccm.persistence.model.PesquisaCientificaEquipamentoPk;
 import br.com.fattoria.sccm.persistence.model.Plataforma;
 import br.com.fattoria.sccm.persistence.model.Sigilo;
+import br.com.fattoria.sccm.persistence.repository.AreaConhecimentoRepository;
 import br.com.fattoria.sccm.persistence.repository.ComissaoRepository;
+import br.com.fattoria.sccm.persistence.repository.EquipamentoRepository;
 import br.com.fattoria.sccm.persistence.repository.InstituicaoRepository;
+import br.com.fattoria.sccm.persistence.repository.PesquisaCientificaAreaConhecimentoRepository;
+import br.com.fattoria.sccm.persistence.repository.PesquisaCientificaEquipamentoRepository;
 import br.com.fattoria.sccm.persistence.repository.PesquisaCientificaRepository;
 import br.com.fattoria.sccm.persistence.repository.PlataformaRepository;
 import br.com.fattoria.sccm.persistence.repository.SigiloRepository;
@@ -53,13 +63,26 @@ public class PesquisaCientificaController {
 	private SigiloRepository sigiloRepository;
 	private InstituicaoRepository instituicaoRepository;
 	private ComissaoRepository comissaoRepository;
+	private PesquisaCientificaEquipamentoRepository pesquisaCientificaEquipamentoRepository;
+	private PesquisaCientificaAreaConhecimentoRepository pesquisaCientificaAreaConhecimentoRepository;
+	private AreaConhecimentoRepository areaConhecimentoRepository;
+	private EquipamentoRepository equipamentoRepository;
 	
-	public PesquisaCientificaController(PesquisaCientificaRepository pesquisaCientificaRepository, PlataformaRepository plataformaRepository, SigiloRepository sigiloRepository, InstituicaoRepository instituicaoRepository, ComissaoRepository comissaoRepository) {
+	public PesquisaCientificaController(PesquisaCientificaRepository pesquisaCientificaRepository, PlataformaRepository plataformaRepository, 
+			SigiloRepository sigiloRepository, InstituicaoRepository instituicaoRepository, ComissaoRepository comissaoRepository,
+			PesquisaCientificaEquipamentoRepository pesquisaCientificaEquipamentoRepository, PesquisaCientificaAreaConhecimentoRepository pesquisaCientificaAreaConhecimentoRepository,
+			AreaConhecimentoRepository areaConhecimentoRepository,
+			EquipamentoRepository equipamentoRepository
+			) {
 		this.pesquisaCientificaRepository = pesquisaCientificaRepository;
 		this.plataformaRepository = plataformaRepository;
 		this.sigiloRepository = sigiloRepository;
 		this.instituicaoRepository = instituicaoRepository;
 		this.comissaoRepository = comissaoRepository;
+		this.pesquisaCientificaEquipamentoRepository = pesquisaCientificaEquipamentoRepository;
+		this.pesquisaCientificaAreaConhecimentoRepository = pesquisaCientificaAreaConhecimentoRepository;
+		this.areaConhecimentoRepository = areaConhecimentoRepository;
+		this.equipamentoRepository = equipamentoRepository;
 	}
 	
 	@PostMapping("/pesquisas_cientificas")
@@ -84,6 +107,22 @@ public class PesquisaCientificaController {
         entity.setSigilo(sigilo.get());
         
         //entity.setComissao(comissaoRepository.save(entity.getComissao()));
+        
+        entity = pesquisaCientificaRepository.save(entity);
+        
+        Iterable<AreaConhecimento> areasConhecimento = areaConhecimentoRepository.findAllById(api.getIdsAreasConhecimento());
+        
+        for (AreaConhecimento areaConhecimento : areasConhecimento) {
+        	PesquisaCientificaAreaConhecimento pesquisaCientificaAreaConhecimento = new PesquisaCientificaAreaConhecimento(new PesquisaCientificaAreaConhecimentoPk(entity.getId(), areaConhecimento.getId()));
+			pesquisaCientificaAreaConhecimentoRepository.save(pesquisaCientificaAreaConhecimento);
+		}
+        
+        Iterable<Equipamento> equipamentos = equipamentoRepository.findAllById(api.getIdsEquipamentos());
+        
+        for (Equipamento equipamento : equipamentos) {
+        	PesquisaCientificaEquipamento pesquisaCientificaEquipamento = new PesquisaCientificaEquipamento(new PesquisaCientificaEquipamentoPk(entity.getId(), equipamento.getId()));
+			pesquisaCientificaEquipamentoRepository.save(pesquisaCientificaEquipamento);
+		}
         
     	PesquisaCientificaModelAssembler assembler = new PesquisaCientificaModelAssembler(); 
     	PesquisaCientificaModel model = assembler.toModel(pesquisaCientificaRepository.save(entity));

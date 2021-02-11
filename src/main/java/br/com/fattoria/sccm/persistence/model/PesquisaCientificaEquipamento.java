@@ -33,6 +33,8 @@ public class PesquisaCientificaEquipamento implements Serializable {
 	@ManyToOne
 	@JoinColumn(name = "fk_equipamento", insertable = false, updatable = false)
 	private Equipamento equipamento;
+	
+	private Long valor;
 
 	public PesquisaCientificaEquipamento(PesquisaCientificaEquipamentoPk pk) {
 		super();
