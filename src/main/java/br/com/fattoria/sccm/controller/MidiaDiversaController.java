@@ -178,6 +178,10 @@ public class MidiaDiversaController {
     		list.add(api.toEntity());
 		}
     	 
+    	List<MidiaDiversaTipoMidia> allByMidiaDiversaId = midiaDiversaTipoMidiaRepository.findAllByMidiaDiversaId(id);
+    	if(allByMidiaDiversaId != null && allByMidiaDiversaId.size() > 0) {
+    		midiaDiversaTipoMidiaRepository.deleteAll(allByMidiaDiversaId);
+    	}
     	Iterable<MidiaDiversaTipoMidia> saveAllList = midiaDiversaTipoMidiaRepository.saveAll(list);
     	
     	MidiaDiversaTipoMidiaModelAssembler assembler = new MidiaDiversaTipoMidiaModelAssembler(); 
