@@ -27,11 +27,11 @@ public class PesquisaCientificaCoAutor implements Serializable {
 	private PesquisaCientificaCoAutorPk pk;
 	
 	@ManyToOne
-	@JoinColumn(name = "fk_pesquisa_cientifica")
+	@JoinColumn(name = "fk_pesquisa_cientifica", insertable = false, updatable = false)
 	private PesquisaCientifica pesquisaCientifica;
 	
 	@ManyToOne
-	@JoinColumn(name = "fk_instituicao")
+	@JoinColumn(name = "fk_instituicao", insertable = false, updatable = false)
 	private Instituicao instituicao;
 
 }

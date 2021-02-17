@@ -1,11 +1,18 @@
 package br.com.fattoria.sccm.persistence.model;
 
+import java.io.Serializable;
+
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
 @Embeddable
-public class PesquisaCientificaCoAutorPk {
+public class PesquisaCientificaCoAutorPk implements Serializable {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	@Column(name = "fk_pesquisa_cientifica")
 	private Long idPesquisaCientifica;
 	
