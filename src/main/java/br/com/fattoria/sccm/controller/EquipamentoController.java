@@ -3,6 +3,7 @@ package br.com.fattoria.sccm.controller;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 
@@ -14,6 +15,7 @@ import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.Link;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -312,6 +314,33 @@ public class EquipamentoController {
     	listEquipamentoResource.add(Link.of(uriString, "self"));
     	
 	    return ResponseEntity.ok(listEquipamentoResource);
+	}
+	
+	@GetMapping("/equipamentos/searchByIdsEquipamentos/{ids}/tipo_dados")
+    @ApiOperation(value = "Retorna uma lista de equipamento")
+    @ApiResponses(value = {
+        @ApiResponse(code = 200, message = "Retorna a lista de dados de um equipamento"),
+    })
+	public ResponseEntity<CollectionModel<TipoDadoModel>> getAllTipoDadosByIdEquipamento(@PathVariable List<Long> ids) {
+    	
+    	log.info("listando equipamento");
+    	
+    	Collection<TipoDado> tipos = new HashSet<TipoDado>();
+    	for (Long id : ids) {
+    		Collection<TipoDado> lista = (Collection<TipoDado>) tipoDadoRepository.findAllByEquipamentoId(id);
+    		
+    		if(lista != null && lista.size() > 0) {
+    			tipos.addAll(lista);
+    		}
+		}
+    	 
+    	TipoDadoModelAssembler assembler = new TipoDadoModelAssembler(); 
+    	CollectionModel<TipoDadoModel> listTipoDadoResource = assembler.toCollectionModel(tipos);
+    	
+    	final String uriString = ServletUriComponentsBuilder.fromCurrentRequest().build().toUriString();
+    	listTipoDadoResource.add(Link.of(uriString, "self"));
+    	
+	    return ResponseEntity.ok(listTipoDadoResource);
 	}
 
 }
