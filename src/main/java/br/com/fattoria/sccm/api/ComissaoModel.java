@@ -15,8 +15,6 @@ public class ComissaoModel extends RepresentationModel<ComissaoModel> {
 
 	private Long id;	
 	
-	private String numeroPC;
-	
 	private String nomeComissao;
 	
 	private String nomeCruzeiro;
