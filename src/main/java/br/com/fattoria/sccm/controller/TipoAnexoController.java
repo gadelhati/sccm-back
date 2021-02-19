@@ -35,7 +35,7 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import javassist.NotFoundException;
 
-@Api(value = "tipoAnexo")
+@Api(value = "Tipo Anexo")
 @RestController
 @RequestMapping(value = "/api", produces = "application/hal+json")
 public class TipoAnexoController {
@@ -47,7 +47,7 @@ public class TipoAnexoController {
 		this.tipoAnexoRepository = tipoAnexoRepository;
 	}
 	
-	@PostMapping("/tipoAnexo")
+	@PostMapping("/tipos_anexo")
 	@ApiOperation(value = "Cria um Tipo Anexo")
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "Tipo Anexo criado"),
@@ -70,8 +70,8 @@ public class TipoAnexoController {
                 .body(paisModel);
 	}
 	
-	@PutMapping("/tipoAnexo/{id}")
-	@ApiOperation(value = "Atualiza um tipoAnexo")
+	@PutMapping("/tipos_anexo/{id}")
+	@ApiOperation(value = "Atualiza um Tipo Anexo")
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "Tipo Anexo atualizado"),
     })
@@ -87,12 +87,14 @@ public class TipoAnexoController {
 
 	}
 	
-	@GetMapping("/tipoAnexo")
-    @ApiOperation(value = "Retorna uma lista de anexos")
+	@GetMapping("/tipos_anexo")
+    @ApiOperation(value = "Retorna uma lista de tipos de anexos")
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "Anexos"),
     })
 	public ResponseEntity<CollectionModel<TipoAnexoModel>> getAll() {
+		
+		log.info("listando tipos anexos");
     	
     	Collection<TipoAnexo> lista = (Collection<TipoAnexo>) tipoAnexoRepository.findAll();
     	
@@ -100,17 +102,19 @@ public class TipoAnexoController {
     	CollectionModel<TipoAnexoModel> listPlataformaResource = assembler.toCollectionModel(lista);
     	
     	final String uriString = ServletUriComponentsBuilder.fromCurrentRequest().build().toUriString();
-    	listPlataformaResource.add(new Link(uriString, "self"));
+    	listPlataformaResource.add(Link.of(uriString, "self"));
     	
 	    return ResponseEntity.ok(listPlataformaResource);
 	}
     
-    @GetMapping("/tipoAnexo/{id}")
-    @ApiOperation(value = "Retorna um Anexos")
+    @GetMapping("/tipos_anexo/{id}")
+    @ApiOperation(value = "Retorna um tipo de anexo")
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "Retorna uma anexo"),
     })
 	public ResponseEntity<TipoAnexoModel> getById(@PathVariable Long id) {
+    	
+    	log.info("tipo anexo por id");
     	 
     	Optional<TipoAnexo> pais = tipoAnexoRepository.findById(id);
     	
@@ -120,7 +124,7 @@ public class TipoAnexoController {
                 .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
 	}
     
-    @DeleteMapping("/tipoAnexo/{id}")
+    @DeleteMapping("/tipos_anexo/{id}")
     @ApiOperation(value = "Deleta um destino")
     public ResponseEntity<?> delete(@PathVariable Long id) throws NotFoundException{
     	

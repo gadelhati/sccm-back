@@ -15,11 +15,14 @@ public class PesquisaCientificaEquipamentosModel extends RepresentationModel<Pes
 	
 	private EquipamentoModel equipamento;
 	
+	private Long valor;
+	
 	private PesquisaCientificaModel pesquisaCientifica;
 	
 	public PesquisaCientificaEquipamentosModel(PesquisaCientificaEquipamento pesquisaCientificaEquipamento) {		
 		this.pesquisaCientifica             = pesquisaCientificaEquipamento.getPesquisaCientifica() != null ? new PesquisaCientificaModel(pesquisaCientificaEquipamento.getPesquisaCientifica()) : null;
 		this.equipamento                    = pesquisaCientificaEquipamento.getEquipamento() != null ? new EquipamentoModel(pesquisaCientificaEquipamento.getEquipamento()) : null;
+		this.valor                          = pesquisaCientificaEquipamento.getValor();
 		
 		if (pesquisaCientificaEquipamento.getPesquisaCientifica() != null && pesquisaCientificaEquipamento.getPesquisaCientifica().getId() != null) {
     		add(linkTo(methodOn(PesquisaCientificaController.class).getById(pesquisaCientificaEquipamento.getPesquisaCientifica().getId())).withRel("pesquisas_cientificas"));
