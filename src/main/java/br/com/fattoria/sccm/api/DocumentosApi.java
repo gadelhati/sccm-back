@@ -26,6 +26,8 @@ public class DocumentosApi {
 	
 	private String observacoes;
 	
+	private Long idPesquisaCientifica;
+	
 	public Documento toEntity() {
 		return new Documento(id, anexo, dataRecebimento, null, null, null, observacoes);
 	}

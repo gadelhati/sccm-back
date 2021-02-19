@@ -28,25 +28,35 @@ import br.com.fattoria.sccm.api.DocumentosApi;
 import br.com.fattoria.sccm.api.DocumentosModel;
 import br.com.fattoria.sccm.api.DocumentosModelAssembler;
 import br.com.fattoria.sccm.persistence.model.Documento;
+import br.com.fattoria.sccm.persistence.model.PesquisaCientifica;
+import br.com.fattoria.sccm.persistence.model.TipoAnexo;
 import br.com.fattoria.sccm.persistence.repository.DocumentosRepository;
+import br.com.fattoria.sccm.persistence.repository.PesquisaCientificaRepository;
+import br.com.fattoria.sccm.persistence.repository.TipoAnexoRepository;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import javassist.NotFoundException;
 
-@Api(value = "destino")
+@Api(value = "documento")
 @RestController
 @RequestMapping(value = "/api", produces = "application/hal+json")
 public class DocumentosController {
 
 	private final Logger log = LoggerFactory.getLogger(DocumentosController.class);
-	private DocumentosRepository documentosRepository;
+	private final DocumentosRepository documentosRepository;
+	private final TipoAnexoRepository tipoAnexoRepository;
+	private final PesquisaCientificaRepository pesquisaCientificaRepository;
 	
-	public DocumentosController(DocumentosRepository destinoRepository) {
-		this.documentosRepository = destinoRepository;
+	public DocumentosController(DocumentosRepository documentosRepository, TipoAnexoRepository tipoAnexoRepository,
+			PesquisaCientificaRepository pesquisaCientificaRepository) {
+		super();
+		this.documentosRepository = documentosRepository;
+		this.tipoAnexoRepository = tipoAnexoRepository;
+		this.pesquisaCientificaRepository = pesquisaCientificaRepository;
 	}
-	
+
 	@PostMapping("/documentos")
 	@ApiOperation(value = "Cria um Documentos")
     @ApiResponses(value = {
@@ -54,7 +64,20 @@ public class DocumentosController {
     })
 	ResponseEntity<DocumentosModel> create(@Valid @RequestBody DocumentosApi api) throws URISyntaxException{
 		
+		log.info("Salvando documento");
+		
+        Optional<TipoAnexo> tipoAnexo = tipoAnexoRepository.findById(api.getIdTipoAnexo());
+		
         Documento entity = api.toEntity();
+        
+        if(api.getIdPesquisaCientifica() != null) {
+        	Optional<PesquisaCientifica> pesquisaCientifica = pesquisaCientificaRepository.findById(api.getIdPesquisaCientifica());
+        	entity.setPesquisaCientifica(pesquisaCientifica.get());
+        }
+        
+        if(tipoAnexo.isPresent()) {
+        	entity.setTipoAnexo(tipoAnexo.get());
+        }
         
     	DocumentosModelAssembler assembler = new DocumentosModelAssembler(); 
     	DocumentosModel model = assembler.toModel(documentosRepository.save(entity));
@@ -71,13 +94,21 @@ public class DocumentosController {
 	}
 	
 	@PutMapping("/documentos/{id}")
-	@ApiOperation(value = "Atualiza um documentos")
+	@ApiOperation(value = "Atualiza um documento")
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "Documento atualizado"),
     })
-	ResponseEntity<DocumentosModel> update(@Valid @RequestBody DocumentosApi pais){
+	ResponseEntity<DocumentosModel> update(@Valid @RequestBody DocumentosApi api){
 		
-        Documento paisEntity = pais.toEntity();
+        Optional<TipoAnexo> tipoAnexo = tipoAnexoRepository.findById(api.getIdTipoAnexo());
+		
+        Documento entity = api.toEntity();
+        
+        if(tipoAnexo.isPresent()) {
+        	entity.setTipoAnexo(tipoAnexo.get());
+        }
+		
+        Documento paisEntity = api.toEntity();
         
     	DocumentosModelAssembler assembler = new DocumentosModelAssembler(); 
     	DocumentosModel paisModel = assembler.toModel(documentosRepository.save(paisEntity));
