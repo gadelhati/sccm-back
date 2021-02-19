@@ -8,10 +8,8 @@ import java.util.Calendar;
 import org.springframework.hateoas.RepresentationModel;
 
 import br.com.fattoria.sccm.controller.DocumentosController;
-import br.com.fattoria.sccm.controller.InstituicaoController;
 import br.com.fattoria.sccm.persistence.model.Destino;
 import br.com.fattoria.sccm.persistence.model.Documento;
-import br.com.fattoria.sccm.persistence.model.TipoAnexo;
 import lombok.Getter;
 
 @Getter
@@ -27,17 +25,20 @@ public class DocumentosModel extends RepresentationModel<DocumentosModel> {
 	
 	private Destino destino;
 	
-	public DocumentosModel(Documento documentos) {		
-		this.id = documentos.getId();
-		this.anexo = documentos.getAnexo();
-		this.dataRecebimento = documentos.getDataRecebimento();
-		this.tipoAnexo = documentos.getTipoAnexo() != null ? new TipoAnexoModel(documentos.getTipoAnexo()) : null;
-		this.destino= documentos.getDestino();
+	private String observacoes;
+	
+	public DocumentosModel(Documento documento) {		
+		this.id = documento.getId();
+		this.anexo = documento.getAnexo();
+		this.dataRecebimento = documento.getDataRecebimento();
+		this.tipoAnexo = documento.getTipoAnexo() != null ? new TipoAnexoModel(documento.getTipoAnexo()) : null;
+		this.destino = documento.getDestino();
+		this.observacoes = documento.getObservacoes();
 		
 		add(linkTo(DocumentosController.class).withRel("documentos"));
 		
-		if (documentos.getTipoAnexo() != null && documentos.getTipoAnexo().getId() != null) {
-			add(linkTo(methodOn(DocumentosController.class).getById(documentos.getTipoAnexo().getId())).withRel("tipoAnexo"));			
+		if (documento.getTipoAnexo() != null && documento.getTipoAnexo().getId() != null) {
+			add(linkTo(methodOn(DocumentosController.class).getById(documento.getTipoAnexo().getId())).withRel("tipos_anexos"));			
 		}
     	    	
 	}
