@@ -21,4 +21,7 @@ public interface AreaConhecimentoRepository extends CrudRepository<AreaConhecime
 	@Query("select ac.areaConhecimento from AreaConhecimentoEquipamento ac where ac.equipamento.id =:id")
 	List<AreaConhecimento> findAllByEquipamentoId(@Param("id") Long id);
 
+	@Query("select pcac.areaConhecimento from PesquisaCientificaAreaConhecimento pcac where pcac.pesquisaCientifica.id =:id")
+	List<AreaConhecimento> findAllByPesquisaCientificaId(@Param("id") Long id);
+
 }
