@@ -20,5 +20,8 @@ public interface TipoDadoRepository extends CrudRepository<TipoDado, Long> {
 	
 	@Query("select ac.tipoDado from EquipamentoDados ac where ac.equipamento.id =:id")
 	List<TipoDado> findAllByEquipamentoId(@Param("id") Long id);
+	
+	@Query("select pcd.tipoDado from PesquisaCientificaDados pcd where pcd.pesquisaCientifica.id =:id")
+	List<TipoDado> findAllByPesquisaCientificaId(@Param("id") Long id);
 
 }

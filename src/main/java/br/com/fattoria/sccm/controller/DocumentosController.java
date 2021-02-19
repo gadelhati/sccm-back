@@ -104,14 +104,17 @@ public class DocumentosController {
 		
         Documento entity = api.toEntity();
         
+        if(api.getIdPesquisaCientifica() != null) {
+        	Optional<PesquisaCientifica> pesquisaCientifica = pesquisaCientificaRepository.findById(api.getIdPesquisaCientifica());
+        	entity.setPesquisaCientifica(pesquisaCientifica.get());
+        }
+        
         if(tipoAnexo.isPresent()) {
         	entity.setTipoAnexo(tipoAnexo.get());
         }
 		
-        Documento paisEntity = api.toEntity();
-        
     	DocumentosModelAssembler assembler = new DocumentosModelAssembler(); 
-    	DocumentosModel paisModel = assembler.toModel(documentosRepository.save(paisEntity));
+    	DocumentosModel paisModel = assembler.toModel(documentosRepository.save(entity));
         
         final URI uri = ServletUriComponentsBuilder.fromCurrentRequest().build().toUri();
         return ResponseEntity.created(uri).body(paisModel);

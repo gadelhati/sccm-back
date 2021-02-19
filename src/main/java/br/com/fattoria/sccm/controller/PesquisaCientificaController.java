@@ -25,9 +25,15 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import br.com.fattoria.sccm.api.AreaConhecimentoModel;
+import br.com.fattoria.sccm.api.AreaConhecimentoModelAssembler;
+import br.com.fattoria.sccm.api.EquipamentoModel;
+import br.com.fattoria.sccm.api.EquipamentoModelAssembler;
 import br.com.fattoria.sccm.api.PesquisaCientificaApi;
 import br.com.fattoria.sccm.api.PesquisaCientificaModel;
 import br.com.fattoria.sccm.api.PesquisaCientificaModelAssembler;
+import br.com.fattoria.sccm.api.TipoDadoModel;
+import br.com.fattoria.sccm.api.TipoDadoModelAssembler;
 import br.com.fattoria.sccm.persistence.model.AreaConhecimento;
 import br.com.fattoria.sccm.persistence.model.Equipamento;
 import br.com.fattoria.sccm.persistence.model.Instituicao;
@@ -38,8 +44,8 @@ import br.com.fattoria.sccm.persistence.model.PesquisaCientificaEquipamento;
 import br.com.fattoria.sccm.persistence.model.PesquisaCientificaEquipamentoPk;
 import br.com.fattoria.sccm.persistence.model.Plataforma;
 import br.com.fattoria.sccm.persistence.model.Sigilo;
+import br.com.fattoria.sccm.persistence.model.TipoDado;
 import br.com.fattoria.sccm.persistence.repository.AreaConhecimentoRepository;
-import br.com.fattoria.sccm.persistence.repository.ComissaoRepository;
 import br.com.fattoria.sccm.persistence.repository.EquipamentoRepository;
 import br.com.fattoria.sccm.persistence.repository.InstituicaoRepository;
 import br.com.fattoria.sccm.persistence.repository.PesquisaCientificaAreaConhecimentoRepository;
@@ -47,6 +53,7 @@ import br.com.fattoria.sccm.persistence.repository.PesquisaCientificaEquipamento
 import br.com.fattoria.sccm.persistence.repository.PesquisaCientificaRepository;
 import br.com.fattoria.sccm.persistence.repository.PlataformaRepository;
 import br.com.fattoria.sccm.persistence.repository.SigiloRepository;
+import br.com.fattoria.sccm.persistence.repository.TipoDadoRepository;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -59,33 +66,35 @@ import javassist.NotFoundException;
 public class PesquisaCientificaController {
 
 	private final Logger log = LoggerFactory.getLogger(PesquisaCientificaController.class);
-	private PesquisaCientificaRepository pesquisaCientificaRepository;
-	private PlataformaRepository plataformaRepository;
-	private SigiloRepository sigiloRepository;
-	private InstituicaoRepository instituicaoRepository;
-	private ComissaoRepository comissaoRepository;
-	private PesquisaCientificaEquipamentoRepository pesquisaCientificaEquipamentoRepository;
-	private PesquisaCientificaAreaConhecimentoRepository pesquisaCientificaAreaConhecimentoRepository;
-	private AreaConhecimentoRepository areaConhecimentoRepository;
-	private EquipamentoRepository equipamentoRepository;
+	private final PesquisaCientificaRepository pesquisaCientificaRepository;
+	private final PlataformaRepository plataformaRepository;
+	private final SigiloRepository sigiloRepository;
+	private final InstituicaoRepository instituicaoRepository;
+	private final PesquisaCientificaEquipamentoRepository pesquisaCientificaEquipamentoRepository;
+	private final PesquisaCientificaAreaConhecimentoRepository pesquisaCientificaAreaConhecimentoRepository;
+	private final AreaConhecimentoRepository areaConhecimentoRepository;
+	private final EquipamentoRepository equipamentoRepository;
+	private final TipoDadoRepository tipoDadoRepository;
 	
-	public PesquisaCientificaController(PesquisaCientificaRepository pesquisaCientificaRepository, PlataformaRepository plataformaRepository, 
-			SigiloRepository sigiloRepository, InstituicaoRepository instituicaoRepository, ComissaoRepository comissaoRepository,
-			PesquisaCientificaEquipamentoRepository pesquisaCientificaEquipamentoRepository, PesquisaCientificaAreaConhecimentoRepository pesquisaCientificaAreaConhecimentoRepository,
-			AreaConhecimentoRepository areaConhecimentoRepository,
-			EquipamentoRepository equipamentoRepository
-			) {
+	public PesquisaCientificaController(PesquisaCientificaRepository pesquisaCientificaRepository,
+			PlataformaRepository plataformaRepository, SigiloRepository sigiloRepository,
+			InstituicaoRepository instituicaoRepository, 
+			PesquisaCientificaEquipamentoRepository pesquisaCientificaEquipamentoRepository,
+			PesquisaCientificaAreaConhecimentoRepository pesquisaCientificaAreaConhecimentoRepository,
+			AreaConhecimentoRepository areaConhecimentoRepository, EquipamentoRepository equipamentoRepository,
+			TipoDadoRepository tipoDadoRepository) {
+		super();
 		this.pesquisaCientificaRepository = pesquisaCientificaRepository;
 		this.plataformaRepository = plataformaRepository;
 		this.sigiloRepository = sigiloRepository;
 		this.instituicaoRepository = instituicaoRepository;
-		this.comissaoRepository = comissaoRepository;
 		this.pesquisaCientificaEquipamentoRepository = pesquisaCientificaEquipamentoRepository;
 		this.pesquisaCientificaAreaConhecimentoRepository = pesquisaCientificaAreaConhecimentoRepository;
 		this.areaConhecimentoRepository = areaConhecimentoRepository;
 		this.equipamentoRepository = equipamentoRepository;
+		this.tipoDadoRepository = tipoDadoRepository;
 	}
-	
+
 	@PostMapping("/pesquisas_cientificas")
 	@ApiOperation(value = "Cria uma Pesquisa Cientifica")
     @ApiResponses(value = {
@@ -242,5 +251,65 @@ public class PesquisaCientificaController {
     	            }).orElseThrow(() -> new NotFoundException("Pesquisa Cientifica não encontrado"));
     	
     }
+    
+	@GetMapping("/pesquisas_cientificas/{id}/areas_conhecimento")
+    @ApiOperation(value = "Retorna uma lista de areas de conhecimento")
+    @ApiResponses(value = {
+        @ApiResponse(code = 200, message = "Retorna uma lista de areas de conhecimento"),
+    })
+	public ResponseEntity<CollectionModel<AreaConhecimentoModel>> getAllAreasConhecimentoByIdPesquisaCientifica(@PathVariable Long id) {
+    	
+    	log.info("listando areas de conhecimento");
+    	 
+    	Collection<AreaConhecimento> lista = (Collection<AreaConhecimento>) areaConhecimentoRepository.findAllByPesquisaCientificaId(id);
+    	
+    	AreaConhecimentoModelAssembler assembler = new AreaConhecimentoModelAssembler(); 
+    	CollectionModel<AreaConhecimentoModel> listResource = assembler.toCollectionModel(lista);
+    	
+    	final String uriString = ServletUriComponentsBuilder.fromCurrentRequest().build().toUriString();
+    	listResource.add(Link.of(uriString, "self"));
+    	
+	    return ResponseEntity.ok(listResource);
+	}
+	
+	@GetMapping("/pesquisas_cientificas/{id}/equipamentos")
+    @ApiOperation(value = "Retorna uma lista de equipamentos")
+    @ApiResponses(value = {
+        @ApiResponse(code = 200, message = "Retorna uma lista de equipamentos"),
+    })
+	public ResponseEntity<CollectionModel<EquipamentoModel>> getAllEquipamentosByIdPesquisaCientifica(@PathVariable Long id) {
+    	
+    	log.info("listando equipamentos");
+    	 
+    	Collection<Equipamento> lista = (Collection<Equipamento>) equipamentoRepository.findAllByPesquisaCientificaId(id);
+    	
+    	EquipamentoModelAssembler assembler = new EquipamentoModelAssembler(); 
+    	CollectionModel<EquipamentoModel> listResource = assembler.toCollectionModel(lista);
+    	
+    	final String uriString = ServletUriComponentsBuilder.fromCurrentRequest().build().toUriString();
+    	listResource.add(Link.of(uriString, "self"));
+    	
+	    return ResponseEntity.ok(listResource);
+	}
+	
+	@GetMapping("/pesquisas_cientificas/{id}/tipos_dados")
+    @ApiOperation(value = "Retorna uma lista de tipos de dados")
+    @ApiResponses(value = {
+        @ApiResponse(code = 200, message = "Retorna uma lista de tipos de dados"),
+    })
+	public ResponseEntity<CollectionModel<TipoDadoModel>> getAllTiposDadosByIdPesquisaCientifica(@PathVariable Long id) {
+    	
+    	log.info("listando tipos de dados");
+    	 
+    	Collection<TipoDado> lista = (Collection<TipoDado>) tipoDadoRepository.findAllByPesquisaCientificaId(id);
+    	
+    	TipoDadoModelAssembler assembler = new TipoDadoModelAssembler(); 
+    	CollectionModel<TipoDadoModel> listResource = assembler.toCollectionModel(lista);
+    	
+    	final String uriString = ServletUriComponentsBuilder.fromCurrentRequest().build().toUriString();
+    	listResource.add(Link.of(uriString, "self"));
+    	
+	    return ResponseEntity.ok(listResource);
+	}
 	
 }

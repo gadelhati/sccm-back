@@ -2,6 +2,9 @@ package br.com.fattoria.sccm.api;
 
 import java.util.Calendar;
 
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+
 import br.com.fattoria.sccm.persistence.model.Documento;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -16,6 +19,7 @@ public class DocumentosApi {
 
 	private Long id;
 	
+	@NotEmpty @NotNull
 	private String anexo;
 	
 	private Calendar dataRecebimento;
@@ -26,6 +30,7 @@ public class DocumentosApi {
 	
 	private String observacoes;
 	
+	@NotNull
 	private Long idPesquisaCientifica;
 	
 	public Documento toEntity() {
