@@ -2,6 +2,7 @@ package br.com.fattoria.sccm.controller;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Optional;
 
@@ -86,9 +87,9 @@ public class PesquisaCientificaController {
 	}
 	
 	@PostMapping("/pesquisas_cientificas")
-	@ApiOperation(value = "Cria uma Comissão")
+	@ApiOperation(value = "Cria uma Pesquisa Cientifica")
     @ApiResponses(value = {
-        @ApiResponse(code = 200, message = "Comissão criada"),
+        @ApiResponse(code = 200, message = "Pesquisa Cientifica criada"),
     })
 	ResponseEntity<PesquisaCientificaModel> create(@Valid @RequestBody PesquisaCientificaApi api) throws URISyntaxException {
 		
@@ -100,38 +101,43 @@ public class PesquisaCientificaController {
 		
 		Optional<Sigilo> sigilo = sigiloRepository.findById(api.getIdSigilo());
 		
-        PesquisaCientifica entity = api.toEntity();
+        PesquisaCientifica entityPC = api.toEntity();
+        entityPC.setDataCadastro(Calendar.getInstance());
         
-        entity.setPlataforma(plataforma.get());
-        entity.setInstituicao(instituicao.get());
-        entity.setSigilo(sigilo.get());
+        entityPC.setPlataforma(plataforma.get());
+        entityPC.setInstituicao(instituicao.get());
+        entityPC.setSigilo(sigilo.get());
         
         //entity.setComissao(comissaoRepository.save(entity.getComissao()));
         
-        entity = pesquisaCientificaRepository.save(entity);
+        entityPC = pesquisaCientificaRepository.save(entityPC);
         
-        Iterable<AreaConhecimento> areasConhecimento = areaConhecimentoRepository.findAllById(api.getIdsAreasConhecimento());
+        if(api.getIdsAreasConhecimento() != null && api.getIdsAreasConhecimento().size() > 0) {
+        	Iterable<AreaConhecimento> areasConhecimento = areaConhecimentoRepository.findAllById(api.getIdsAreasConhecimento());
+            
+            for (AreaConhecimento areaConhecimento : areasConhecimento) {
+            	PesquisaCientificaAreaConhecimento pesquisaCientificaAreaConhecimento = new PesquisaCientificaAreaConhecimento(new PesquisaCientificaAreaConhecimentoPk(entityPC.getId(), areaConhecimento.getId()));
+    			pesquisaCientificaAreaConhecimentoRepository.save(pesquisaCientificaAreaConhecimento);
+    		}
+        }
         
-        for (AreaConhecimento areaConhecimento : areasConhecimento) {
-        	PesquisaCientificaAreaConhecimento pesquisaCientificaAreaConhecimento = new PesquisaCientificaAreaConhecimento(new PesquisaCientificaAreaConhecimentoPk(entity.getId(), areaConhecimento.getId()));
-			pesquisaCientificaAreaConhecimentoRepository.save(pesquisaCientificaAreaConhecimento);
-		}
-        
-        Iterable<Equipamento> equipamentos = equipamentoRepository.findAllById(api.getIdsEquipamentos());
-        
-        for (Equipamento equipamento : equipamentos) {
-        	PesquisaCientificaEquipamento pesquisaCientificaEquipamento = new PesquisaCientificaEquipamento(new PesquisaCientificaEquipamentoPk(entity.getId(), equipamento.getId()));
-			pesquisaCientificaEquipamentoRepository.save(pesquisaCientificaEquipamento);
-		}
+        if(api.getIdsEquipamentos() != null && api.getIdsEquipamentos().size() > 0) {
+	        Iterable<Equipamento> equipamentos = equipamentoRepository.findAllById(api.getIdsEquipamentos());
+	        
+	        for (Equipamento equipamento : equipamentos) {
+	        	PesquisaCientificaEquipamento pesquisaCientificaEquipamento = new PesquisaCientificaEquipamento(new PesquisaCientificaEquipamentoPk(entityPC.getId(), equipamento.getId()));
+				pesquisaCientificaEquipamentoRepository.save(pesquisaCientificaEquipamento);
+			}
+        }
         
     	PesquisaCientificaModelAssembler assembler = new PesquisaCientificaModelAssembler(); 
-    	PesquisaCientificaModel model = assembler.toModel(pesquisaCientificaRepository.save(entity));
+    	PesquisaCientificaModel model = assembler.toModel(entityPC);
  
         
         final URI uri =
                 MvcUriComponentsBuilder.fromController(getClass())
                     .path("/{id}")
-                    .buildAndExpand(entity.getId())
+                    .buildAndExpand(entityPC.getId())
                     .toUri();
         
         return ResponseEntity.created(uri)
@@ -145,10 +151,44 @@ public class PesquisaCientificaController {
     })
 	ResponseEntity<PesquisaCientificaModel> update(@Valid @RequestBody PesquisaCientificaApi api){
 		
-        PesquisaCientifica entity = api.toEntity();
+		log.info("Alterando "+api);
+		
+		Optional<Plataforma> plataforma = plataformaRepository.findById(api.getIdPlataforma());
+		
+		Optional<Instituicao> instituicao = instituicaoRepository.findById(api.getIdInstituicao());
+		
+		Optional<Sigilo> sigilo = sigiloRepository.findById(api.getIdSigilo());
+		
+        PesquisaCientifica entityPC = api.toEntity();
+        
+        entityPC.setPlataforma(plataforma.get());
+        entityPC.setInstituicao(instituicao.get());
+        entityPC.setSigilo(sigilo.get());
+        
+        //entity.setComissao(comissaoRepository.save(entity.getComissao()));
+        
+        entityPC = pesquisaCientificaRepository.save(entityPC);
+        
+        if(api.getIdsAreasConhecimento() != null && api.getIdsAreasConhecimento().size() > 0) {
+        	Iterable<AreaConhecimento> areasConhecimento = areaConhecimentoRepository.findAllById(api.getIdsAreasConhecimento());
+            
+            for (AreaConhecimento areaConhecimento : areasConhecimento) {
+            	PesquisaCientificaAreaConhecimento pesquisaCientificaAreaConhecimento = new PesquisaCientificaAreaConhecimento(new PesquisaCientificaAreaConhecimentoPk(entityPC.getId(), areaConhecimento.getId()));
+    			pesquisaCientificaAreaConhecimentoRepository.save(pesquisaCientificaAreaConhecimento);
+    		}
+        }
+        
+        if(api.getIdsEquipamentos() != null && api.getIdsEquipamentos().size() > 0) {
+	        Iterable<Equipamento> equipamentos = equipamentoRepository.findAllById(api.getIdsEquipamentos());
+	        
+	        for (Equipamento equipamento : equipamentos) {
+	        	PesquisaCientificaEquipamento pesquisaCientificaEquipamento = new PesquisaCientificaEquipamento(new PesquisaCientificaEquipamentoPk(entityPC.getId(), equipamento.getId()));
+				pesquisaCientificaEquipamentoRepository.save(pesquisaCientificaEquipamento);
+			}
+        }
         
     	PesquisaCientificaModelAssembler assembler = new PesquisaCientificaModelAssembler(); 
-    	PesquisaCientificaModel model = assembler.toModel(pesquisaCientificaRepository.save(entity));
+    	PesquisaCientificaModel model = assembler.toModel(entityPC);
         
         final URI uri = ServletUriComponentsBuilder.fromCurrentRequest().build().toUri();
         return ResponseEntity.created(uri).body(model);

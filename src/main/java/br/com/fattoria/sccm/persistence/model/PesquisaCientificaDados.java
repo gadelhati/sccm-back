@@ -33,13 +33,10 @@ public class PesquisaCientificaDados implements Serializable {
 	@ManyToOne
 	@JoinColumn(name = "fk_tipo_dados", insertable = false, updatable = false)
 	private TipoDado tipoDado;
-	
-	private int quantidade;
 
-	public PesquisaCientificaDados(PesquisaCientificaDadosPk pk, int quantidade) {
+	public PesquisaCientificaDados(PesquisaCientificaDadosPk pk) {
 		super();
 		this.pk = pk;
-		this.quantidade = quantidade;
 	}
 	
 }

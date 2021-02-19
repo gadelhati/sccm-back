@@ -3,6 +3,8 @@ package br.com.fattoria.sccm.api;
 import java.util.Calendar;
 import java.util.List;
 
+import javax.validation.constraints.NotNull;
+
 import br.com.fattoria.sccm.persistence.model.PesquisaCientifica;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -17,12 +19,13 @@ public class PesquisaCientificaApi {
 	
 	private Long id;	
 
+	@NotNull
 	private Long idSigilo;
 
-	private Long idComissao;
-
+	@NotNull
 	private Long idInstituicao;
 
+	@NotNull
 	private Long idPlataforma;
 
 	private Calendar dataCadastro;

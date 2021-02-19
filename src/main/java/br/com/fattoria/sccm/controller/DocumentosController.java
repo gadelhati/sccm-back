@@ -97,12 +97,12 @@ public class DocumentosController {
     	Collection<Documento> lista = (Collection<Documento>) documentosRepository.findAll();
     	
     	DocumentosModelAssembler assembler = new DocumentosModelAssembler(); 
-    	CollectionModel<DocumentosModel> listPlataformaResource = assembler.toCollectionModel(lista);
+    	CollectionModel<DocumentosModel> listResource = assembler.toCollectionModel(lista);
     	
     	final String uriString = ServletUriComponentsBuilder.fromCurrentRequest().build().toUriString();
-    	listPlataformaResource.add(new Link(uriString, "self"));
+    	listResource.add(Link.of(uriString, "self"));
     	
-	    return ResponseEntity.ok(listPlataformaResource);
+	    return ResponseEntity.ok(listResource);
 	}
     
     @GetMapping("/documentos/{id}")
@@ -112,16 +112,16 @@ public class DocumentosController {
     })
 	public ResponseEntity<DocumentosModel> getById(@PathVariable Long id) {
     	 
-    	Optional<Documento> pais = documentosRepository.findById(id);
+    	Optional<Documento> documentos = documentosRepository.findById(id);
     	
     	DocumentosModelAssembler assembler = new DocumentosModelAssembler(); 
     	 
-    	return pais.map(response -> ResponseEntity.ok().body(assembler.toModel(response)))
+    	return documentos.map(response -> ResponseEntity.ok().body(assembler.toModel(response)))
                 .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
 	}
     
     @DeleteMapping("/documentos/{id}")
-    @ApiOperation(value = "Deleta um destino")
+    @ApiOperation(value = "Deleta um documento")
     public ResponseEntity<?> delete(@PathVariable Long id) throws NotFoundException{
     	
     	 documentosRepository.deleteById(id);
