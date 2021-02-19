@@ -155,10 +155,11 @@ public class DocumentosController {
     @ApiOperation(value = "Deleta um documento")
     public ResponseEntity<?> delete(@PathVariable Long id) throws NotFoundException{
     	
-    	 documentosRepository.deleteById(id);
-    	 Optional<Documento> pais = documentosRepository.findById(id);
+    	log.info("Removendo documento "+id);
+    	
+    	 Optional<Documento> documento = documentosRepository.findById(id);
     	 
-    	 return pais.map(
+    	 return documento.map(
     	            p -> {
     	            	documentosRepository.deleteById(id);
     	              return ResponseEntity.noContent().build();
