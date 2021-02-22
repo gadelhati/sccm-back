@@ -100,7 +100,7 @@ public class DestinoController {
     	CollectionModel<DestinoModel> listPlataformaResource = assembler.toCollectionModel(lista);
     	
     	final String uriString = ServletUriComponentsBuilder.fromCurrentRequest().build().toUriString();
-    	listPlataformaResource.add(new Link(uriString, "self"));
+    	listPlataformaResource.add(Link.of(uriString, "self"));
     	
 	    return ResponseEntity.ok(listPlataformaResource);
 	}
@@ -112,11 +112,11 @@ public class DestinoController {
     })
 	public ResponseEntity<DestinoModel> getById(@PathVariable Long id) {
     	 
-    	Optional<Destino> pais = destinoRepository.findById(id);
+    	Optional<Destino> destino = destinoRepository.findById(id);
     	
     	DestinoModelAssembler assembler = new DestinoModelAssembler(); 
     	 
-    	return pais.map(response -> ResponseEntity.ok().body(assembler.toModel(response)))
+    	return destino.map(response -> ResponseEntity.ok().body(assembler.toModel(response)))
                 .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
 	}
     
@@ -124,10 +124,9 @@ public class DestinoController {
     @ApiOperation(value = "Deleta um destino")
     public ResponseEntity<?> delete(@PathVariable Long id) throws NotFoundException{
     	
-    	 destinoRepository.deleteById(id);
-    	 Optional<Destino> pais = destinoRepository.findById(id);
+    	 Optional<Destino> destino = destinoRepository.findById(id);
     	 
-    	 return pais.map(
+    	 return destino.map(
     	            p -> {
     	            	destinoRepository.deleteById(id);
     	              return ResponseEntity.noContent().build();
