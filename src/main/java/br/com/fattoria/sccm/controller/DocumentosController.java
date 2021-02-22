@@ -128,10 +128,10 @@ public class DocumentosController {
         }
 		
     	DocumentosModelAssembler assembler = new DocumentosModelAssembler(); 
-    	DocumentosModel paisModel = assembler.toModel(documentosRepository.save(entity));
+    	DocumentosModel documentoModel = assembler.toModel(documentosRepository.save(entity));
         
         final URI uri = ServletUriComponentsBuilder.fromCurrentRequest().build().toUri();
-        return ResponseEntity.created(uri).body(paisModel);
+        return ResponseEntity.created(uri).body(documentoModel);
 
 	}
 	
