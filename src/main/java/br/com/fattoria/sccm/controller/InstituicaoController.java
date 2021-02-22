@@ -217,5 +217,45 @@ public class InstituicaoController {
     	
 	    return ResponseEntity.ok(listInstituicaoResource);
 	}
+	
+	@GetMapping("/instituicoes/privada/ativas")
+    @ApiOperation(value = "Retorna uma lista de instituicoes ativas")
+    @ApiResponses(value = {
+        @ApiResponse(code = 200, message = "Retorna a lista de instituicoes privadas ativas"),
+    })
+	public ResponseEntity<CollectionModel<InstituicaoModel>> getAllPrivadasAtivas() {
+    	
+    	log.info("listando instituicao");
+    	 
+    	Collection<Instituicao> lista = (Collection<Instituicao>) instituicaoRepository.findAllByTipoInstituicaoPrivadoAndAtivoTrue();
+    	
+    	InstituicaoModelAssembler assembler = new InstituicaoModelAssembler(); 
+    	CollectionModel<InstituicaoModel> listInstituicaoResource = assembler.toCollectionModel(lista);
+    	
+    	final String uriString = ServletUriComponentsBuilder.fromCurrentRequest().build().toUriString();
+    	listInstituicaoResource.add(Link.of(uriString, "self"));
+    	
+	    return ResponseEntity.ok(listInstituicaoResource);
+	}
+	
+	@GetMapping("/instituicoes/publica/ativas")
+    @ApiOperation(value = "Retorna uma lista de instituicoes ativas")
+    @ApiResponses(value = {
+        @ApiResponse(code = 200, message = "Retorna a lista de instituicoes publicas ativas"),
+    })
+	public ResponseEntity<CollectionModel<InstituicaoModel>> getAllPublicasAtivas() {
+    	
+    	log.info("listando instituicao");
+    	 
+    	Collection<Instituicao> lista = (Collection<Instituicao>) instituicaoRepository.findAllByTipoInstituicaoPublicoAndAtivoTrue();
+    	
+    	InstituicaoModelAssembler assembler = new InstituicaoModelAssembler(); 
+    	CollectionModel<InstituicaoModel> listInstituicaoResource = assembler.toCollectionModel(lista);
+    	
+    	final String uriString = ServletUriComponentsBuilder.fromCurrentRequest().build().toUriString();
+    	listInstituicaoResource.add(Link.of(uriString, "self"));
+    	
+	    return ResponseEntity.ok(listInstituicaoResource);
+	}
 
 }
