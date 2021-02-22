@@ -25,8 +25,6 @@ import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBui
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import br.com.fattoria.sccm.api.ChaveValor;
-import br.com.fattoria.sccm.api.PesquisaCientificaDadosModel;
-import br.com.fattoria.sccm.api.PesquisaCientificaDadosModelAssembler;
 import br.com.fattoria.sccm.api.PesquisaCientificaEquipamentosApi;
 import br.com.fattoria.sccm.api.PesquisaCientificaEquipamentosModel;
 import br.com.fattoria.sccm.api.PesquisaCientificaEquipamentosModelAssembler;
@@ -69,6 +67,9 @@ public class PesquisaCientificaEquipamentosController {
 		
 		log.info("Salvando "+api);
 		
+		Collection<PesquisaCientificaEquipamento> equipamentosByPesquisaCientifica = pesquisaCientificaEquipamentoRepository.findAllByIdPesquisaCientifica(api.getIdPesquisaCientifica());
+		pesquisaCientificaEquipamentoRepository.deleteAll(equipamentosByPesquisaCientifica);
+		
 		List<PesquisaCientificaEquipamento> listaPCE = new ArrayList<PesquisaCientificaEquipamento>();
         
         if(api.getEquipamentosValores() != null && api.getEquipamentosValores().size() > 0) {
@@ -104,6 +105,9 @@ public class PesquisaCientificaEquipamentosController {
 	ResponseEntity<CollectionModel<PesquisaCientificaEquipamentosModel>> update(@Valid @RequestBody PesquisaCientificaEquipamentosApi api){
 		
 		log.info("Alterando "+api);
+		
+		Collection<PesquisaCientificaEquipamento> equipamentosByPesquisaCientifica = pesquisaCientificaEquipamentoRepository.findAllByIdPesquisaCientifica(api.getIdPesquisaCientifica());
+		pesquisaCientificaEquipamentoRepository.deleteAll(equipamentosByPesquisaCientifica);
 		
 		List<PesquisaCientificaEquipamento> listaPCE = new ArrayList<PesquisaCientificaEquipamento>();
     

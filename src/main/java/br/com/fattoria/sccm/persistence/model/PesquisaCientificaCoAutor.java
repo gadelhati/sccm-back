@@ -20,18 +20,23 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name = "pesquisa_cientifica_co_autor")
 public class PesquisaCientificaCoAutor implements Serializable {
-	
+
 	private static final long serialVersionUID = 1L;
-	
+
 	@EmbeddedId
 	private PesquisaCientificaCoAutorPk pk;
-	
+
 	@ManyToOne
 	@JoinColumn(name = "fk_pesquisa_cientifica", insertable = false, updatable = false)
 	private PesquisaCientifica pesquisaCientifica;
-	
+
 	@ManyToOne
 	@JoinColumn(name = "fk_instituicao", insertable = false, updatable = false)
 	private Instituicao instituicao;
+
+	public PesquisaCientificaCoAutor(PesquisaCientificaCoAutorPk pk) {
+		super();
+		this.pk = pk;
+	}
 
 }

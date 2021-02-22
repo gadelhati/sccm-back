@@ -29,6 +29,8 @@ import br.com.fattoria.sccm.api.AreaConhecimentoModel;
 import br.com.fattoria.sccm.api.AreaConhecimentoModelAssembler;
 import br.com.fattoria.sccm.api.EquipamentoModel;
 import br.com.fattoria.sccm.api.EquipamentoModelAssembler;
+import br.com.fattoria.sccm.api.InstituicaoModel;
+import br.com.fattoria.sccm.api.InstituicaoModelAssembler;
 import br.com.fattoria.sccm.api.PesquisaCientificaApi;
 import br.com.fattoria.sccm.api.PesquisaCientificaModel;
 import br.com.fattoria.sccm.api.PesquisaCientificaModelAssembler;
@@ -40,8 +42,8 @@ import br.com.fattoria.sccm.persistence.model.Instituicao;
 import br.com.fattoria.sccm.persistence.model.PesquisaCientifica;
 import br.com.fattoria.sccm.persistence.model.PesquisaCientificaAreaConhecimento;
 import br.com.fattoria.sccm.persistence.model.PesquisaCientificaAreaConhecimentoPk;
-import br.com.fattoria.sccm.persistence.model.PesquisaCientificaEquipamento;
-import br.com.fattoria.sccm.persistence.model.PesquisaCientificaEquipamentoPk;
+import br.com.fattoria.sccm.persistence.model.PesquisaCientificaCoAutor;
+import br.com.fattoria.sccm.persistence.model.PesquisaCientificaCoAutorPk;
 import br.com.fattoria.sccm.persistence.model.Plataforma;
 import br.com.fattoria.sccm.persistence.model.Sigilo;
 import br.com.fattoria.sccm.persistence.model.TipoDado;
@@ -49,6 +51,7 @@ import br.com.fattoria.sccm.persistence.repository.AreaConhecimentoRepository;
 import br.com.fattoria.sccm.persistence.repository.EquipamentoRepository;
 import br.com.fattoria.sccm.persistence.repository.InstituicaoRepository;
 import br.com.fattoria.sccm.persistence.repository.PesquisaCientificaAreaConhecimentoRepository;
+import br.com.fattoria.sccm.persistence.repository.PesquisaCientificaCoAutorRepository;
 import br.com.fattoria.sccm.persistence.repository.PesquisaCientificaEquipamentoRepository;
 import br.com.fattoria.sccm.persistence.repository.PesquisaCientificaRepository;
 import br.com.fattoria.sccm.persistence.repository.PlataformaRepository;
@@ -71,6 +74,7 @@ public class PesquisaCientificaController {
 	private final SigiloRepository sigiloRepository;
 	private final InstituicaoRepository instituicaoRepository;
 	private final PesquisaCientificaEquipamentoRepository pesquisaCientificaEquipamentoRepository;
+	private final PesquisaCientificaCoAutorRepository pesquisaCientificaCoAutorRepository;
 	private final PesquisaCientificaAreaConhecimentoRepository pesquisaCientificaAreaConhecimentoRepository;
 	private final AreaConhecimentoRepository areaConhecimentoRepository;
 	private final EquipamentoRepository equipamentoRepository;
@@ -78,8 +82,9 @@ public class PesquisaCientificaController {
 	
 	public PesquisaCientificaController(PesquisaCientificaRepository pesquisaCientificaRepository,
 			PlataformaRepository plataformaRepository, SigiloRepository sigiloRepository,
-			InstituicaoRepository instituicaoRepository, 
+			InstituicaoRepository instituicaoRepository,
 			PesquisaCientificaEquipamentoRepository pesquisaCientificaEquipamentoRepository,
+			PesquisaCientificaCoAutorRepository pesquisaCientificaCoAutorRepository,
 			PesquisaCientificaAreaConhecimentoRepository pesquisaCientificaAreaConhecimentoRepository,
 			AreaConhecimentoRepository areaConhecimentoRepository, EquipamentoRepository equipamentoRepository,
 			TipoDadoRepository tipoDadoRepository) {
@@ -89,6 +94,7 @@ public class PesquisaCientificaController {
 		this.sigiloRepository = sigiloRepository;
 		this.instituicaoRepository = instituicaoRepository;
 		this.pesquisaCientificaEquipamentoRepository = pesquisaCientificaEquipamentoRepository;
+		this.pesquisaCientificaCoAutorRepository = pesquisaCientificaCoAutorRepository;
 		this.pesquisaCientificaAreaConhecimentoRepository = pesquisaCientificaAreaConhecimentoRepository;
 		this.areaConhecimentoRepository = areaConhecimentoRepository;
 		this.equipamentoRepository = equipamentoRepository;
@@ -130,12 +136,21 @@ public class PesquisaCientificaController {
     		}
         }
         
-        if(api.getIdsEquipamentos() != null && api.getIdsEquipamentos().size() > 0) {
+/*        if(api.getIdsEquipamentos() != null && api.getIdsEquipamentos().size() > 0) {
 	        Iterable<Equipamento> equipamentos = equipamentoRepository.findAllById(api.getIdsEquipamentos());
 	        
 	        for (Equipamento equipamento : equipamentos) {
 	        	PesquisaCientificaEquipamento pesquisaCientificaEquipamento = new PesquisaCientificaEquipamento(new PesquisaCientificaEquipamentoPk(entityPC.getId(), equipamento.getId()));
 				pesquisaCientificaEquipamentoRepository.save(pesquisaCientificaEquipamento);
+			}
+        }*/
+        
+        if(api.getIdsCoParticipantes() != null && api.getIdsCoParticipantes().size() > 0) {
+	        Iterable<Instituicao> instituicoes = instituicaoRepository.findAllById(api.getIdsCoParticipantes());
+	        
+	        for (Instituicao instituicaoCoParticipante : instituicoes) {
+	        	PesquisaCientificaCoAutor pesquisaCientificaCoParticipante = new PesquisaCientificaCoAutor(new PesquisaCientificaCoAutorPk(entityPC.getId(), instituicaoCoParticipante.getId()));
+	        	pesquisaCientificaCoAutorRepository.save(pesquisaCientificaCoParticipante);
 			}
         }
         
@@ -178,6 +193,9 @@ public class PesquisaCientificaController {
         
         entityPC = pesquisaCientificaRepository.save(entityPC);
         
+        Collection<PesquisaCientificaAreaConhecimento> areasConhecimentoByPesquisaCientifica =  pesquisaCientificaAreaConhecimentoRepository.findAllByIdPesquisaCientifica(api.getId());
+        pesquisaCientificaAreaConhecimentoRepository.deleteAll(areasConhecimentoByPesquisaCientifica);
+        
         if(api.getIdsAreasConhecimento() != null && api.getIdsAreasConhecimento().size() > 0) {
         	Iterable<AreaConhecimento> areasConhecimento = areaConhecimentoRepository.findAllById(api.getIdsAreasConhecimento());
             
@@ -187,12 +205,27 @@ public class PesquisaCientificaController {
     		}
         }
         
+        /*Collection<PesquisaCientificaEquipamento> equipamentosByPesquisaCientifica = pesquisaCientificaEquipamentoRepository.findAllByIdPesquisaCientifica(api.getId());
+        pesquisaCientificaEquipamentoRepository.deleteAll(equipamentosByPesquisaCientifica);
+        
         if(api.getIdsEquipamentos() != null && api.getIdsEquipamentos().size() > 0) {
 	        Iterable<Equipamento> equipamentos = equipamentoRepository.findAllById(api.getIdsEquipamentos());
 	        
 	        for (Equipamento equipamento : equipamentos) {
 	        	PesquisaCientificaEquipamento pesquisaCientificaEquipamento = new PesquisaCientificaEquipamento(new PesquisaCientificaEquipamentoPk(entityPC.getId(), equipamento.getId()));
 				pesquisaCientificaEquipamentoRepository.save(pesquisaCientificaEquipamento);
+			}
+        }*/
+        
+        Collection<PesquisaCientificaCoAutor> coAutoresByPesquisaCientifica = pesquisaCientificaCoAutorRepository.findAllByIdPesquisaCientifica(api.getId());
+        pesquisaCientificaCoAutorRepository.deleteAll(coAutoresByPesquisaCientifica);
+        
+        if(api.getIdsCoParticipantes() != null && api.getIdsCoParticipantes().size() > 0) {
+	        Iterable<Instituicao> instituicoes = instituicaoRepository.findAllById(api.getIdsCoParticipantes());
+	        
+	        for (Instituicao instituicaoCoParticipante : instituicoes) {
+	        	PesquisaCientificaCoAutor pesquisaCientificaCoParticipante = new PesquisaCientificaCoAutor(new PesquisaCientificaCoAutorPk(entityPC.getId(), instituicaoCoParticipante.getId()));
+	        	pesquisaCientificaCoAutorRepository.save(pesquisaCientificaCoParticipante);
 			}
         }
         
@@ -305,6 +338,26 @@ public class PesquisaCientificaController {
     	
     	TipoDadoModelAssembler assembler = new TipoDadoModelAssembler(); 
     	CollectionModel<TipoDadoModel> listResource = assembler.toCollectionModel(lista);
+    	
+    	final String uriString = ServletUriComponentsBuilder.fromCurrentRequest().build().toUriString();
+    	listResource.add(Link.of(uriString, "self"));
+    	
+	    return ResponseEntity.ok(listResource);
+	}
+	
+	@GetMapping("/pesquisas_cientificas/{id}/coparticipantes")
+    @ApiOperation(value = "Retorna uma lista de coparticipantes")
+    @ApiResponses(value = {
+        @ApiResponse(code = 200, message = "Retorna uma lista de coparticipantes"),
+    })
+	public ResponseEntity<CollectionModel<InstituicaoModel>> getAllCoparticipantesByIdPesquisaCientifica(@PathVariable Long id) {
+    	
+    	log.info("listando coparticipantes");
+    	 
+    	Collection<Instituicao> lista = (Collection<Instituicao>) instituicaoRepository.findAllByPesquisaCientificaId(id);
+    	
+    	InstituicaoModelAssembler assembler = new InstituicaoModelAssembler(); 
+    	CollectionModel<InstituicaoModel> listResource = assembler.toCollectionModel(lista);
     	
     	final String uriString = ServletUriComponentsBuilder.fromCurrentRequest().build().toUriString();
     	listResource.add(Link.of(uriString, "self"));

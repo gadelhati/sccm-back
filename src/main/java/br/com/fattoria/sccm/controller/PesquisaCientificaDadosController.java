@@ -64,6 +64,9 @@ public class PesquisaCientificaDadosController {
 	ResponseEntity<CollectionModel<PesquisaCientificaDadosModel>> create(@Valid @RequestBody PesquisaCientificaDadosApi api) throws URISyntaxException {
 		
 		log.info("Salvando "+api);
+		
+		Collection<PesquisaCientificaDados> dadosByPesquisaCientifica = pesquisaCientificaDadosRepository.findAllByIdPesquisaCientifica(api.getIdPesquisaCientifica());
+		pesquisaCientificaDadosRepository.deleteAll(dadosByPesquisaCientifica);
         
 		List<PesquisaCientificaDados> listaPCD = new ArrayList<PesquisaCientificaDados>();
         if(api.getIdsDadosEquipamentos() != null && api.getIdsDadosEquipamentos().size() > 0) {
@@ -97,6 +100,9 @@ public class PesquisaCientificaDadosController {
 	ResponseEntity<CollectionModel<PesquisaCientificaDadosModel>> update(@Valid @RequestBody PesquisaCientificaDadosApi api){
 		
 		log.info("Alterando "+api);
+		
+		Collection<PesquisaCientificaDados> dadosByPesquisaCientifica = pesquisaCientificaDadosRepository.findAllByIdPesquisaCientifica(api.getIdPesquisaCientifica());
+		pesquisaCientificaDadosRepository.deleteAll(dadosByPesquisaCientifica);
 		
 		List<PesquisaCientificaDados> listaPCD = new ArrayList<PesquisaCientificaDados>();
         if(api.getIdsDadosEquipamentos() != null && api.getIdsDadosEquipamentos().size() > 0) {
