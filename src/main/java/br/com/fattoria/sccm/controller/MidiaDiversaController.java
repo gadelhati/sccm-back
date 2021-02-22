@@ -164,13 +164,11 @@ public class MidiaDiversaController {
 	}
 	
 	@PutMapping("/midias_diversas/{id}/midias_diversas_tipos_midias")
-    @ApiOperation(value = "Salva uma lista de midias_diversas_tipos_midias")
+    @ApiOperation(value = "Salva uma lista de midias diversas tipos midias")
     @ApiResponses(value = {
-        @ApiResponse(code = 200, message = "Salva a lista de midias_diversas_tipos_midias"),
+        @ApiResponse(code = 200, message = "Salva a lista de midias diversas tipos midias"),
     })
 	public ResponseEntity<CollectionModel<MidiaDiversaTipoMidiaModel>> updateAllMidiaDiversaTipoMidiaByIdMidiaDiversa(@PathVariable Long id,  @RequestBody WrapperListApi<MidiaDiversaTipoMidiaApi> midiasDiversaTipoMidia) {
-    	
-    	log.info("listando equipamento "+id);
     	
     	List<MidiaDiversaTipoMidia> list = new ArrayList<MidiaDiversaTipoMidia>();
     	

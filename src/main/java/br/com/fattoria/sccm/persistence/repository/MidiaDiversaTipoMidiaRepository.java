@@ -9,10 +9,11 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 import org.springframework.stereotype.Repository;
 
 import br.com.fattoria.sccm.persistence.model.MidiaDiversaTipoMidia;
+import br.com.fattoria.sccm.persistence.model.MidiaDiversaTipoMidiaPK;
 
 @Repository
 @RepositoryRestResource(collectionResourceRel = "midias_diversas_tipos_midias", path="midias_diversas_tipos_midias", exported = false)
-public interface MidiaDiversaTipoMidiaRepository extends CrudRepository<MidiaDiversaTipoMidia, Long> {
+public interface MidiaDiversaTipoMidiaRepository extends CrudRepository<MidiaDiversaTipoMidia, MidiaDiversaTipoMidiaPK> {
 
 	@Query("select mdtm from MidiaDiversaTipoMidia mdtm where mdtm.midiaDiversa.id =:id")
 	List<MidiaDiversaTipoMidia> findAllByMidiaDiversaId(@Param("id") Long id);
