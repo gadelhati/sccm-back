@@ -27,6 +27,8 @@ public class MidiaParticularModel extends RepresentationModel<MidiaParticularMod
 	private PlataformaModel plataforma;
 	
 	private InstituicaoModel instituicao;
+	
+	private String observacoes;
 
     public MidiaParticularModel(MidiaParticular midia) {
 
@@ -37,6 +39,7 @@ public class MidiaParticularModel extends RepresentationModel<MidiaParticularMod
     	this.data = midia.getData();
     	this.plataforma = midia.getPlataforma() != null ? new PlataformaModel(midia.getPlataforma()) : null;
     	this.instituicao = midia.getInstituicao() != null ? new InstituicaoModel(midia.getInstituicao()) : null;
+    	this.observacoes = midia.getObservacoes();
     	add(linkTo(MidiaParticularController.class).withRel("midias_particulares"));
         add(linkTo(methodOn(MidiaParticularController.class).getById(midia.getId())).withSelfRel());
         add(linkTo(methodOn(MidiaParticularController.class).getAllMidiaParticularTipoMidiaByIdMidiaParticular(midia.getId())).withSelfRel());
