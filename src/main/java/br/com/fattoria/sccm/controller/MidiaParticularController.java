@@ -33,10 +33,14 @@ import br.com.fattoria.sccm.api.MidiaParticularTipoMidiaApi;
 import br.com.fattoria.sccm.api.MidiaParticularTipoMidiaModel;
 import br.com.fattoria.sccm.api.MidiaParticularTipoMidiaModelAssembler;
 import br.com.fattoria.sccm.api.WrapperListApi;
+import br.com.fattoria.sccm.persistence.model.Instituicao;
 import br.com.fattoria.sccm.persistence.model.MidiaParticular;
 import br.com.fattoria.sccm.persistence.model.MidiaParticularTipoMidia;
+import br.com.fattoria.sccm.persistence.model.Plataforma;
+import br.com.fattoria.sccm.persistence.repository.InstituicaoRepository;
 import br.com.fattoria.sccm.persistence.repository.MidiaParticularRepository;
 import br.com.fattoria.sccm.persistence.repository.MidiaParticularTipoMidiaRepository;
+import br.com.fattoria.sccm.persistence.repository.PlataformaRepository;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -49,14 +53,21 @@ import javassist.NotFoundException;
 public class MidiaParticularController {
 	
 	private final Logger log = LoggerFactory.getLogger(MidiaParticularController.class);
-	private MidiaParticularRepository midiaParticularRepository;
-	private MidiaParticularTipoMidiaRepository midiaParticularTipoMidiaRepository;
+	private final MidiaParticularRepository midiaParticularRepository;
+	private final MidiaParticularTipoMidiaRepository midiaParticularTipoMidiaRepository;
+	private final InstituicaoRepository instituicaoRepository;
+	private final PlataformaRepository plataformaRepository;
 		
-	public MidiaParticularController(MidiaParticularRepository midiaParticularRepository, MidiaParticularTipoMidiaRepository midiaParticularTipoMidiaRepository) {
+	public MidiaParticularController(MidiaParticularRepository midiaParticularRepository,
+			MidiaParticularTipoMidiaRepository midiaParticularTipoMidiaRepository,
+			InstituicaoRepository instituicaoRepository, PlataformaRepository plataformaRepository) {
+		super();
 		this.midiaParticularRepository = midiaParticularRepository;
 		this.midiaParticularTipoMidiaRepository = midiaParticularTipoMidiaRepository;
+		this.instituicaoRepository = instituicaoRepository;
+		this.plataformaRepository = plataformaRepository;
 	}
-	
+
 	@PostMapping("/midias_particulares")
 	@ApiOperation(value = "Adiciona uma mídia particular")
     @ApiResponses(value = {
@@ -67,6 +78,16 @@ public class MidiaParticularController {
 		log.info("criando midia");
 	
         MidiaParticular midiaParticularEntity = midiaParticular.toEntity();
+        
+        if(midiaParticular.getIdInstituicao() != null) {
+        	Optional<Instituicao> instituicao = instituicaoRepository.findById(midiaParticular.getIdInstituicao());
+        	midiaParticularEntity.setInstituicao(instituicao.get());
+        }
+        
+        if(midiaParticular.getIdPlataforma() != null) {
+        	Optional<Plataforma> plataforma = plataformaRepository.findById(midiaParticular.getIdPlataforma());
+        	midiaParticularEntity.setPlataforma(plataforma.get());
+        }
         
     	MidiaParticularModelAssembler assembler = new MidiaParticularModelAssembler(); 
     	MidiaParticularModel midiaParticularModel = assembler.toModel(midiaParticularRepository.save(midiaParticularEntity));
@@ -85,6 +106,16 @@ public class MidiaParticularController {
 		log.info("alterando midia");
 	
         MidiaParticular midiaParticularEntity = midiaParticular.toEntity();
+        
+        if(midiaParticular.getIdInstituicao() != null) {
+        	Optional<Instituicao> instituicao = instituicaoRepository.findById(midiaParticular.getIdInstituicao());
+        	midiaParticularEntity.setInstituicao(instituicao.get());
+        }
+        
+        if(midiaParticular.getIdPlataforma() != null) {
+        	Optional<Plataforma> plataforma = plataformaRepository.findById(midiaParticular.getIdPlataforma());
+        	midiaParticularEntity.setPlataforma(plataforma.get());
+        }
         
     	MidiaParticularModelAssembler assembler = new MidiaParticularModelAssembler(); 
     	MidiaParticularModel MidiaParticularModel = assembler.toModel(midiaParticularRepository.save(midiaParticularEntity));
