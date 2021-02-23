@@ -124,7 +124,6 @@ public class TipoEnderecoController {
     @ApiOperation(value = "Deleta um Tipo Endereco")
     public ResponseEntity<?> delete(@PathVariable Long id) throws NotFoundException{
     	
-    	 tipoEnderecoRepository.deleteById(id);
     	 Optional<TipoEndereco> opt = tipoEnderecoRepository.findById(id);
     	 
     	 return opt.map(

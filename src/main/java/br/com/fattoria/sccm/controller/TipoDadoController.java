@@ -148,10 +148,9 @@ public class TipoDadoController {
     	
     	 log.info("TipoDado por id "+id);
     	
-    	 tipoDadoRepository.deleteById(id);
-    	 Optional<TipoDado> pais = tipoDadoRepository.findById(id);
+    	 Optional<TipoDado> tipoDado = tipoDadoRepository.findById(id);
     	 
-    	 return pais.map(p -> {tipoDadoRepository.deleteById(id); 
+    	 return tipoDado.map(p -> {tipoDadoRepository.deleteById(id); 
     	 return ResponseEntity.noContent().build();}).orElseThrow(() -> new NotFoundException("TipoDado não encontrada"));    	
     }
     

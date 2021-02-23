@@ -128,10 +128,9 @@ public class TipoAnexoController {
     @ApiOperation(value = "Deleta um destino")
     public ResponseEntity<?> delete(@PathVariable Long id) throws NotFoundException{
     	
-    	 tipoAnexoRepository.deleteById(id);
-    	 Optional<TipoAnexo> pais = tipoAnexoRepository.findById(id);
+    	 Optional<TipoAnexo> tipoAnexo = tipoAnexoRepository.findById(id);
     	 
-    	 return pais.map(
+    	 return tipoAnexo.map(
     	            p -> {
     	            	tipoAnexoRepository.deleteById(id);
     	              return ResponseEntity.noContent().build();

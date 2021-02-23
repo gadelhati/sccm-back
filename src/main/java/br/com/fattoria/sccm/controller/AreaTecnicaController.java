@@ -126,7 +126,6 @@ public class AreaTecnicaController {
     	
     	 log.info("plataforma por id "+id);
     	
-    	 areaTecnicaRepository.deleteById(id);
     	 Optional<AreaTecnica> areaTecnica = areaTecnicaRepository.findById(id);
     	 
     	 return areaTecnica.map(p -> {areaTecnicaRepository.deleteById(id);

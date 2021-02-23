@@ -100,7 +100,7 @@ public class PalavraChaveController {
     	CollectionModel<PalavraChaveModel> listResource = assembler.toCollectionModel(lista);
     	
     	final String uriString = ServletUriComponentsBuilder.fromCurrentRequest().build().toUriString();
-    	listResource.add(new Link(uriString, "self"));
+    	listResource.add(Link.of(uriString, "self"));
     	
 	    return ResponseEntity.ok(listResource);
 	}
@@ -124,7 +124,6 @@ public class PalavraChaveController {
     @ApiOperation(value = "Deleta um item")
     public ResponseEntity<?> delete(@PathVariable Long id) throws NotFoundException{
     	
-    	 palavraChaveRepository.deleteById(id);
     	 Optional<PalavraChave> entity = palavraChaveRepository.findById(id);
     	 
     	 return entity.map(

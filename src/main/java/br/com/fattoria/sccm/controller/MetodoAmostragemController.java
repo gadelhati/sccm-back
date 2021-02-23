@@ -129,10 +129,9 @@ public class MetodoAmostragemController {
     	
     	 log.info("Metodo Amostragem por id "+id);
     	
-    	 metodoAmostragemRepository.deleteById(id);
-    	 Optional<MetodoAmostragem> pais = metodoAmostragemRepository.findById(id);
+    	 Optional<MetodoAmostragem> metodoAmostragem = metodoAmostragemRepository.findById(id);
     	 
-    	 return pais.map(p -> {metodoAmostragemRepository.deleteById(id); 
+    	 return metodoAmostragem.map(p -> {metodoAmostragemRepository.deleteById(id); 
     	 return ResponseEntity.noContent().build();}).orElseThrow(() -> new NotFoundException("Método Amostragem não encontrado"));    	
     }
 

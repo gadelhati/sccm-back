@@ -134,7 +134,6 @@ public class PaisController {
     	
     	 log.info("plataforma por id "+id);
     	
-    	 paisRepository.deleteById(id);
     	 Optional<Pais> pais = paisRepository.findById(id);
     	 
     	 return pais.map(

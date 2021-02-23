@@ -127,7 +127,6 @@ public class UnidadeMedidaController {
     	
     	 log.info("Unidade de Medida por id "+id);
     	
-    	 unidadeMedidaRepository.deleteById(id);
     	 Optional<UnidadeMedida> unidadeMedida = unidadeMedidaRepository.findById(id);
     	 
     	 return unidadeMedida.map(p -> {unidadeMedidaRepository.deleteById(id);

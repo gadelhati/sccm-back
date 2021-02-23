@@ -106,7 +106,7 @@ public class TipoPlataformaController {
     	CollectionModel<TipoPlataformaModel> listPlataformaResource = assembler.toCollectionModel(lista);
     	
     	final String uriString = ServletUriComponentsBuilder.fromCurrentRequest().build().toUriString();
-    	listPlataformaResource.add(new Link(uriString, "self"));
+    	listPlataformaResource.add(Link.of(uriString, "self"));
     	
 	    return ResponseEntity.ok(listPlataformaResource);
 	}
@@ -134,7 +134,6 @@ public class TipoPlataformaController {
     	
     	 log.info("plataforma por id "+id);
     	
-    	 tipoPlataformaRepository.deleteById(id);
     	 Optional<TipoPlataforma> tipoPlataforma = tipoPlataformaRepository.findById(id);
     	 
     	 return tipoPlataforma.map(

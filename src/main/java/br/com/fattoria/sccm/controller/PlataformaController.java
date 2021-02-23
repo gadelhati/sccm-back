@@ -163,7 +163,6 @@ public class PlataformaController {
     	
     	 log.info("plataforma por id "+id);
     	
-    	 plataformaRepository.deleteById(id);
     	 Optional<Plataforma> plataforma = plataformaRepository.findById(id);
     	 
     	 return plataforma.map(

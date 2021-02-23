@@ -274,7 +274,6 @@ public class PesquisaCientificaController {
     @ApiOperation(value = "Deleta uma Pesquisa Cientifica")
     public ResponseEntity<?> delete(@PathVariable Long id) throws NotFoundException {
     	
-    	 pesquisaCientificaRepository.deleteById(id);
     	 Optional<PesquisaCientifica> entity = pesquisaCientificaRepository.findById(id);
     	 
     	 return entity.map(

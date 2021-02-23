@@ -123,8 +123,7 @@ public class ComissaoController {
     @DeleteMapping("/comissoes/{id}")
     @ApiOperation(value = "Deleta uma comissão")
     public ResponseEntity<?> delete(@PathVariable Long id) throws NotFoundException{
-    	
-    	 comissaoRepository.deleteById(id);
+
     	 Optional<Comissao> entity = comissaoRepository.findById(id);
     	 
     	 return entity.map(
