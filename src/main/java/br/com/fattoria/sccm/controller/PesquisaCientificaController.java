@@ -27,6 +27,8 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import br.com.fattoria.sccm.api.AreaConhecimentoModel;
 import br.com.fattoria.sccm.api.AreaConhecimentoModelAssembler;
+import br.com.fattoria.sccm.api.DocumentosModel;
+import br.com.fattoria.sccm.api.DocumentosModelAssembler;
 import br.com.fattoria.sccm.api.EquipamentoModel;
 import br.com.fattoria.sccm.api.EquipamentoModelAssembler;
 import br.com.fattoria.sccm.api.InstituicaoModel;
@@ -37,6 +39,7 @@ import br.com.fattoria.sccm.api.PesquisaCientificaModelAssembler;
 import br.com.fattoria.sccm.api.TipoDadoModel;
 import br.com.fattoria.sccm.api.TipoDadoModelAssembler;
 import br.com.fattoria.sccm.persistence.model.AreaConhecimento;
+import br.com.fattoria.sccm.persistence.model.Documento;
 import br.com.fattoria.sccm.persistence.model.Equipamento;
 import br.com.fattoria.sccm.persistence.model.Instituicao;
 import br.com.fattoria.sccm.persistence.model.PesquisaCientifica;
@@ -48,6 +51,7 @@ import br.com.fattoria.sccm.persistence.model.Plataforma;
 import br.com.fattoria.sccm.persistence.model.Sigilo;
 import br.com.fattoria.sccm.persistence.model.TipoDado;
 import br.com.fattoria.sccm.persistence.repository.AreaConhecimentoRepository;
+import br.com.fattoria.sccm.persistence.repository.DocumentosRepository;
 import br.com.fattoria.sccm.persistence.repository.EquipamentoRepository;
 import br.com.fattoria.sccm.persistence.repository.InstituicaoRepository;
 import br.com.fattoria.sccm.persistence.repository.PesquisaCientificaAreaConhecimentoRepository;
@@ -79,6 +83,7 @@ public class PesquisaCientificaController {
 	private final AreaConhecimentoRepository areaConhecimentoRepository;
 	private final EquipamentoRepository equipamentoRepository;
 	private final TipoDadoRepository tipoDadoRepository;
+	private final DocumentosRepository documentosRepository;
 	
 	public PesquisaCientificaController(PesquisaCientificaRepository pesquisaCientificaRepository,
 			PlataformaRepository plataformaRepository, SigiloRepository sigiloRepository,
@@ -87,7 +92,7 @@ public class PesquisaCientificaController {
 			PesquisaCientificaCoAutorRepository pesquisaCientificaCoAutorRepository,
 			PesquisaCientificaAreaConhecimentoRepository pesquisaCientificaAreaConhecimentoRepository,
 			AreaConhecimentoRepository areaConhecimentoRepository, EquipamentoRepository equipamentoRepository,
-			TipoDadoRepository tipoDadoRepository) {
+			TipoDadoRepository tipoDadoRepository, DocumentosRepository documentosRepository) {
 		super();
 		this.pesquisaCientificaRepository = pesquisaCientificaRepository;
 		this.plataformaRepository = plataformaRepository;
@@ -99,6 +104,7 @@ public class PesquisaCientificaController {
 		this.areaConhecimentoRepository = areaConhecimentoRepository;
 		this.equipamentoRepository = equipamentoRepository;
 		this.tipoDadoRepository = tipoDadoRepository;
+		this.documentosRepository = documentosRepository;
 	}
 
 	@PostMapping("/pesquisas_cientificas")
@@ -357,6 +363,26 @@ public class PesquisaCientificaController {
     	
     	InstituicaoModelAssembler assembler = new InstituicaoModelAssembler(); 
     	CollectionModel<InstituicaoModel> listResource = assembler.toCollectionModel(lista);
+    	
+    	final String uriString = ServletUriComponentsBuilder.fromCurrentRequest().build().toUriString();
+    	listResource.add(Link.of(uriString, "self"));
+    	
+	    return ResponseEntity.ok(listResource);
+	}
+	
+	@GetMapping("/pesquisas_cientificas/{id}/documentos")
+    @ApiOperation(value = "Retorna uma lista de documentos")
+    @ApiResponses(value = {
+        @ApiResponse(code = 200, message = "Retorna uma lista de documentos"),
+    })
+	public ResponseEntity<CollectionModel<DocumentosModel>> getAllDocumentosByIdPesquisaCientifica(@PathVariable Long id) {
+    	
+    	log.info("listando coparticipantes");
+    	 
+    	Collection<Documento> lista = (Collection<Documento>) documentosRepository.findAllByPesquisaCientificaId(id);
+    	
+    	DocumentosModelAssembler assembler = new DocumentosModelAssembler(); 
+    	CollectionModel<DocumentosModel> listResource = assembler.toCollectionModel(lista);
     	
     	final String uriString = ServletUriComponentsBuilder.fromCurrentRequest().build().toUriString();
     	listResource.add(Link.of(uriString, "self"));
