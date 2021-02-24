@@ -44,10 +44,10 @@ public class PesquisaCientificaApi {
 	@Pattern(regexp = RegexLatLong.LATITUDE_PATTERN, message = "Latitude Sul inválida")
 	private String limiteSulLatitude;
 	
-	@Pattern(regexp = RegexLatLong.LONGITUDE_PATTERN, message = "Latitude Leste inválida")
+	@Pattern(regexp = RegexLatLong.LONGITUDE_PATTERN, message = "Longitude Leste inválida")
 	private String limiteLesteLongitude;
 	
-	@Pattern(regexp = RegexLatLong.LONGITUDE_PATTERN, message = "Latitude Oeste inválida")
+	@Pattern(regexp = RegexLatLong.LONGITUDE_PATTERN, message = "Longitude Oeste inválida")
 	private String limiteOesteLongitude;
 	
 	private String numeroPC;
