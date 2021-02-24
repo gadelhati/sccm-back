@@ -4,8 +4,10 @@ import java.util.Calendar;
 import java.util.List;
 
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 
 import br.com.fattoria.sccm.persistence.model.PesquisaCientifica;
+import br.com.fattoria.sccm.persistence.validation.RegexLatLong;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -36,12 +38,16 @@ public class PesquisaCientificaApi {
 		
 	private String cartaNautica;
 	
+	@Pattern(regexp = RegexLatLong.LATITUDE_PATTERN, message = "Latitude Norte inválida")
 	private String limiteNorteLatitude;
 	
+	@Pattern(regexp = RegexLatLong.LATITUDE_PATTERN, message = "Latitude Sul inválida")
 	private String limiteSulLatitude;
 	
+	@Pattern(regexp = RegexLatLong.LONGITUDE_PATTERN, message = "Latitude Leste inválida")
 	private String limiteLesteLongitude;
 	
+	@Pattern(regexp = RegexLatLong.LONGITUDE_PATTERN, message = "Latitude Oeste inválida")
 	private String limiteOesteLongitude;
 	
 	private String numeroPC;
