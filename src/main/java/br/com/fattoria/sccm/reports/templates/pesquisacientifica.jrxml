@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="pesquisacientifica" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="951aba53-cd32-4467-9d50-a8d5d82398c7">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="detalhe" fontSize="10"/>
+	<style name="tituloDocumento" fontSize="28" isBold="true"/>
+	<style name="tituloTabela" fontSize="14"/>
+	<field name="numeroPC" class="java.lang.String"/>
+	<field name="sigilo" class="java.lang.String"/>
+	<field name="comissao" class="java.lang.String"/>
+	<field name="instituicao" class="java.lang.String"/>
+	<field name="plataforma" class="java.lang.String"/>
+	<background>
+		<band/>
+	</background>
+	<title>
+		<band height="72">
+			<frame>
+				<reportElement mode="Opaque" x="-20" y="-20" width="595" height="92" backcolor="#34704B" uuid="ad8f838b-5476-4056-8bac-a864e2098a9a"/>
+				<staticText>
+					<reportElement style="tituloDocumento" x="20" y="20" width="363" height="43" forecolor="#FFFFFF" uuid="25f62b0a-3d47-417f-b75c-7e95536c31a1"/>
+					<textElement>
+						<font size="28" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Pesquisas Científicas]]></text>
+				</staticText>
+			</frame>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="13"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="21">
+			<staticText>
+				<reportElement style="tituloTabela" mode="Opaque" x="0" y="0" width="68" height="20" forecolor="#34704B" backcolor="#E6E6E6" uuid="d9155130-1d4d-4008-ac9a-5ac775b08b1c"/>
+				<textElement textAlignment="Center">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[N° PC]]></text>
+			</staticText>
+			<line>
+				<reportElement x="-20" y="20" width="595" height="1" forecolor="#666666" uuid="b1ed31c8-0586-491c-a064-71ca0b97be95"/>
+			</line>
+			<staticText>
+				<reportElement style="tituloTabela" mode="Opaque" x="69" y="0" width="70" height="20" forecolor="#34704B" backcolor="#E6E6E6" uuid="a3e7d96b-6327-4fc8-999e-89d98c890758"/>
+				<textElement textAlignment="Center">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[SIGILO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="tituloTabela" mode="Opaque" x="140" y="0" width="144" height="20" forecolor="#34704B" backcolor="#E6E6E6" uuid="87945940-1786-4179-9c12-557526d4137f"/>
+				<textElement textAlignment="Center">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[COMISSÃO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="tituloTabela" mode="Opaque" x="285" y="0" width="144" height="20" forecolor="#34704B" backcolor="#E6E6E6" uuid="eb8ab394-3336-4da1-8177-5dfc5eb7093b"/>
+				<textElement textAlignment="Center">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[INSTITUIÇÃO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="tituloTabela" mode="Opaque" x="430" y="0" width="125" height="20" forecolor="#34704B" backcolor="#E6E6E6" uuid="9eb5df19-0c0e-43ec-87cf-b07290a2456b"/>
+				<textElement textAlignment="Center">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[PLATAFORMA]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20">
+			<line>
+				<reportElement positionType="FixRelativeToBottom" x="0" y="19" width="555" height="1" uuid="25d71b17-0c17-4c98-bcd0-d7560698f84c"/>
+			</line>
+			<textField isBlankWhenNull="true">
+				<reportElement style="detalhe" x="0" y="0" width="68" height="20" uuid="12c69648-aadc-4719-9bd0-f57cc1e201d5"/>
+				<textFieldExpression><![CDATA[$F{numeroPC}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement style="detalhe" x="69" y="0" width="70" height="20" uuid="ac805626-6fca-48ed-b2b8-75c687ce386b"/>
+				<textFieldExpression><![CDATA[$F{sigilo}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement style="detalhe" x="140" y="0" width="144" height="20" uuid="e794e586-2aeb-441e-b901-c7dcee09bdb1"/>
+				<textFieldExpression><![CDATA[$F{comissao}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement style="detalhe" x="285" y="0" width="144" height="20" uuid="af3fcbe4-f79e-4629-9dea-8352f9cc2b19"/>
+				<textFieldExpression><![CDATA[$F{instituicao}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement style="detalhe" x="430" y="0" width="125" height="20" uuid="60111311-95dd-4e95-8c67-b88d42c08790"/>
+				<textFieldExpression><![CDATA[$F{plataforma}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band/>
+	</columnFooter>
+	<pageFooter>
+		<band height="17">
+			<textField>
+				<reportElement mode="Opaque" x="0" y="4" width="515" height="13" backcolor="#E6E6E6" uuid="120b26ad-ff13-47f1-851d-5d1cf892f90e"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement mode="Opaque" x="515" y="4" width="40" height="13" backcolor="#E6E6E6" uuid="857efb5c-ba6e-4651-a8c6-eb2e90cf9896"/>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField pattern="EEEEE dd MMMMM yyyy">
+				<reportElement x="0" y="4" width="100" height="13" uuid="7b7dbebb-24e5-4ff6-a145-1737fb9264bb"/>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band/>
+	</summary>
+</jasperReport>
