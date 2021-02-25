@@ -43,20 +43,6 @@ public class Comissao implements Serializable {
 	@Column(name = "nome_comissao")
 	private String nomeComissao;
 	
-	@Column(name = "nome_cruzeiro")
-	private String nomeCruzeiro;
-	
-	@Column(name = "pernada")
-	private Integer pernada;
-	
-	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name = "data_entrada")
-	private Calendar dataEntrada;
-	
-	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name = "data_oficial")
-	private Calendar dataOficial;
-	
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "data_inicio")
 	private Calendar dataInicio;
@@ -65,10 +51,10 @@ public class Comissao implements Serializable {
 	@Column(name = "data_fim")
 	private Calendar dataFim;
 	
-	@Column(name = "observacoes")
-	private String observacoes;
+	@Column(name = "resumo")
+	private String resumo;
 	
-	@Column(name = "imagem")
-	private String imagem;
+	@Column(name = "palavras_chaves")
+	private String palavrasChaves;
 
 }

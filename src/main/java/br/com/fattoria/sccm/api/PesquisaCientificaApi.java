@@ -34,7 +34,7 @@ public class PesquisaCientificaApi {
 
 	private String comandante;
 	
-	private String chefeCientifico;
+	private String coordenadorCientifico;
 		
 	private String cartaNautica;
 	
@@ -61,7 +61,7 @@ public class PesquisaCientificaApi {
 	private List<Long> idsCoParticipantes;
 	
 	public PesquisaCientifica toEntity() {
-		return new PesquisaCientifica(id, null, comissao != null ? comissao.toEntity() : null, null, null, dataCadastro, comandante, chefeCientifico, cartaNautica, limiteNorteLatitude, limiteSulLatitude, limiteLesteLongitude, limiteOesteLongitude, numeroPC, null, null, null);
+		return new PesquisaCientifica(id, null, comissao != null ? comissao.toEntity() : null, null, null, dataCadastro, comandante, coordenadorCientifico, cartaNautica, limiteNorteLatitude, limiteSulLatitude, limiteLesteLongitude, limiteOesteLongitude, numeroPC, null, null, null);
 	}
 	
 }

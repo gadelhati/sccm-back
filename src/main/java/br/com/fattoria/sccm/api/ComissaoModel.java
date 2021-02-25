@@ -17,35 +17,22 @@ public class ComissaoModel extends RepresentationModel<ComissaoModel> {
 	
 	private String nomeComissao;
 	
-	private String nomeCruzeiro;
-	
-	private Integer pernada;
-	
-	private Calendar dataEntrada;
-	
-	private Calendar dataOficial;
-	
 	private Calendar dataInicio;
 	
 	private Calendar dataFim;
 	
-	private String observacoes;
+	private String resumo;
 	
-	private String imagem;
+	private String palavrasChaves;
 	
 	private TipoComissaoModel tipoComissao;
 	
 	public ComissaoModel(Comissao comissao) {		
 		this.id           = comissao.getId();		
-		this.nomeComissao = comissao.getNomeComissao();
-		this.nomeCruzeiro = comissao.getNomeCruzeiro();
-		this.pernada      = comissao.getPernada();
-		this.dataEntrada  = comissao.getDataEntrada();
-		this.dataOficial  = comissao.getDataOficial();
 		this.dataInicio   = comissao.getDataInicio();
 		this.dataFim      = comissao.getDataFim();
-		this.observacoes  = comissao.getObservacoes();
-		this.imagem       = comissao.getImagem();
+		this.resumo       = comissao.getResumo();
+		this.palavrasChaves = comissao.getPalavrasChaves();
 		this.tipoComissao = comissao.getTipoComissao() != null ? new TipoComissaoModel(comissao.getTipoComissao()) : null;
 		
 		add(linkTo(ComissaoController.class).withRel("comissoes"));

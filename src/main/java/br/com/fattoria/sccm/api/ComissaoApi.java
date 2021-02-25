@@ -26,33 +26,19 @@ public class ComissaoApi {
 	@NotEmpty
 	private String nomeComissao;
 	
-	@NotBlank
-	@NotBlank
-	@NotEmpty
-	private String nomeCruzeiro;
-	
-	@NotBlank
-	@NotBlank
-	@NotEmpty
-	private Integer pernada;
-	
-	private Calendar dataEntrada;
-	
-	private Calendar dataOficial;
-	
 	private Calendar dataInicio;
 	
 	private Calendar dataFim;
 	
-	private String observacoes;
+	private String resumo;
 	
-	private String imagem;
+	private String palavrasChaves;
 	
 	@NotNull
 	private Long idTipoComissao;
 	
 	public Comissao toEntity() {
-		return new Comissao(id, idTipoComissao != null ? new TipoComissao(idTipoComissao) : null, nomeComissao, nomeCruzeiro, pernada, dataEntrada, dataOficial, dataInicio, dataFim, observacoes, imagem);
+		return new Comissao(id, idTipoComissao != null ? new TipoComissao(idTipoComissao) : null, nomeComissao, dataInicio, dataFim, resumo, palavrasChaves);
 	}
 
 }

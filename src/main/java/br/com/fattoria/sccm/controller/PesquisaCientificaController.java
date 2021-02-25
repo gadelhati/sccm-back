@@ -10,6 +10,7 @@ import javax.validation.Valid;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Sort;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.Link;
 import org.springframework.http.HttpStatus;
@@ -250,7 +251,7 @@ public class PesquisaCientificaController {
     })
 	public ResponseEntity<CollectionModel<PesquisaCientificaModel>> getAll() {
     	
-    	Collection<PesquisaCientifica> lista = (Collection<PesquisaCientifica>) pesquisaCientificaRepository.findAll();
+    	Collection<PesquisaCientifica> lista = (Collection<PesquisaCientifica>) pesquisaCientificaRepository.findAll(Sort.by("numeroPC").descending());
     	
     	PesquisaCientificaModelAssembler assembler = new PesquisaCientificaModelAssembler(); 
     	CollectionModel<PesquisaCientificaModel> listResource = assembler.toCollectionModel(lista);

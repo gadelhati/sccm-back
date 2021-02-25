@@ -32,7 +32,7 @@ public class PesquisaCientificaModel  extends RepresentationModel<PesquisaCienti
 
 	private String comandante;
 	
-	private String chefeCientifico;
+	private String coordenadorCientifico;
 	
 	private String cartaNautica;
 	
@@ -55,7 +55,7 @@ public class PesquisaCientificaModel  extends RepresentationModel<PesquisaCienti
 		this.plataforma           = pesquisaCientifica.getPlataforma() != null ? new PlataformaModel(pesquisaCientifica.getPlataforma()) : null;
 		this.dataCadastro         = pesquisaCientifica.getDataCadastro();
 		this.comandante           = pesquisaCientifica.getComandante();
-		this.chefeCientifico      = pesquisaCientifica.getChefeCientifico();
+		this.coordenadorCientifico      = pesquisaCientifica.getCoordenadorCientifico();
 		this.cartaNautica         = pesquisaCientifica.getCartaNautica();
 		this.limiteNorteLatitude  = pesquisaCientifica.getLimiteNorteLatitude();
 		this.limiteSulLatitude    = pesquisaCientifica.getLimiteSulLatitude();
