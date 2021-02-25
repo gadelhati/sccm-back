@@ -65,8 +65,8 @@ public class PesquisaCientifica implements Serializable {
 	@Column(name = "comandante")
 	private String comandante;
 	
-	@Column(name = "chefe_cientifico")
-	private String chefeCientifico;
+	@Column(name = "coordenador_cientifico")
+	private String coordenadorCientifico;
 	
 	@Column(name = "carta_nautica")
 	private String cartaNautica;
