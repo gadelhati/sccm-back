@@ -28,7 +28,8 @@ public class ComissaoModel extends RepresentationModel<ComissaoModel> {
 	private TipoComissaoModel tipoComissao;
 	
 	public ComissaoModel(Comissao comissao) {		
-		this.id           = comissao.getId();		
+		this.id           = comissao.getId();
+		this.nomeComissao = comissao.getNomeComissao();
 		this.dataInicio   = comissao.getDataInicio();
 		this.dataFim      = comissao.getDataFim();
 		this.resumo       = comissao.getResumo();

@@ -5,7 +5,6 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 import org.springframework.hateoas.RepresentationModel;
 
-import br.com.fattoria.sccm.controller.ComissaoController;
 import br.com.fattoria.sccm.controller.DestinoController;
 import br.com.fattoria.sccm.controller.PesquisaCientificaController;
 import br.com.fattoria.sccm.persistence.model.PalavraChave;
