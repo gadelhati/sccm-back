@@ -5,7 +5,6 @@ import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSuppor
 
 import br.com.fattoria.sccm.controller.ComissaoController;
 import br.com.fattoria.sccm.persistence.model.Comissao;
-import br.com.fattoria.sccm.persistence.model.Comissao;
 
 public class ComissaoModelAssembler extends RepresentationModelAssemblerSupport<Comissao, ComissaoModel> {
 

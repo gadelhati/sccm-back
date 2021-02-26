@@ -5,7 +5,6 @@ import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSuppor
 
 import br.com.fattoria.sccm.controller.DestinoController;
 import br.com.fattoria.sccm.persistence.model.Destino;
-import br.com.fattoria.sccm.persistence.model.Equipamento;
 
 public class DestinoModelAssembler extends RepresentationModelAssemblerSupport<Destino, DestinoModel> {
 
