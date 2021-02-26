@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 import br.com.fattoria.sccm.persistence.model.Sequence;
 
 @Repository
-@RepositoryRestResource(collectionResourceRel = "sequence", path="sequence")
-public interface SequenceRepository extends CrudRepository<Sequence, Long> {
+@RepositoryRestResource(collectionResourceRel = "sequence", path="sequence", exported = false)
+public interface SequenceRepository extends CrudRepository<Sequence, String> {
 
 }
