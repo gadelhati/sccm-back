@@ -7,6 +7,7 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -21,6 +22,7 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import br.com.fattoria.sccm.persistence.listener.PequisaCientificaListener;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -32,6 +34,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Entity
 @Table(name = "pesquisa_cientifica")
+@EntityListeners(PequisaCientificaListener.class)
 @SequenceGenerator(name="pesquisa_cientifica_generator", sequenceName="pesquisa_cientifica_seq", allocationSize = 1)
 public class PesquisaCientifica implements Serializable {
 

@@ -62,6 +62,8 @@ import br.com.fattoria.sccm.persistence.repository.PesquisaCientificaRepository;
 import br.com.fattoria.sccm.persistence.repository.PlataformaRepository;
 import br.com.fattoria.sccm.persistence.repository.SigiloRepository;
 import br.com.fattoria.sccm.persistence.repository.TipoDadoRepository;
+import br.com.fattoria.sccm.reports.templates.busines.SequenceGenerator;
+import br.com.fattoria.sccm.reports.templates.busines.SequenceModel;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -85,6 +87,7 @@ public class PesquisaCientificaController {
 	private final EquipamentoRepository equipamentoRepository;
 	private final TipoDadoRepository tipoDadoRepository;
 	private final DocumentosRepository documentosRepository;
+	private final SequenceGenerator sequenceGenerator;
 	
 	public PesquisaCientificaController(PesquisaCientificaRepository pesquisaCientificaRepository,
 			PlataformaRepository plataformaRepository, SigiloRepository sigiloRepository,
@@ -93,7 +96,7 @@ public class PesquisaCientificaController {
 			PesquisaCientificaCoAutorRepository pesquisaCientificaCoAutorRepository,
 			PesquisaCientificaAreaConhecimentoRepository pesquisaCientificaAreaConhecimentoRepository,
 			AreaConhecimentoRepository areaConhecimentoRepository, EquipamentoRepository equipamentoRepository,
-			TipoDadoRepository tipoDadoRepository, DocumentosRepository documentosRepository) {
+			TipoDadoRepository tipoDadoRepository, DocumentosRepository documentosRepository, SequenceGenerator sequenceGenerator) {
 		super();
 		this.pesquisaCientificaRepository = pesquisaCientificaRepository;
 		this.plataformaRepository = plataformaRepository;
@@ -106,6 +109,7 @@ public class PesquisaCientificaController {
 		this.equipamentoRepository = equipamentoRepository;
 		this.tipoDadoRepository = tipoDadoRepository;
 		this.documentosRepository = documentosRepository;
+		this.sequenceGenerator = sequenceGenerator;
 	}
 
 	@PostMapping("/pesquisas_cientificas")
@@ -130,7 +134,9 @@ public class PesquisaCientificaController {
         entityPC.setInstituicao(instituicao.get());
         entityPC.setSigilo(sigilo.get());
         
-        //entity.setComissao(comissaoRepository.save(entity.getComissao()));
+		String sequence = sequenceGenerator.getSequence(SequenceModel.build("NUMERO_PC"));
+		log.info("Numero PC gerado "+sequence);
+		entityPC.setNumeroPC(sequence);
         
         entityPC = pesquisaCientificaRepository.save(entityPC);
         
@@ -390,5 +396,17 @@ public class PesquisaCientificaController {
     	
 	    return ResponseEntity.ok(listResource);
 	}
+	
+	@GetMapping("/pesquisas_cientificas/sequence")
+	public ResponseEntity<?> getSequence() {
+    	
+		String sequence = sequenceGenerator.getSequence(SequenceModel.build("NUMERO_PC"));
+		log.info("Numero PC gerado "+sequence);
+    	
+	    return ResponseEntity.ok(sequence);
+	}
+	
+
+    
 	
 }
