@@ -11,6 +11,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.Link;
+import org.springframework.hateoas.server.EntityLinks;
+import org.springframework.hateoas.server.TypedEntityLinks;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -24,10 +26,17 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import br.com.fattoria.sccm.api.PlataformaModel;
 import br.com.fattoria.sccm.api.ShipSynopApi;
 import br.com.fattoria.sccm.api.ShipSynopModel;
 import br.com.fattoria.sccm.api.ShipSynopModelAssembler;
+import br.com.fattoria.sccm.persistence.model.Comissao;
+import br.com.fattoria.sccm.persistence.model.PesquisaCientifica;
+import br.com.fattoria.sccm.persistence.model.Plataforma;
 import br.com.fattoria.sccm.persistence.model.ShipSynop;
+import br.com.fattoria.sccm.persistence.repository.ComissaoRepository;
+import br.com.fattoria.sccm.persistence.repository.PesquisaCientificaRepository;
+import br.com.fattoria.sccm.persistence.repository.PlataformaRepository;
 import br.com.fattoria.sccm.persistence.repository.ShipSynopRepository;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -42,9 +51,19 @@ public class ShipSynopController {
 
 	private final Logger log = LoggerFactory.getLogger(ShipSynopController.class);
 	private ShipSynopRepository shipSynopRepository;
+	private ComissaoRepository comissaoRepository;
+	private PlataformaRepository plataformaRepository;
+	private PesquisaCientificaRepository pesquisaCientificaRepository;
 	
-	public ShipSynopController(ShipSynopRepository shipSynopRepository) {
+	private final TypedEntityLinks<ShipSynopModel> links;
+	
+	public ShipSynopController(ShipSynopRepository shipSynopRepository, ComissaoRepository comissaoRepository,
+			PlataformaRepository plataformaRepository, PesquisaCientificaRepository pesquisaCientificaRepository, EntityLinks entityLinks) {
 		this.shipSynopRepository = shipSynopRepository;
+		this.comissaoRepository = comissaoRepository;
+		this.plataformaRepository = plataformaRepository;
+		this.pesquisaCientificaRepository = pesquisaCientificaRepository;
+		this.links = entityLinks.forType(ShipSynopModel::getId);
 	}
 	
 	@PostMapping("/shipSynop")
@@ -52,14 +71,23 @@ public class ShipSynopController {
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "Destino criado"),
     })
-	ResponseEntity<ShipSynopModel> create(@Valid @RequestBody ShipSynopApi api) throws URISyntaxException{
-		
+	ResponseEntity<ShipSynopModel> create(@Valid @RequestBody ShipSynopApi api) throws URISyntaxException {
+        
+        Optional<Plataforma> plataforma = plataformaRepository.findById(api.getIdPlataforma());
+        
+        Optional<Comissao> comissao = comissaoRepository.findById(api.getIdComissao());
+        
+        Optional<PesquisaCientifica> pc = pesquisaCientificaRepository.findById(api.getIdPesquisaCientifica());
+        
         ShipSynop entity = api.toEntity();
+    	
+    	entity.setPlataforma(plataforma.get());
+    	entity.setComissao(comissao.get());
+    	entity.setPesquisaCientifica(pc.get());
         
     	ShipSynopModelAssembler assembler = new ShipSynopModelAssembler(); 
     	ShipSynopModel model = assembler.toModel(shipSynopRepository.save(entity));
- 
-        
+    	 
         final URI uri =
                 MvcUriComponentsBuilder.fromController(getClass())
                     .path("/{id}")
@@ -77,7 +105,18 @@ public class ShipSynopController {
     })
 	ResponseEntity<ShipSynopModel> update(@Valid @RequestBody ShipSynopApi api){
 		
+		Optional<Plataforma> plataforma = plataformaRepository.findById(api.getIdPlataforma());
+        
+        Optional<Comissao> comissao = comissaoRepository.findById(api.getIdComissao());
+        
+        Optional<PesquisaCientifica> pc = pesquisaCientificaRepository.findById(api.getIdPesquisaCientifica());
+        		
         ShipSynop entity = api.toEntity();
+        
+        entity.setPlataforma(plataforma.get());
+    	entity.setComissao(comissao.get());
+    	entity.setPesquisaCientifica(pc.get());
+        
         
     	ShipSynopModelAssembler assembler = new ShipSynopModelAssembler(); 
     	ShipSynopModel paisModel = assembler.toModel(shipSynopRepository.save(entity));

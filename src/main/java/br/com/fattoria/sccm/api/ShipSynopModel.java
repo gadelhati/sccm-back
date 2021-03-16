@@ -63,15 +63,15 @@ public class ShipSynopModel extends RepresentationModel<ShipSynopModel> {
 		
 		add(linkTo(methodOn(ShipSynopController.class).getAll()).withRel("shipSynop"));
 		
-		if (shipSynop.getPlataforma() != null && shipSynop.getPlataforma() != null) {
+		if (shipSynop.getPlataforma() != null && shipSynop.getPlataforma().getId() != null) {
     		add(linkTo(methodOn(PlataformaController.class).getById(shipSynop.getPlataforma().getId())).withRel("plataforma"));
     	}
 		
-		if (shipSynop.getComissao() != null && shipSynop.getComissao() != null) {
+		if (shipSynop.getComissao() != null && shipSynop.getComissao().getId() != null) {
     		add(linkTo(methodOn(ComissaoController.class).getById(shipSynop.getComissao().getId())).withRel("comissao"));
     	}
 		
-		if (shipSynop.getPesquisaCientifica() != null && shipSynop.getPesquisaCientifica() != null) {
+		if (shipSynop.getPesquisaCientifica() != null && shipSynop.getPesquisaCientifica().getId() != null) {
     		add(linkTo(methodOn(PesquisaCientificaController.class).getById(shipSynop.getPesquisaCientifica().getId())).withRel("pesquisaCientifica"));
     	}
 		

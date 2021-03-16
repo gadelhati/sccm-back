@@ -11,6 +11,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.Link;
+import org.springframework.hateoas.server.EntityLinks;
+import org.springframework.hateoas.server.TypedEntityLinks;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -27,8 +29,13 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import br.com.fattoria.sccm.api.ControleInternoApi;
 import br.com.fattoria.sccm.api.ControleInternoModel;
 import br.com.fattoria.sccm.api.ControleInternoModelAssembler;
+import br.com.fattoria.sccm.api.ShipSynopModel;
 import br.com.fattoria.sccm.persistence.model.ControleInterno;
+import br.com.fattoria.sccm.persistence.model.Instituicao;
+import br.com.fattoria.sccm.persistence.model.PesquisaCientifica;
 import br.com.fattoria.sccm.persistence.repository.ControleInternoRepository;
+import br.com.fattoria.sccm.persistence.repository.InstituicaoRepository;
+import br.com.fattoria.sccm.persistence.repository.PesquisaCientificaRepository;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -42,9 +49,17 @@ public class ControleInternoController {
 
 	private final Logger log = LoggerFactory.getLogger(ControleInternoController.class);
 	private ControleInternoRepository controleInternoRepository;
+	private InstituicaoRepository instituicaoRepository;
+	private PesquisaCientificaRepository pesquisaCientificaRepository;
 	
-	public ControleInternoController(ControleInternoRepository controleInternoRepository) {
+	private final TypedEntityLinks<ShipSynopModel> links;
+	
+	public ControleInternoController(ControleInternoRepository controleInternoRepository, 
+			InstituicaoRepository instituicaoRepository, PesquisaCientificaRepository pesquisaCientificaRepository, EntityLinks entityLinks) {
 		this.controleInternoRepository = controleInternoRepository;
+		this.instituicaoRepository = instituicaoRepository;
+		this.pesquisaCientificaRepository = pesquisaCientificaRepository;
+		this.links = entityLinks.forType(ShipSynopModel::getId);
 	}
 	
 	@PostMapping("/controleInterno")
@@ -52,9 +67,16 @@ public class ControleInternoController {
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "Destino criado"),
     })
-	ResponseEntity<ControleInternoModel> create(@Valid @RequestBody ControleInternoApi api) throws URISyntaxException{
+	ResponseEntity<ControleInternoModel> create(@Valid @RequestBody ControleInternoApi api) throws URISyntaxException {
+		
+		Optional<Instituicao> instituicao = instituicaoRepository.findById(api.getIdInstituicao());
+		
+		Optional<PesquisaCientifica> pesquisaCientifica = pesquisaCientificaRepository.findById(api.getIdPesquisaCientifica());
 		
         ControleInterno entity = api.toEntity();
+        
+        entity.setInstituicao(instituicao.get());
+        entity.setPesquisaCientifica(pesquisaCientifica.get());
         
     	ControleInternoModelAssembler assembler = new ControleInternoModelAssembler(); 
     	ControleInternoModel model = assembler.toModel(controleInternoRepository.save(entity));
@@ -77,8 +99,15 @@ public class ControleInternoController {
     })
 	ResponseEntity<ControleInternoModel> update(@Valid @RequestBody ControleInternoApi api){
 		
-        ControleInterno entity = api.toEntity();
+		Optional<Instituicao> instituicao = instituicaoRepository.findById(api.getIdInstituicao());
+		
+		Optional<PesquisaCientifica> pesquisaCientifica = pesquisaCientificaRepository.findById(api.getIdPesquisaCientifica());
+		
+		ControleInterno entity = api.toEntity();
         
+		entity.setInstituicao(instituicao.get());
+        entity.setPesquisaCientifica(pesquisaCientifica.get());
+		
     	ControleInternoModelAssembler assembler = new ControleInternoModelAssembler(); 
     	ControleInternoModel model = assembler.toModel(controleInternoRepository.save(entity));
         
