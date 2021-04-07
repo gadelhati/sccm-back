@@ -1,19 +1,30 @@
 package br.com.fattoria.sccm.controller;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Optional;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Sort;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.Link;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -51,6 +62,7 @@ import br.com.fattoria.sccm.persistence.model.PesquisaCientificaCoAutorPk;
 import br.com.fattoria.sccm.persistence.model.Plataforma;
 import br.com.fattoria.sccm.persistence.model.Sigilo;
 import br.com.fattoria.sccm.persistence.model.TipoDado;
+import br.com.fattoria.sccm.persistence.model.XML;
 import br.com.fattoria.sccm.persistence.repository.AreaConhecimentoRepository;
 import br.com.fattoria.sccm.persistence.repository.DocumentosRepository;
 import br.com.fattoria.sccm.persistence.repository.EquipamentoRepository;
@@ -62,8 +74,10 @@ import br.com.fattoria.sccm.persistence.repository.PesquisaCientificaRepository;
 import br.com.fattoria.sccm.persistence.repository.PlataformaRepository;
 import br.com.fattoria.sccm.persistence.repository.SigiloRepository;
 import br.com.fattoria.sccm.persistence.repository.TipoDadoRepository;
+import br.com.fattoria.sccm.persistence.repository.XMLRepository;
 import br.com.fattoria.sccm.reports.templates.busines.SequenceGenerator;
 import br.com.fattoria.sccm.reports.templates.busines.SequenceModel;
+import br.com.fattoria.sccm.service.DocumentStorageService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -88,6 +102,10 @@ public class PesquisaCientificaController {
 	private final TipoDadoRepository tipoDadoRepository;
 	private final DocumentosRepository documentosRepository;
 	private final SequenceGenerator sequenceGenerator;
+	private final XMLRepository xmlRepository;
+	
+	@Autowired
+	private DocumentStorageService documentStorageService;
 	
 	public PesquisaCientificaController(PesquisaCientificaRepository pesquisaCientificaRepository,
 			PlataformaRepository plataformaRepository, SigiloRepository sigiloRepository,
@@ -96,7 +114,7 @@ public class PesquisaCientificaController {
 			PesquisaCientificaCoAutorRepository pesquisaCientificaCoAutorRepository,
 			PesquisaCientificaAreaConhecimentoRepository pesquisaCientificaAreaConhecimentoRepository,
 			AreaConhecimentoRepository areaConhecimentoRepository, EquipamentoRepository equipamentoRepository,
-			TipoDadoRepository tipoDadoRepository, DocumentosRepository documentosRepository, SequenceGenerator sequenceGenerator) {
+			TipoDadoRepository tipoDadoRepository, DocumentosRepository documentosRepository, SequenceGenerator sequenceGenerator, XMLRepository xmlRepository) {
 		super();
 		this.pesquisaCientificaRepository = pesquisaCientificaRepository;
 		this.plataformaRepository = plataformaRepository;
@@ -110,6 +128,7 @@ public class PesquisaCientificaController {
 		this.tipoDadoRepository = tipoDadoRepository;
 		this.documentosRepository = documentosRepository;
 		this.sequenceGenerator = sequenceGenerator;
+		this.xmlRepository = xmlRepository;
 	}
 
 	@PostMapping("/pesquisas_cientificas")
@@ -398,13 +417,60 @@ public class PesquisaCientificaController {
 	}
 	
 	@GetMapping("/pesquisas_cientificas/sequence")
-	public ResponseEntity<?> getSequence() {
+	public ResponseEntity<?> getSequence() { 
     	
 		String sequence = sequenceGenerator.getSequence(SequenceModel.build("NUMERO_PC"));
 		log.info("Numero PC gerado "+sequence);
     	
 	    return ResponseEntity.ok(sequence);
 	}
+	
+	@GetMapping("/pesquisas_cientificas/xml")
+	public ResponseEntity<Resource> getXml(HttpServletRequest request) throws IOException {
+		
+		Optional<XML> entity = xmlRepository.findById(1L);
+		
+		XML xml = entity.get();
+		
+		String path = "C:\\Users\\Victor\\";
+		
+		File file = new File(path + "teste.xml");
+				
+		FileWriter archive = new FileWriter(file);
+		PrintWriter writer = new PrintWriter(archive);
+			
+		writer.println(xml.getXml().toString());			
+		archive.close();
+			
+		Resource resource = null;
+		try {
+			resource = documentStorageService.loadFileAsResource(file.getName());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		String contentType = null;
+		
+		try {
+			contentType = request.getServletContext().getMimeType(resource.getFile().getAbsolutePath());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		if (contentType == null) {
+			contentType = "application/octet-stream";
+		}
+		
+		System.out.println("FIM " + resource.getFilename());
+		
+		return ResponseEntity.ok()
+				.contentType(MediaType.parseMediaType(contentType))
+				.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")								
+				.body(resource);
+	    
+	}
+	
+	
 	
 
     
