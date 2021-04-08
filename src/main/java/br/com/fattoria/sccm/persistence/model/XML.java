@@ -1,16 +1,17 @@
 package br.com.fattoria.sccm.persistence.model;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import br.com.fattoria.sccm.xml.sxtream.DescriptiveKeywords;
+import br.com.fattoria.sccm.xml.sxtream.Keyword;
+import br.com.fattoria.sccm.xml.sxtream.types.CharacterString;
+import br.com.fattoria.sccm.xml.sxtream.types.CodeList;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -34,117 +35,87 @@ public class XML implements Serializable {
 	
 	public String getFormat(PesquisaCientifica pc) {
 		
-		this.xml = this.xml.replace("${FILE_IDENTIFIER}", "");		
-		this.xml = this.xml.replace("${DATA_GERACAO_XML}", "");		
+		SimpleDateFormat dateTimeFormatXML = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+		SimpleDateFormat dateFormatXML = new SimpleDateFormat("yyyy-MM-dd");
+		
+		this.xml = this.xml.replace("${FILE_IDENTIFIER}", pc.getId().toString());		
+		this.xml = this.xml.replace("${DATA_GERACAO_XML}", dateTimeFormatXML.format(new Date()));		
 		this.xml = this.xml.replace("${TITULO}", "");
 		this.xml = this.xml.replace("${DATA_RECEBIMENTO}", "");
-		this.xml = this.xml.replace("${RESUMO}", "");
-		this.xml = this.xml.replace("${NAVIO}", "");
-		this.xml = this.xml.replace("${COORDENADOR_PROJETO}", "");
-		this.xml = this.xml.replace("${INSTITUICAO}", "");
-		this.xml = this.xml.replace("${CAMINHO_PC}", "");		 
-		this.xml = this.xml.replace("${LIMITE_OESTE}", ""); 
-		this.xml = this.xml.replace("${LIMITE_LESTE}", "");
-		this.xml = this.xml.replace("${LIMITE_SUL}", "");
-		this.xml = this.xml.replace("${LIMITE_NORTE}", "");
-		this.xml = this.xml.replace("${DATA_INICIO}", "");
-		this.xml = this.xml.replace("${DATA_FINAL}", "");	    
+		this.xml = this.xml.replace("${RESUMO}", pc.getComissao().getResumo());
+		this.xml = this.xml.replace("${NAVIO}", pc.getPlataforma().getNome());
+		this.xml = this.xml.replace("${COORDENADOR_PROJETO}", pc.getCoordenadorCientifico());
+		this.xml = this.xml.replace("${INSTITUICAO}", pc.getInstituicao().getNome());
+		this.xml = this.xml.replace("${ID_PC}", pc.getId().toString());	
+		this.xml = this.xml.replace("${NUMERO_PC}", pc.getNumeroPC());	
+		this.xml = this.xml.replace("${LIMITE_OESTE}", pc.getLimiteOesteLongitude()); 
+		this.xml = this.xml.replace("${LIMITE_LESTE}", pc.getLimiteLesteLongitude());
+		this.xml = this.xml.replace("${LIMITE_SUL}", pc.getLimiteSulLatitude());
+		this.xml = this.xml.replace("${LIMITE_NORTE}", pc.getLimiteNorteLatitude());
+		this.xml = this.xml.replace("${DATA_INICIO}", dateFormatXML.format(pc.getComissao().getDataInicio().getTime()));
+		this.xml = this.xml.replace("${DATA_FINAL}", dateFormatXML.format(pc.getComissao().getDataFim().getTime()));	  
 		
-		String conteudoDinamico = "";
+		StringBuilder conteudoDinamico = new StringBuilder("");
 		
 		if (pc.getListaAreaConhecimento() != null && pc.getListaAreaConhecimento().size() > 0) {			
 			for (AreaConhecimento areaConhecimento : pc.getListaAreaConhecimento()) {				
-				conteudoDinamico += this.getConteudoDinamico(this.xml, areaConhecimento.getNome());				
+				CharacterString keyword = new CharacterString(areaConhecimento.getNome());
+				CodeList type = new CodeList("platform");
+				DescriptiveKeywords descriptiveKeywords = new DescriptiveKeywords(new Keyword(keyword, type));
+				conteudoDinamico.append(descriptiveKeywords.toXML());
+				conteudoDinamico.append("\n");
 			}			
 		}
 		
-		this.xml = this.
-		
-		return "";
-	}
-	
-	private String getConteudoDinamico(String conteudo, String palavraChave) {
-		
-		boolean catchContent = false;
-		
-		String[] linha = conteudo.split("\n");
-		
-		String conteudoDinamico = "";
-		
-		for (String l : linha) {
-			
-			if (conteudo.contains("${FIM_FOR_PALAVRA_CHAVE}")) {
-				catchContent = false;
-			}
-		
-			if (catchContent) {
-				conteudoDinamico += conteudo + "\n";
-			}
-		
-			if (conteudo.contains("${FOR_PALAVRA_CHAVE}")) {
-				catchContent = true;
-			}	
+		if (pc.getPlataforma() != null) {			
+			CharacterString keyword = new CharacterString(pc.getPlataforma().getNome());
+			CodeList type = new CodeList("platform");
+			DescriptiveKeywords descriptiveKeywords = new DescriptiveKeywords(new Keyword(keyword, type));
+			conteudoDinamico.append(descriptiveKeywords.toXML());	
+			conteudoDinamico.append("\n");
 		}
-				
-		return conteudoDinamico.replace("${PALAVRA_CHAVE}", palavraChave);
-	}
-	
-	
-	public static void main(String[] args) {
+		
+		if (pc.getListaTiposDados() != null && pc.getListaTiposDados().size() > 0) {		
+			for (TipoDado tipoDado : pc.getListaTiposDados()) {
+				CharacterString keyword = new CharacterString(tipoDado.getDescricao());
+				CodeList type = new CodeList("platform");//sensor
+				DescriptiveKeywords descriptiveKeywords = new DescriptiveKeywords(new Keyword(keyword, type));
+				conteudoDinamico.append(descriptiveKeywords.toXML());	
+				conteudoDinamico.append("\n");
+			}
+		}
+		
+		if (pc.getListaEquipamentos() != null && pc.getListaEquipamentos().size() > 0) {		
+			for (Equipamento equipamento : pc.getListaEquipamentos()) {
+				CharacterString keyword = new CharacterString(equipamento.getNome());
+				CodeList type = new CodeList("instrument");
+				DescriptiveKeywords descriptiveKeywords = new DescriptiveKeywords(new Keyword(keyword, type));
+				conteudoDinamico.append(descriptiveKeywords.toXML());	
+				conteudoDinamico.append("\n");
+			}
+		}
 
-		boolean ler = true;
-
-		boolean catchContent = false;
-
-		try {
-			BufferedReader buffRead = new BufferedReader(new FileReader("C:\\Users\\Victor\\Downloads\\teste.xml"));
-			String linha = buffRead.readLine();
-
-			String conteudoDinamico = "";
+		if (pc.getComissao().getPalavrasChaves() != null && pc.getComissao().getPalavrasChaves() != "") {	
 			
-			while (ler) {
-
-				if (linha != null && !linha.equals("")) {
-					
-					
-					/*if (linha.contains("${FIM_FOR_PALAVRA_CHAVE}")) {
-						catchContent = false;
-					}
-					
-					if (catchContent) {*/
-						conteudoDinamico += linha + "\n";
-					/*}
-					
-					if (linha.contains("${FOR_PALAVRA_CHAVE}")) {
-						catchContent = true;
-					}*/					
-//					System.out.println(i++ + linha);
-				} else {
-					ler = false;
+			String[] palavrasChaves = pc.getComissao().getPalavrasChaves().split(",");
+			
+			if(palavrasChaves.length > 0) {
+				for (String palavraChave : palavrasChaves) {
+					CharacterString keyword = new CharacterString(palavraChave);
+					CodeList type = new CodeList("theme");
+					DescriptiveKeywords descriptiveKeywords = new DescriptiveKeywords(new Keyword(keyword, type));
+					conteudoDinamico.append(descriptiveKeywords.toXML());
+					conteudoDinamico.append("\n");
 				}
-				
-				linha = buffRead.readLine();
-
 			}
 			
-//			System.out.println(conteudoDinamico);
-			
-			String[] split = conteudoDinamico.split("\n");
-			
-			for (String s : split) {
-				System.out.println(s);
-			}
-			
-
-			buffRead.close();
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
 		}
-
-		System.out.println("FIM");
-
+		
+		conteudoDinamico.append("<!--PALAVRAS CHAVES -->");
+		
+		this.xml = this.xml.replace("${PALAVRA_CHAVE}", conteudoDinamico.toString());
+		
+		return xml;
 	}
 	
 }

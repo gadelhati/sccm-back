@@ -1,24 +1,20 @@
 package br.com.fattoria.sccm.controller;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileWriter;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.InputStreamResource;
-import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Sort;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.Link;
@@ -94,7 +90,6 @@ public class PesquisaCientificaController {
 	private final PlataformaRepository plataformaRepository;
 	private final SigiloRepository sigiloRepository;
 	private final InstituicaoRepository instituicaoRepository;
-	private final PesquisaCientificaEquipamentoRepository pesquisaCientificaEquipamentoRepository;
 	private final PesquisaCientificaCoAutorRepository pesquisaCientificaCoAutorRepository;
 	private final PesquisaCientificaAreaConhecimentoRepository pesquisaCientificaAreaConhecimentoRepository;
 	private final AreaConhecimentoRepository areaConhecimentoRepository;
@@ -120,7 +115,6 @@ public class PesquisaCientificaController {
 		this.plataformaRepository = plataformaRepository;
 		this.sigiloRepository = sigiloRepository;
 		this.instituicaoRepository = instituicaoRepository;
-		this.pesquisaCientificaEquipamentoRepository = pesquisaCientificaEquipamentoRepository;
 		this.pesquisaCientificaCoAutorRepository = pesquisaCientificaCoAutorRepository;
 		this.pesquisaCientificaAreaConhecimentoRepository = pesquisaCientificaAreaConhecimentoRepository;
 		this.areaConhecimentoRepository = areaConhecimentoRepository;
@@ -403,7 +397,7 @@ public class PesquisaCientificaController {
     })
 	public ResponseEntity<CollectionModel<DocumentosModel>> getAllDocumentosByIdPesquisaCientifica(@PathVariable Long id) {
     	
-    	log.info("listando coparticipantes");
+    	log.info("listando documentos");
     	 
     	Collection<Documento> lista = (Collection<Documento>) documentosRepository.findAllByPesquisaCientificaId(id);
     	
@@ -425,14 +419,16 @@ public class PesquisaCientificaController {
 	    return ResponseEntity.ok(sequence);
 	}
 	
-	@GetMapping("/pesquisas_cientificas/xml")
-	public ResponseEntity<Resource> getXml(HttpServletRequest request) throws IOException {
+	@GetMapping({"/pesquisas_cientificas/xml", "/pesquisas_cientificas/{id}/xml"})
+	public ResponseEntity<?> getXml(@PathVariable Long id) throws IOException {
 		
-		Optional<XML> entity = xmlRepository.findById(1L);
+		Optional<XML> entityXML = xmlRepository.findById(1L);
 		
-		XML xml = entity.get();
+		Optional<PesquisaCientifica> entityPC = pesquisaCientificaRepository.findById(101L);
 		
-		String path = "C:\\Users\\Victor\\";
+		XML xml = entityXML.get();
+		
+/*		String path = "C:\\Users\\Victor\\";
 		
 		File file = new File(path + "teste.xml");
 				
@@ -449,24 +445,35 @@ public class PesquisaCientificaController {
 			e.printStackTrace();
 		}
 		
-		String contentType = null;
+		String contentType = null;*/
 		
-		try {
-			contentType = request.getServletContext().getMimeType(resource.getFile().getAbsolutePath());
-		} catch (Exception e) {
-			e.printStackTrace();
+		ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+		PrintWriter writer = new PrintWriter(byteArrayOutputStream);
+		
+		if(entityXML.isPresent() && entityPC.isPresent()) {
+			
+			PesquisaCientifica pesquisaCientifica = entityPC.get();
+			
+			Collection<AreaConhecimento> listaAreaConhecimento = (Collection<AreaConhecimento>) areaConhecimentoRepository.findAllByPesquisaCientificaId(id);
+			Collection<Equipamento> listaEquipamentos = (Collection<Equipamento>) equipamentoRepository.findAllByPesquisaCientificaId(id);
+			Collection<TipoDado> listaTiposDados = (Collection<TipoDado>) tipoDadoRepository.findAllByPesquisaCientificaId(id);
+			
+			pesquisaCientifica.setListaAreaConhecimento((List<AreaConhecimento>) listaAreaConhecimento);
+			pesquisaCientifica.setListaEquipamentos((List<Equipamento>) listaEquipamentos);
+			pesquisaCientifica.setListaTiposDados((List<TipoDado>) listaTiposDados);
+			
+			xml.getFormat(pesquisaCientifica);
+			writer.println(xml.getXml());
 		}
 		
-		if (contentType == null) {
-			contentType = "application/octet-stream";
-		}
-		
-		System.out.println("FIM " + resource.getFilename());
+		writer.close();
+		byteArrayOutputStream.flush();
+		byteArrayOutputStream.close();
 		
 		return ResponseEntity.ok()
-				.contentType(MediaType.parseMediaType(contentType))
-				.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")								
-				.body(resource);
+				.contentType(MediaType.parseMediaType("application/octet-stream"))
+				.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + xml.getId() + ".xml\"")								
+				.body(byteArrayOutputStream.toByteArray());
 	    
 	}
 	
