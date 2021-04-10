@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.List;
@@ -15,6 +16,10 @@ import javax.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.Link;
@@ -29,12 +34,15 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import br.com.fattoria.sccm.api.AreaConhecimentoModel;
 import br.com.fattoria.sccm.api.AreaConhecimentoModelAssembler;
+import br.com.fattoria.sccm.api.ControleInternoModel;
+import br.com.fattoria.sccm.api.ControleInternoModelAssembler;
 import br.com.fattoria.sccm.api.DocumentosModel;
 import br.com.fattoria.sccm.api.DocumentosModelAssembler;
 import br.com.fattoria.sccm.api.EquipamentoModel;
@@ -47,6 +55,7 @@ import br.com.fattoria.sccm.api.PesquisaCientificaModelAssembler;
 import br.com.fattoria.sccm.api.TipoDadoModel;
 import br.com.fattoria.sccm.api.TipoDadoModelAssembler;
 import br.com.fattoria.sccm.persistence.model.AreaConhecimento;
+import br.com.fattoria.sccm.persistence.model.ControleInterno;
 import br.com.fattoria.sccm.persistence.model.Documento;
 import br.com.fattoria.sccm.persistence.model.Equipamento;
 import br.com.fattoria.sccm.persistence.model.Instituicao;
@@ -60,12 +69,12 @@ import br.com.fattoria.sccm.persistence.model.Sigilo;
 import br.com.fattoria.sccm.persistence.model.TipoDado;
 import br.com.fattoria.sccm.persistence.model.XML;
 import br.com.fattoria.sccm.persistence.repository.AreaConhecimentoRepository;
+import br.com.fattoria.sccm.persistence.repository.ControleInternoRepository;
 import br.com.fattoria.sccm.persistence.repository.DocumentosRepository;
 import br.com.fattoria.sccm.persistence.repository.EquipamentoRepository;
 import br.com.fattoria.sccm.persistence.repository.InstituicaoRepository;
 import br.com.fattoria.sccm.persistence.repository.PesquisaCientificaAreaConhecimentoRepository;
 import br.com.fattoria.sccm.persistence.repository.PesquisaCientificaCoAutorRepository;
-import br.com.fattoria.sccm.persistence.repository.PesquisaCientificaEquipamentoRepository;
 import br.com.fattoria.sccm.persistence.repository.PesquisaCientificaRepository;
 import br.com.fattoria.sccm.persistence.repository.PlataformaRepository;
 import br.com.fattoria.sccm.persistence.repository.SigiloRepository;
@@ -96,6 +105,7 @@ public class PesquisaCientificaController {
 	private final EquipamentoRepository equipamentoRepository;
 	private final TipoDadoRepository tipoDadoRepository;
 	private final DocumentosRepository documentosRepository;
+	private final ControleInternoRepository controleInternoRepository;
 	private final SequenceGenerator sequenceGenerator;
 	private final XMLRepository xmlRepository;
 	
@@ -105,11 +115,12 @@ public class PesquisaCientificaController {
 	public PesquisaCientificaController(PesquisaCientificaRepository pesquisaCientificaRepository,
 			PlataformaRepository plataformaRepository, SigiloRepository sigiloRepository,
 			InstituicaoRepository instituicaoRepository,
-			PesquisaCientificaEquipamentoRepository pesquisaCientificaEquipamentoRepository,
 			PesquisaCientificaCoAutorRepository pesquisaCientificaCoAutorRepository,
 			PesquisaCientificaAreaConhecimentoRepository pesquisaCientificaAreaConhecimentoRepository,
 			AreaConhecimentoRepository areaConhecimentoRepository, EquipamentoRepository equipamentoRepository,
-			TipoDadoRepository tipoDadoRepository, DocumentosRepository documentosRepository, SequenceGenerator sequenceGenerator, XMLRepository xmlRepository) {
+			TipoDadoRepository tipoDadoRepository, DocumentosRepository documentosRepository,
+			ControleInternoRepository controleInternoRepository, SequenceGenerator sequenceGenerator,
+			XMLRepository xmlRepository, DocumentStorageService documentStorageService) {
 		super();
 		this.pesquisaCientificaRepository = pesquisaCientificaRepository;
 		this.plataformaRepository = plataformaRepository;
@@ -121,8 +132,10 @@ public class PesquisaCientificaController {
 		this.equipamentoRepository = equipamentoRepository;
 		this.tipoDadoRepository = tipoDadoRepository;
 		this.documentosRepository = documentosRepository;
+		this.controleInternoRepository = controleInternoRepository;
 		this.sequenceGenerator = sequenceGenerator;
 		this.xmlRepository = xmlRepository;
+		this.documentStorageService = documentStorageService;
 	}
 
 	@PostMapping("/pesquisas_cientificas")
@@ -280,6 +293,30 @@ public class PesquisaCientificaController {
     	
 	    return ResponseEntity.ok(listResource);
 	}
+	
+	@GetMapping("/pesquisas_cientificas/pagina")
+    @ApiOperation(value = "Retorna uma lista de Pesquisa Cientifica")
+    @ApiResponses(value = {
+        @ApiResponse(code = 200, message = "Pesquisa Cientifica"),
+    })
+	public ResponseEntity<Page<PesquisaCientificaModel>> getAll(@RequestParam("page") int page, @RequestParam("size") int size) {
+		
+		log.info("paginando pesquisas_cientificas");
+		
+		PageRequest pageRequest = PageRequest.of(page, size, Sort.by("numeroPC").descending());
+    	
+    	Page<PesquisaCientifica> lista = (Page<PesquisaCientifica>) pesquisaCientificaRepository.findAll(pageRequest);
+    	
+    	PesquisaCientificaModelAssembler assembler = new PesquisaCientificaModelAssembler(); 
+    	CollectionModel<PesquisaCientificaModel> listResource = assembler.toCollectionModel(lista.toList());
+    	
+//    	final String uriString = ServletUriComponentsBuilder.fromCurrentRequest().build().toUriString();
+//    	listResource.add(Link.of(uriString, "self"));
+    	
+    	Page<PesquisaCientificaModel> pageFull = new PageImpl<PesquisaCientificaModel>(new ArrayList(listResource.getContent()), lista.getPageable(), lista.getTotalElements());
+    	
+	    return ResponseEntity.ok(pageFull);
+	}
     
     @GetMapping("/pesquisas_cientificas/{id}")
     @ApiOperation(value = "Retorna uma Pesquisa Cientifica")
@@ -403,6 +440,26 @@ public class PesquisaCientificaController {
     	
     	DocumentosModelAssembler assembler = new DocumentosModelAssembler(); 
     	CollectionModel<DocumentosModel> listResource = assembler.toCollectionModel(lista);
+    	
+    	final String uriString = ServletUriComponentsBuilder.fromCurrentRequest().build().toUriString();
+    	listResource.add(Link.of(uriString, "self"));
+    	
+	    return ResponseEntity.ok(listResource);
+	}
+	
+	@GetMapping("/pesquisas_cientificas/{id}/controleInterno")
+    @ApiOperation(value = "Retorna uma lista controles internos")
+    @ApiResponses(value = {
+        @ApiResponse(code = 200, message = "Retorna uma lista de controles internos"),
+    })
+	public ResponseEntity<CollectionModel<ControleInternoModel>> getAllControlesInternosByIdPesquisaCientifica(@PathVariable Long id) {
+    	
+    	log.info("listando controles internos");
+    	 
+    	Collection<ControleInterno> lista = (Collection<ControleInterno>) controleInternoRepository.findAllByPesquisaCientificaId(id);
+    	
+    	ControleInternoModelAssembler assembler = new ControleInternoModelAssembler(); 
+    	CollectionModel<ControleInternoModel> listResource = assembler.toCollectionModel(lista);
     	
     	final String uriString = ServletUriComponentsBuilder.fromCurrentRequest().build().toUriString();
     	listResource.add(Link.of(uriString, "self"));
