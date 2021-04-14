@@ -59,7 +59,7 @@ public class InstituicaoApi {
 	
 	public Instituicao toEntity() {
 		Endereco enderecoEntity = endereco != null ? 
-				new Endereco(endereco.getId(), null, endereco.getLogradouro(), endereco.getNumero(), endereco.getComplemento(), endereco.getCidade(), endereco.getCep()) : null;
+				new Endereco(endereco.getId(), null, endereco.getLogradouro(), endereco.getNumero(), endereco.getComplemento(), endereco.getCidade(), endereco.getEstado(), endereco.getBairro(), endereco.getCep()) : null;
 		return new Instituicao(id, nome, sigla, tipoInstituicao, numeroInscricao, numeroControle, null, ativo, email, site, enderecoEntity);//endereco != null ? endereco.toEntity() : null
 	}
 
