@@ -34,7 +34,7 @@ public class PlataformaModel extends RepresentationModel<PlataformaModel> {
     	this.tipoPlataforma = plataforma.getTipoPlataforma() != null ? new TipoPlataformaModel(plataforma.getTipoPlataforma()) : null;
     	this.bandeira = plataforma.getBandeira() != null ? new PaisModel(plataforma.getBandeira()) : null;
     	
-    	add(linkTo(PlataformaController.class).withRel("plataformas"));
+    	add(linkTo(methodOn(PlataformaController.class).getAll()).withRel("plataformas"));
     	if(plataforma.getTipoPlataforma() != null && plataforma.getTipoPlataforma().getId() != null) {
     		add(linkTo(methodOn(TipoPlataformaController.class).getById(plataforma.getTipoPlataforma().getId())).withRel("tipos_plataforma"));
     	}

@@ -62,7 +62,8 @@ public class PesquisaCientificaModel  extends RepresentationModel<PesquisaCienti
 		this.limiteLesteLongitude = pesquisaCientifica.getLimiteLesteLongitude();
 		this.limiteOesteLongitude = pesquisaCientifica.getLimiteOesteLongitude();
 		
-		add(linkTo(PesquisaCientificaController.class).withRel("pesquisas_cientificas"));
+		add(linkTo(methodOn(PesquisaCientificaController.class).getAll()).withRel("pesquisas_cientificas"));
+		add(linkTo(methodOn(PesquisaCientificaController.class).getById(pesquisaCientifica.getId())).withSelfRel());
 		
 		if (pesquisaCientifica.getComissao() != null && pesquisaCientifica.getComissao().getId() != null) {
     		add(linkTo(methodOn(ComissaoController.class).getById(pesquisaCientifica.getComissao().getId())).withRel("comissao"));

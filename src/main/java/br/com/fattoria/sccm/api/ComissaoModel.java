@@ -1,6 +1,7 @@
 package br.com.fattoria.sccm.api;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 import java.util.Calendar;
 
@@ -36,7 +37,8 @@ public class ComissaoModel extends RepresentationModel<ComissaoModel> {
 		this.palavrasChaves = comissao.getPalavrasChaves();
 		this.tipoComissao = comissao.getTipoComissao() != null ? new TipoComissaoModel(comissao.getTipoComissao()) : null;
 		
-		add(linkTo(ComissaoController.class).withRel("comissoes"));
+		add(linkTo(methodOn(ComissaoController.class).getAll()).withRel("comissoes"));
+		add(linkTo(methodOn(ComissaoController.class).getById(comissao.getId())).withSelfRel());
     	    	
 	}
 	

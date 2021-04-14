@@ -49,10 +49,12 @@ public class InstituicaoModel extends RepresentationModel<InstituicaoModel> {
     	this.endereco = instituicao.getEndereco() != null ? new EnderecoModel(instituicao.getEndereco()) : null;
     	this.ativo = instituicao.isAtivo();
     	
-    	add(linkTo(InstituicaoController.class).withRel("instituicoes"));
+    	add(linkTo(methodOn(InstituicaoController.class).getAll()).withRel("instituicoes"));
     	if(instituicao.getPais() != null && instituicao.getPais().getId() != null) {
     		add(linkTo(methodOn(PaisController.class).getById(instituicao.getPais().getId())).withRel("paises"));
     	}
         add(linkTo(methodOn(InstituicaoController.class).getById(instituicao.getId())).withSelfRel());
+        
+        
 	}
 }
