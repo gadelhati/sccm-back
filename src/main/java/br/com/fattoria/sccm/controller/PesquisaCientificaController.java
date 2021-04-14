@@ -27,6 +27,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -299,13 +300,16 @@ public class PesquisaCientificaController {
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "Pesquisa Cientifica"),
     })
-	public ResponseEntity<Page<PesquisaCientificaModel>> getAll(@RequestParam("page") int page, @RequestParam("size") int size) {
+	public ResponseEntity<Page<PesquisaCientificaModel>> getAll(@RequestParam("page") int page, @RequestParam("size") int size, @RequestParam String search) {
 		
 		log.info("paginando pesquisas_cientificas");
 		
 		PageRequest pageRequest = PageRequest.of(page, size, Sort.by("numeroPC").descending());
     	
-    	Page<PesquisaCientifica> lista = (Page<PesquisaCientifica>) pesquisaCientificaRepository.findAll(pageRequest);
+    	Page<PesquisaCientifica> lista = null;
+    	
+    	lista = ObjectUtils.isEmpty(search) ? pesquisaCientificaRepository.findAll(pageRequest) : 
+    		pesquisaCientificaRepository.findAllBySearch(pageRequest, "%"+search+"%");
     	
     	PesquisaCientificaModelAssembler assembler = new PesquisaCientificaModelAssembler(); 
     	CollectionModel<PesquisaCientificaModel> listResource = assembler.toCollectionModel(lista.toList());
@@ -313,7 +317,7 @@ public class PesquisaCientificaController {
 //    	final String uriString = ServletUriComponentsBuilder.fromCurrentRequest().build().toUriString();
 //    	listResource.add(Link.of(uriString, "self"));
     	
-    	Page<PesquisaCientificaModel> pageFull = new PageImpl<PesquisaCientificaModel>(new ArrayList(listResource.getContent()), lista.getPageable(), lista.getTotalElements());
+    	Page<PesquisaCientificaModel> pageFull = new PageImpl<PesquisaCientificaModel>(new ArrayList<PesquisaCientificaModel>(listResource.getContent()), lista.getPageable(), lista.getTotalElements());
     	
 	    return ResponseEntity.ok(pageFull);
 	}
