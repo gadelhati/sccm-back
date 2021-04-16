@@ -5,21 +5,23 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
+import org.keycloak.representations.AccessToken;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.Link;
@@ -54,6 +56,7 @@ import br.com.fattoria.sccm.api.PesquisaCientificaModel;
 import br.com.fattoria.sccm.api.PesquisaCientificaModelAssembler;
 import br.com.fattoria.sccm.api.TipoDadoModel;
 import br.com.fattoria.sccm.api.TipoDadoModelAssembler;
+import br.com.fattoria.sccm.api.UsuarioApi;
 import br.com.fattoria.sccm.persistence.model.AreaConhecimento;
 import br.com.fattoria.sccm.persistence.model.ControleInterno;
 import br.com.fattoria.sccm.persistence.model.Documento;
@@ -83,6 +86,7 @@ import br.com.fattoria.sccm.persistence.repository.XMLRepository;
 import br.com.fattoria.sccm.reports.templates.busines.SequenceGenerator;
 import br.com.fattoria.sccm.reports.templates.busines.SequenceModel;
 import br.com.fattoria.sccm.service.DocumentStorageService;
+import br.com.fattoria.sccm.service.KeycloakAuthenticationTokenUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -212,9 +216,15 @@ public class PesquisaCientificaController {
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "Pesquisa Cientifica atualizada"),
     })
-	ResponseEntity<PesquisaCientificaModel> update(@Valid @RequestBody PesquisaCientificaApi api){
+	ResponseEntity<PesquisaCientificaModel> update(HttpServletRequest request, @Valid @RequestBody PesquisaCientificaApi api){
 		
 		log.info("Alterando "+api);
+		
+		AccessToken accessToken = KeycloakAuthenticationTokenUtil.getAccessToken(request);
+		
+		//UsuarioApi usuarioApi = UsuarioApi.toUsuarioApi(accessToken.get);
+		
+		log.info("Alterando "+accessToken);
 		
 		Optional<Plataforma> plataforma = plataformaRepository.findById(api.getIdPlataforma());
 		
