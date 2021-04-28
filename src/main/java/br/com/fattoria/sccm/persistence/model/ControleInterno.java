@@ -1,6 +1,7 @@
 package br.com.fattoria.sccm.persistence.model;
 
 import java.io.Serializable;
+import java.util.Calendar;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
