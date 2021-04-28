@@ -23,6 +23,9 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 
+import org.hibernate.envers.Audited;
+import org.hibernate.envers.RelationTargetAuditMode;
+
 import br.com.fattoria.sccm.persistence.listener.PequisaCientificaListener;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -33,6 +36,7 @@ import lombok.NoArgsConstructor;
 @EqualsAndHashCode
 @NoArgsConstructor
 @AllArgsConstructor
+@Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
 @Entity
 @Table(name = "pesquisa_cientifica")
 @EntityListeners(PequisaCientificaListener.class)
