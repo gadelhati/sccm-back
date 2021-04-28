@@ -481,7 +481,7 @@ public class PesquisaCientificaController {
 		
 		Optional<XML> entityXML = xmlRepository.findById(1L);
 		
-		Optional<PesquisaCientifica> entityPC = pesquisaCientificaRepository.findById(101L);
+		Optional<PesquisaCientifica> entityPC = pesquisaCientificaRepository.findById(id);
 		
 		XML xml = entityXML.get();
 		
@@ -519,8 +519,8 @@ public class PesquisaCientificaController {
 			pesquisaCientifica.setListaEquipamentos((List<Equipamento>) listaEquipamentos);
 			pesquisaCientifica.setListaTiposDados((List<TipoDado>) listaTiposDados);
 			
-			xml.getFormat(pesquisaCientifica);
-			writer.println(xml.getXml());
+			
+			writer.println(xml.getFormat(pesquisaCientifica));
 		}
 		
 		writer.close();

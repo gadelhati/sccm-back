@@ -3,6 +3,8 @@ package br.com.fattoria.sccm.api;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
+import java.util.Calendar;
+
 import org.springframework.hateoas.RepresentationModel;
 
 import br.com.fattoria.sccm.controller.ControleInternoController;
@@ -27,6 +29,10 @@ public class ControleInternoModel extends RepresentationModel<ControleInternoMod
 	private String numeroAutorizacao;
 	
 	private PesquisaCientificaModel pesquisaCientifica;
+	
+	private Calendar dataOficio;
+	
+	private String recibo;
 
 	public ControleInternoModel(ControleInterno controleInterno) {
 		this.id = controleInterno.getId();
@@ -36,7 +42,9 @@ public class ControleInternoModel extends RepresentationModel<ControleInternoMod
 		this.formaEnvio = controleInterno.getFormaEnvio();
 		this.numeroAutorizacao = controleInterno.getNumeroAutorizacao();
 		this.pesquisaCientifica = controleInterno.getPesquisaCientifica() != null ? new PesquisaCientificaModel(controleInterno.getPesquisaCientifica()) : null;
-	
+		this.dataOficio = controleInterno.getDataOficio();
+		this.recibo = controleInterno.getRecibo();
+		
 		add(linkTo(methodOn(ControleInternoController.class).getAll()).withRel("controleInterno"));
 
 		if (controleInterno.getInstituicao() != null && controleInterno.getInstituicao() != null) {
