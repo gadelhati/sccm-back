@@ -13,6 +13,9 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
+import org.hibernate.envers.Audited;
+
+@Audited
 @Entity
 @Table(name = "sigilo")
 @SequenceGenerator(name = "sigilo_generator", sequenceName = "sigilo_seq", allocationSize = 1)
