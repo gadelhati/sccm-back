@@ -21,8 +21,6 @@ public class UsuarioApi {
 	
 	private String nome;
 	
-	private String email;
-	
 	public static UsuarioApi toUsuarioApi(final Principal principal){
 		
 		KeycloakAuthenticationToken kp = (KeycloakAuthenticationToken) principal;
@@ -31,7 +29,7 @@ public class UsuarioApi {
 
         AccessToken token  = simpleKeycloakAccount.getKeycloakSecurityContext().getToken();
         
-        return new UsuarioApi(token.getId(), token.getGivenName(), token.getEmail());
+        return new UsuarioApi(token.getId(), token.getPreferredUsername());
 	}
 
 }
