@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="subReport_fichaPesquisaCientifica_documentos" language="groovy" pageWidth="555" pageHeight="802" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="c244933d-5bbb-4441-a038-130eb96d302e">
+	<property name="ireport.zoom" value="1.9487171000000014"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<queryString>
+		<![CDATA[SELECT
+    d.anexo,
+	ta.descricao as tipo,
+	dst.destino,
+	to_char(d.data_recebimento, 'DD/MM/YYYY') as dt_recebimento
+FROM
+    documentos d
+Left Join tipo_anexo ta on ta.id = d.fk_tipo_anexo
+left join destino dst on dst.id = d.fk_destino
+WHERE
+    d.fk_pesquisa_cientifica = 501]]>
+	</queryString>
+	<field name="anexo" class="java.lang.String"/>
+	<field name="tipo" class="java.lang.String"/>
+	<field name="destino" class="java.lang.String"/>
+	<field name="dt_recebimento" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="40" splitType="Stretch">
+			<staticText>
+				<reportElement mode="Opaque" x="0" y="0" width="555" height="20" backcolor="#999999" uuid="10427ce4-8390-4907-8a8f-cba8e51f0d6c"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Documentos e Mídias Enviados e Recebidos]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="0" y="20" width="240" height="20" backcolor="#CCCCCC" uuid="6df27ac9-db2e-4af4-ad18-2956c200e31f"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Anexo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="240" y="20" width="100" height="20" backcolor="#CCCCCC" uuid="7d8bdac5-255d-44d3-bae7-8cd184256c87"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Tipo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="340" y="20" width="100" height="20" backcolor="#CCCCCC" uuid="cadc1789-bd14-4082-aceb-c742104c2aa3"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Destino]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="440" y="20" width="115" height="20" backcolor="#CCCCCC" uuid="cdefa78d-ac35-4813-9d0a-0b124284f02d"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Recebimento
+]]></text>
+			</staticText>
+		</band>
+	</title>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="240" height="20" uuid="3027565b-da44-410c-9479-29affdc17ad3"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{anexo}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="240" y="0" width="100" height="20" uuid="46574257-dd31-4436-8e52-92c43722adc6"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{tipo}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="340" y="0" width="100" height="20" uuid="f627ab60-079f-4d5a-8e79-481d9df3d4cb"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{destino}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="440" y="0" width="115" height="20" uuid="21d17f1d-5815-4ae0-9cba-87a3f80774ea"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{dt_recebimento}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

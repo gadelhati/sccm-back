@@ -56,5 +56,11 @@ public class ControleInterno implements Serializable {
 	@ManyToOne
 	@JoinColumn(name = "fk_pc")
 	private PesquisaCientifica pesquisaCientifica;
+	
+	@Column(name = "data_oficio")
+	private Calendar dataOficio;
+	
+	@Column(name = "recibo")
+	private String recibo;
 
 }
