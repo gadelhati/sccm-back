@@ -1,12 +1,13 @@
 package br.com.fattoria.sccm.reports;
 
 import java.io.FileNotFoundException;
-import java.util.Collection;
 
-public class ReportFichaPesquisaCientifica extends ReportGenerator<Long> {
+import br.com.fattoria.sccm.reports.data.FichaPesquisaCientificaDTO;
 
-	public ReportFichaPesquisaCientifica(Collection<Long> idPC) throws FileNotFoundException {
-		super(idPC);
+public class ReportFichaPesquisaCientifica extends ReportGenerator<FichaPesquisaCientificaDTO> {
+
+	public ReportFichaPesquisaCientifica(FichaPesquisaCientificaDTO dto) throws FileNotFoundException {
+		super(dto);
 	}
 	
 	@Override

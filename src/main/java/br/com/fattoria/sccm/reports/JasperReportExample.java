@@ -5,7 +5,9 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import br.com.fattoria.sccm.persistence.repository.PesquisaCientificaRepository;
 import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JRResultSetDataSource;
 import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.design.JasperDesign;
@@ -22,7 +24,7 @@ public class JasperReportExample {
 	private static final String pwd = "";
 
 	
-	public void gerar(String layout) throws JRException, ClassNotFoundException, SQLException {
+	public void gerar(String layout, PesquisaCientificaRepository repository) throws JRException, ClassNotFoundException, SQLException {
 		
 		//Gera o Design
 		JasperDesign design = JRXmlLoader.load(layout);
@@ -36,6 +38,11 @@ public class JasperReportExample {
 //		Statement stm = con.createStatement();
 //		String query = " select * from ficha_pesquisa_cientifica_view where id = 521";
 //		ResultSet rs = stm.executeQuery(query);
+		
+//		JRResultSetDataSource jrRS = new JRResultSetDataSource(resultSet)
+		
+		
+		
 		
 	}
 	

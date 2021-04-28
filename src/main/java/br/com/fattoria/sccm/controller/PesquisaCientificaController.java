@@ -80,6 +80,12 @@ import br.com.fattoria.sccm.persistence.repository.PlataformaRepository;
 import br.com.fattoria.sccm.persistence.repository.SigiloRepository;
 import br.com.fattoria.sccm.persistence.repository.TipoDadoRepository;
 import br.com.fattoria.sccm.persistence.repository.XMLRepository;
+import br.com.fattoria.sccm.reports.ReportFichaPesquisaCientifica;
+import br.com.fattoria.sccm.reports.data.AreaConhecimentoDTO;
+import br.com.fattoria.sccm.reports.data.DocumentosDTO;
+import br.com.fattoria.sccm.reports.data.EquipamentoDTO;
+import br.com.fattoria.sccm.reports.data.FichaPesquisaCientificaDTO;
+import br.com.fattoria.sccm.reports.data.TipoDadoDTO;
 import br.com.fattoria.sccm.reports.templates.busines.SequenceGenerator;
 import br.com.fattoria.sccm.reports.templates.busines.SequenceModel;
 import br.com.fattoria.sccm.service.DocumentStorageService;
@@ -88,6 +94,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import javassist.NotFoundException;
+import net.sf.jasperreports.engine.JRException;
 
 @Api(value = "Pesquisa Cientifica")
 @RestController
@@ -485,24 +492,24 @@ public class PesquisaCientificaController {
 		
 		XML xml = entityXML.get();
 		
-/*		String path = "C:\\Users\\Victor\\";
-		
-		File file = new File(path + "teste.xml");
-				
-		FileWriter archive = new FileWriter(file);
-		PrintWriter writer = new PrintWriter(archive);
-			
-		writer.println(xml.getXml().toString());			
-		archive.close();
-			
-		Resource resource = null;
-		try {
-			resource = documentStorageService.loadFileAsResource(file.getName());
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		
-		String contentType = null;*/
+//		String path = "C:\\Users\\Victor\\";
+//		
+//		File file = new File(path + "teste.xml");
+//				
+//		FileWriter archive = new FileWriter(file);
+//		PrintWriter writer = new PrintWriter(archive);
+//			
+//		writer.println(xml.getXml().toString());			
+//		archive.close();
+//			
+//		Resource resource = null;
+//		try {
+//			resource = documentStorageService.loadFileAsResource(file.getName());
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
+//		
+//		String contentType = null;
 		
 		ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
 		PrintWriter writer = new PrintWriter(byteArrayOutputStream);
@@ -534,6 +541,49 @@ public class PesquisaCientificaController {
 	    
 	}
 	
+	@GetMapping({"/pesquisas_cientificas/pdf", "/pesquisas_cientificas/{id}/pdf"})
+	public ResponseEntity<?> getPDF(@PathVariable Long id) throws IOException, JRException {
+		
+		FichaPesquisaCientificaDTO dto = pesquisaCientificaRepository.getIdFichaPesquisaCientificaView(id);
+		
+		AreaConhecimentoDTO areaConhecimentoDTO = new AreaConhecimentoDTO();		
+		dto.setListaAreaConhecimento(areaConhecimentoDTO.getListToListDTO(areaConhecimentoRepository.findAllByPesquisaCientificaId(id)));
+		
+		TipoDadoDTO tipoDadoDTO = new TipoDadoDTO();		
+		dto.setListaVariaveis(tipoDadoDTO.getListToListDTO(tipoDadoRepository.findAllByPesquisaCientificaId(id)));
+		
+		EquipamentoDTO equipamentoDTO = new EquipamentoDTO();		
+		dto.setListaEquipamentos(equipamentoDTO.getListToListDTO(equipamentoRepository.findAllByPesquisaCientificaId(id)));
+		
+		DocumentosDTO documentosDTO = new DocumentosDTO();		
+		dto.setListaDocumentos(documentosDTO.getListToListDTO((List<Documento>)documentosRepository.findAllByPesquisaCientificaId(id)));
+		
+		ReportFichaPesquisaCientifica report = new ReportFichaPesquisaCientifica(dto);
+		
+		report.addParametro("IMG_LOGO", ReportFichaPesquisaCientifica.class.
+				getResourceAsStream("/br/com/fattoria/sccm/reports/img/logo-chm.png"));
+		
+		report.addJasperSubReport("SUB_AREA_CONHECIMENTO", ReportFichaPesquisaCientifica.class.
+				getResourceAsStream("/br/com/fattoria/sccm/reports/templates/subReport_fichaPesquisaCientifica_areaConhecimento.jasper"));
+		
+		report.addJasperSubReport("SUB_VARIAVEIS_COLETADAS", ReportFichaPesquisaCientifica.class.
+				getResourceAsStream("/br/com/fattoria/sccm/reports/templates/subReport_fichaPesquisaCientifica_dados.jasper"));
+		
+		report.addJasperSubReport("SUB_EQUIPAMENTOS", ReportFichaPesquisaCientifica.class.
+				getResourceAsStream("/br/com/fattoria/sccm/reports/templates/subReport_fichaPesquisaCientifica_equipamento.jasper"));
+		
+		report.addJasperSubReport("SUB_DOCUMENTOS", ReportFichaPesquisaCientifica.class.
+				getResourceAsStream("/br/com/fattoria/sccm/reports/templates/subReport_fichaPesquisaCientifica_documentos.jasper"));
+		
+		ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+		report.geraPDF(byteArrayOutputStream);
+		
+		return ResponseEntity.ok()
+				.contentType(MediaType.parseMediaType("application/pdf"))
+				.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + dto.getFitoteca() + ".pdf\"")								
+				.body(byteArrayOutputStream.toByteArray());
+	    
+	}
 	
 	
 

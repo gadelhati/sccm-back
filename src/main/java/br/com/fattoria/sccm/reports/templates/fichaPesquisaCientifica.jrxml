@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="fichaPesquisaCientifica" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="16a947a1-b653-4543-ae1f-21aed7900de5">
-	<property name="ireport.zoom" value="2.357947691000031"/>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="fichaPesquisaCientifica" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="16a947a1-b653-4543-ae1f-21aed7900de5">
+	<property name="ireport.zoom" value="1.9487171000000263"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="1392"/>
+	<property name="ireport.y" value="0"/>
 	<style name="table">
 		<box>
 			<pen lineWidth="1.0" lineColor="#000000"/>
@@ -25,11 +25,15 @@
 	</style>
 	<subDataset name="Table Dataset 1" uuid="bef690af-7c77-4550-92c6-8118203860c6"/>
 	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
-		<defaultValueExpression><![CDATA["C:\\Users\\Victor\\Documents\\Downloads\\"]]></defaultValueExpression>
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
 	</parameter>
 	<parameter name="cod_pc" class="java.lang.Integer">
 		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
 	</parameter>
+	<parameter name="SUB_AREA_CONHECIMENTO" class="net.sf.jasperreports.engine.JasperReport"/>
+	<parameter name="SUB_VARIAVEIS_COLETADAS" class="net.sf.jasperreports.engine.JasperReport"/>
+	<parameter name="SUB_EQUIPAMENTOS" class="net.sf.jasperreports.engine.JasperReport"/>
+	<parameter name="SUB_DOCUMENTOS" class="net.sf.jasperreports.engine.JasperReport"/>
 	<queryString>
 		<![CDATA[SELECT
     c.nome_comissao,
@@ -56,22 +60,15 @@
 	pc.comandante,
 	p.indicativo_visual,
 	bP.nome as bandeira,
-	'012/2019' as nRecibo,
-	'8 22/02/2019' as oficio,
-	'PC1802' as codFitoteca,
-	'H-20-01-08' as arquivoTecnico,
-	'OFI' as formaEnvio,
-	'IES LH-06/2019' as autEMA,
-	'1' as areaConhecimento,
-	'1' as variaveisColetadas,
-	'1' as equipamentos,
-	'1' as documentosEnviados,
-	'' as logobndo,
-	'' as logochm,
-	'' as estadoinstituicao,
 	bI.nome as paisinstituicao,
 	'' as telefoneinstituicao,
-  	'' as outrasinstituicoes
+  	'' as outrasinstituicoes,
+	ci.recibo,
+	ci.numero_oficio || to_char(ci.data_oficio, 'DD/MM/YYYY') as oficio,
+	pc.numero_pc as fitoteca,
+	ci.arquivo_tecnico,
+	ci.forma_envio,
+	ci.numero_autorizacao
 FROM
     pesquisa_cientifica pc
 LEFT JOIN comissao c ON pc.fk_comissao = c.id
@@ -82,6 +79,8 @@ LEFT join plataforma p on p.id = pc.fk_plataforma
 LEFT join tipo_plataforma tp on tp.id = p.fk_tipo_plataforma
 LEFT join Pais bP on bP.id = p.bandeira
 LEFT join Pais bI on bI.id = i.fk_pais
+LEFT JOIN controle_interno ci on pc.id = ci.fk_pc
+LEFT JOIN instituicao iCI on iCI.id = ci.fk_instituicao
 WHERE
     pc.id = $P{cod_pc}]]>
 	</queryString>
@@ -108,22 +107,19 @@ WHERE
 	<field name="comandante" class="java.lang.String"/>
 	<field name="indicativo_visual" class="java.lang.String"/>
 	<field name="bandeira" class="java.lang.String"/>
-	<field name="nrecibo" class="java.lang.String"/>
-	<field name="oficio" class="java.lang.String"/>
-	<field name="codfitoteca" class="java.lang.String"/>
-	<field name="arquivotecnico" class="java.lang.String"/>
-	<field name="formaenvio" class="java.lang.String"/>
-	<field name="autema" class="java.lang.String"/>
-	<field name="areaconhecimento" class="java.lang.String"/>
-	<field name="variaveiscoletadas" class="java.lang.String"/>
-	<field name="equipamentos" class="java.lang.String"/>
-	<field name="documentosenviados" class="java.lang.String"/>
-	<field name="logobndo" class="java.lang.String"/>
-	<field name="logochm" class="java.lang.String"/>
-	<field name="estadoinstituicao" class="java.lang.String"/>
 	<field name="paisinstituicao" class="java.lang.String"/>
 	<field name="telefoneinstituicao" class="java.lang.String"/>
 	<field name="outrasinstituicoes" class="java.lang.String"/>
+	<field name="recibo" class="java.lang.String"/>
+	<field name="oficio" class="java.lang.String"/>
+	<field name="fitoteca" class="java.lang.String"/>
+	<field name="arquivo_tecnico" class="java.lang.String"/>
+	<field name="forma_envio" class="java.lang.String"/>
+	<field name="numero_autorizacao" class="java.lang.String"/>
+	<field name="listaAreaConhecimento" class="java.util.List"/>
+	<field name="listaVariaveis" class="java.util.List"/>
+	<field name="listaEquipamentos" class="java.util.List"/>
+	<field name="listaDocumentos" class="java.util.List"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
@@ -147,13 +143,6 @@ WHERE
 				</textElement>
 				<text><![CDATA[Nº Recibo]]></text>
 			</staticText>
-			<textField>
-				<reportElement mode="Transparent" x="462" y="0" width="93" height="14" forecolor="#FFFFFF" backcolor="#CCCCCC" uuid="c316990a-739a-4580-8200-76d9bad29c8e"/>
-				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<paragraph rightIndent="2"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{nrecibo}]]></textFieldExpression>
-			</textField>
 			<staticText>
 				<reportElement mode="Transparent" x="376" y="14" width="86" height="14" forecolor="#FFFFFF" backcolor="#CCCCCC" uuid="85171cc2-f508-48e1-8f11-eb3bc304d35c"/>
 				<textElement verticalAlignment="Middle">
@@ -162,13 +151,6 @@ WHERE
 				</textElement>
 				<text><![CDATA[Ofício nº]]></text>
 			</staticText>
-			<textField>
-				<reportElement mode="Transparent" x="462" y="14" width="93" height="14" forecolor="#FFFFFF" backcolor="#CCCCCC" uuid="95b2514b-f074-43d3-8caf-e1b4d08f2a71"/>
-				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<paragraph rightIndent="2"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{oficio}]]></textFieldExpression>
-			</textField>
 			<staticText>
 				<reportElement mode="Transparent" x="376" y="28" width="86" height="14" forecolor="#FFFFFF" backcolor="#CCCCCC" uuid="b636b9f0-f53e-4e8c-ba31-95b591c77940"/>
 				<textElement verticalAlignment="Middle">
@@ -177,13 +159,6 @@ WHERE
 				</textElement>
 				<text><![CDATA[N° Cód. Fitoteca]]></text>
 			</staticText>
-			<textField>
-				<reportElement mode="Transparent" x="462" y="28" width="93" height="14" forecolor="#FFFFFF" backcolor="#CCCCCC" uuid="cf3a49df-f0d6-4fb4-b379-7eabbba45593"/>
-				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<paragraph rightIndent="2"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{codfitoteca}]]></textFieldExpression>
-			</textField>
 			<staticText>
 				<reportElement mode="Transparent" x="376" y="42" width="86" height="14" forecolor="#FFFFFF" backcolor="#CCCCCC" uuid="2c703de5-57b3-47df-ad37-3133977ca2d0"/>
 				<textElement verticalAlignment="Middle">
@@ -192,13 +167,6 @@ WHERE
 				</textElement>
 				<text><![CDATA[Arquivo Técnico]]></text>
 			</staticText>
-			<textField>
-				<reportElement mode="Transparent" x="462" y="42" width="93" height="14" forecolor="#FFFFFF" backcolor="#CCCCCC" uuid="60789221-3be2-4b6f-b709-9232e6d1a635"/>
-				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<paragraph rightIndent="2"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{arquivotecnico}]]></textFieldExpression>
-			</textField>
 			<staticText>
 				<reportElement mode="Transparent" x="376" y="56" width="86" height="14" forecolor="#FFFFFF" backcolor="#CCCCCC" uuid="b0824be1-407d-4dfd-b94e-0c0611bf1807"/>
 				<textElement verticalAlignment="Middle">
@@ -207,13 +175,6 @@ WHERE
 				</textElement>
 				<text><![CDATA[Forma de envio]]></text>
 			</staticText>
-			<textField>
-				<reportElement mode="Transparent" x="462" y="56" width="93" height="14" forecolor="#FFFFFF" backcolor="#CCCCCC" uuid="383fca81-7959-4253-880f-2bcc25d6ede6"/>
-				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<paragraph rightIndent="2"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{formaenvio}]]></textFieldExpression>
-			</textField>
 			<staticText>
 				<reportElement mode="Transparent" x="376" y="70" width="86" height="15" forecolor="#FFFFFF" backcolor="#CCCCCC" uuid="c2e0ddfe-67ff-4248-ab16-47d12b367402"/>
 				<textElement verticalAlignment="Middle">
@@ -222,21 +183,56 @@ WHERE
 				</textElement>
 				<text><![CDATA[Nº IE ou Aut. EMA]]></text>
 			</staticText>
+			<image hAlign="Center" vAlign="Middle" isUsingCache="true">
+				<reportElement x="0" y="0" width="100" height="85" uuid="30cee3ae-ede8-4f71-8a04-ecaa0698d32f"/>
+				<imageExpression><![CDATA[$P{REPORT_PARAMETERS_MAP}.get("IMG_LOGO")]]></imageExpression>
+			</image>
+			<image hAlign="Center" vAlign="Middle" isUsingCache="true">
+				<reportElement x="276" y="0" width="100" height="85" uuid="46df8a51-e059-41fa-bc00-3c15b012c5cd"/>
+				<imageExpression><![CDATA[$P{REPORT_PARAMETERS_MAP}.get("IMG_LOGO")]]></imageExpression>
+			</image>
 			<textField>
-				<reportElement mode="Transparent" x="462" y="70" width="93" height="15" forecolor="#FFFFFF" backcolor="#CCCCCC" uuid="d6fb18c7-96e4-45e5-9cf2-b9063de3249f"/>
-				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<paragraph rightIndent="2"/>
+				<reportElement x="462" y="0" width="93" height="14" forecolor="#FFFFFF" uuid="188c57b0-afbd-4035-98c0-c524946a5929"/>
+				<textElement>
+					<paragraph leftIndent="2"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{autema}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{recibo}]]></textFieldExpression>
 			</textField>
-			<image>
-				<reportElement x="0" y="0" width="100" height="50" uuid="30cee3ae-ede8-4f71-8a04-ecaa0698d32f"/>
-				<imageExpression><![CDATA[]]></imageExpression>
-			</image>
-			<image>
-				<reportElement x="276" y="0" width="100" height="50" uuid="46df8a51-e059-41fa-bc00-3c15b012c5cd"/>
-				<imageExpression><![CDATA[]]></imageExpression>
-			</image>
+			<textField>
+				<reportElement x="462" y="14" width="93" height="14" forecolor="#FFFFFF" uuid="2c894e98-5326-4708-b891-95a47849c1ce"/>
+				<textElement>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{oficio}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="462" y="28" width="93" height="14" forecolor="#FFFFFF" uuid="542e84f3-e37b-4580-b640-79b91c2b3660"/>
+				<textElement>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{fitoteca}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="462" y="42" width="93" height="14" forecolor="#FFFFFF" uuid="0bf50a95-bf47-4edc-b346-db324a03aaa4"/>
+				<textElement>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{arquivo_tecnico}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="462" y="56" width="93" height="14" forecolor="#FFFFFF" uuid="db96ea55-a10d-4e8c-884f-73e9acc3bd33"/>
+				<textElement>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{forma_envio}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="462" y="70" width="93" height="15" forecolor="#FFFFFF" uuid="85593ef1-44c0-48d1-ae39-f05e26c321ad"/>
+				<textElement>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{numero_autorizacao}]]></textFieldExpression>
+			</textField>
 		</band>
 	</title>
 	<detail>
@@ -435,22 +431,6 @@ WHERE
 					<paragraph leftIndent="1"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{nome_comissao}]]></textFieldExpression>
-			</textField>
-			<staticText>
-				<reportElement style="table" mode="Opaque" x="0" y="280" width="100" height="39" backcolor="#CCCCCC" uuid="3b9fbad4-e0ad-4684-b423-13480d0bee3a"/>
-				<textElement verticalAlignment="Middle">
-					<font isBold="true"/>
-					<paragraph leftIndent="1"/>
-				</textElement>
-				<text><![CDATA[Resumo ou
-Objetivo da Coleta]]></text>
-			</staticText>
-			<textField>
-				<reportElement style="table" x="100" y="280" width="455" height="39" uuid="6785a0c8-72bb-4161-95e8-c42febf46484"/>
-				<textElement verticalAlignment="Middle">
-					<paragraph leftIndent="1"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{resumo}]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement style="table" mode="Opaque" x="0" y="319" width="100" height="20" backcolor="#CCCCCC" uuid="497ceb32-299a-4b93-ae98-f6f18351f277"/>
@@ -687,25 +667,55 @@ Objetivo da Coleta]]></text>
 				<text><![CDATA[Dados Coletados]]></text>
 			</staticText>
 			<subreport>
-				<reportElement style="table" mode="Transparent" x="0" y="600" width="556" height="19" uuid="31a9f5d8-3ca6-411a-b847-7a9db3107665"/>
-				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
-				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "subReport_fichaPesquisaCientifica_areaConhecimento.jasper"]]></subreportExpression>
+				<reportElement style="table" mode="Transparent" x="0" y="599" width="556" height="20" uuid="31a9f5d8-3ca6-411a-b847-7a9db3107665"/>
+				<subreportParameter name="cod_pc">
+					<subreportParameterExpression><![CDATA[$P{cod_pc}]]></subreportParameterExpression>
+				</subreportParameter>
+				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{listaAreaConhecimento})]]></dataSourceExpression>
+				<subreportExpression><![CDATA[$P{SUB_AREA_CONHECIMENTO}]]></subreportExpression>
 			</subreport>
 			<subreport>
-				<reportElement positionType="Float" x="0" y="619" width="556" height="20" uuid="469745c4-3e1a-474f-87a6-43ca14f364e5"/>
-				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
-				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "subReport_fichaPesquisaCientifica_dados.jasper"]]></subreportExpression>
+				<reportElement style="table" positionType="Float" x="0" y="619" width="556" height="20" uuid="469745c4-3e1a-474f-87a6-43ca14f364e5"/>
+				<subreportParameter name="cod_pc">
+					<subreportParameterExpression><![CDATA[$P{cod_pc}]]></subreportParameterExpression>
+				</subreportParameter>
+				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{listaVariaveis})]]></dataSourceExpression>
+				<subreportExpression><![CDATA[$P{SUB_VARIAVEIS_COLETADAS}]]></subreportExpression>
 			</subreport>
 			<subreport>
-				<reportElement x="0" y="639" width="556" height="20" uuid="a00fa33a-fc19-4214-a37d-7b3cb2b90e63"/>
-				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
-				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "subReport_fichaPesquisaCientifica_equipamento.jasper"]]></subreportExpression>
+				<reportElement style="table" positionType="Float" x="0" y="639" width="556" height="20" uuid="a00fa33a-fc19-4214-a37d-7b3cb2b90e63"/>
+				<subreportParameter name="cod_pc">
+					<subreportParameterExpression><![CDATA[$P{cod_pc}]]></subreportParameterExpression>
+				</subreportParameter>
+				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{listaEquipamentos})]]></dataSourceExpression>
+				<subreportExpression><![CDATA[$P{SUB_EQUIPAMENTOS}]]></subreportExpression>
 			</subreport>
 			<subreport>
-				<reportElement x="0" y="659" width="556" height="20" uuid="2a046d5f-3dc0-47b1-bfcc-291e7a017898"/>
-				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
-				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "subReport_fichaPesquisaCientifica_documentos.jasper"]]></subreportExpression>
+				<reportElement style="table" positionType="Float" x="0" y="659" width="556" height="20" uuid="2a046d5f-3dc0-47b1-bfcc-291e7a017898"/>
+				<subreportParameter name="cod_pc">
+					<subreportParameterExpression><![CDATA[$P{cod_pc}]]></subreportParameterExpression>
+				</subreportParameter>
+				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{listaDocumentos})]]></dataSourceExpression>
+				<subreportExpression><![CDATA[$P{SUB_DOCUMENTOS}]]></subreportExpression>
 			</subreport>
+			<elementGroup>
+				<staticText>
+					<reportElement style="table" mode="Opaque" x="0" y="280" width="100" height="39" backcolor="#CCCCCC" uuid="3b9fbad4-e0ad-4684-b423-13480d0bee3a"/>
+					<textElement verticalAlignment="Middle">
+						<font isBold="true"/>
+						<paragraph leftIndent="1"/>
+					</textElement>
+					<text><![CDATA[Resumo ou
+Objetivo da Coleta]]></text>
+				</staticText>
+				<textField>
+					<reportElement style="table" x="100" y="280" width="455" height="39" uuid="6785a0c8-72bb-4161-95e8-c42febf46484"/>
+					<textElement verticalAlignment="Middle">
+						<paragraph leftIndent="1"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{resumo}]]></textFieldExpression>
+				</textField>
+			</elementGroup>
 		</band>
 	</detail>
 </jasperReport>
