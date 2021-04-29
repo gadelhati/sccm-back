@@ -14,14 +14,14 @@ public class CorsConfig extends WebMvcConfigurationSupport {
     	return new WebMvcConfigurer() {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping("/api/**")
-				.allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS", "HEAD", "TRACE", "CONNECT")
-				.allowedOrigins("http://127.0.0.1:3000");
+//                registry.addMapping("/api/**")
+//				.allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS", "HEAD", "TRACE", "CONNECT")
+//				.allowedOrigins("http://127.0.0.1:3000");
                 
-//                registry.addMapping("/**")
-//                .allowedOrigins("*")
-//                .allowedHeaders("*")
-//                .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS", "HEAD", "TRACE", "CONNECT");
+                registry.addMapping("/**")
+                .allowedOrigins("/**")
+                .allowedHeaders("*")
+                .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS", "HEAD", "TRACE", "CONNECT");
             }
         };
     }

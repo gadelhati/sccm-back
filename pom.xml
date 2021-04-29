@@ -12,9 +12,9 @@
 	<groupId>br.com.fattoria</groupId>
 	<artifactId>sccm</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<packaging>jar</packaging>
+	<packaging>war</packaging>
 
-	<name>sccm</name>
+	<name>controle-fitoteca</name>
 	<url>http://maven.apache.org</url>
 
 	<properties>
@@ -28,6 +28,11 @@
 
 	<dependencies>
 
+<!-- 		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency> -->
+		
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-hateoas</artifactId>
@@ -85,6 +90,12 @@
 		</dependency>
 
 		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-tomcat</artifactId>
+			<scope>provider</scope>
+		</dependency>
+
+		<dependency>
 			<groupId>io.springfox</groupId>
 			<artifactId>springfox-swagger2</artifactId>
 			<version>${springfox.version}</version>
@@ -112,18 +123,18 @@
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-envers</artifactId>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>net.sf.jasperreports</groupId>
 			<artifactId>jasperreports</artifactId>
 			<version>${jasperreports.version}</version>
 		</dependency>
-		
+
 		<dependency>
-		    <groupId>com.thoughtworks.xstream</groupId>
-		    <artifactId>xstream</artifactId>
-		    <version>${xstream.version}</version>
-		</dependency>		
+			<groupId>com.thoughtworks.xstream</groupId>
+			<artifactId>xstream</artifactId>
+			<version>${xstream.version}</version>
+		</dependency>
 
 	</dependencies>
 
@@ -139,12 +150,20 @@
 		</dependencies>
 	</dependencyManagement>
 
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-maven-plugin</artifactId>
-			</plugin>
-		</plugins>
-	</build>
+		<build>
+			<defaultGoal>install</defaultGoal>
+			<finalName>controle-fitoteca</finalName>
+			<plugins>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-war-plugin</artifactId>
+					<configuration> <!-- Java EE 6 doesn't require web.xml, Maven needs to catch up! -->
+						<failOnMissingWebXml>false</failOnMissingWebXml>
+					</configuration>
+					<executions>
+						<execution></execution>
+					</executions>
+				</plugin>
+			</plugins>
+		</build>
 </project>
