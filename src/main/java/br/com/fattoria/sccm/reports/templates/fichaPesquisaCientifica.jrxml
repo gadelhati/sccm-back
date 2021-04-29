@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="fichaPesquisaCientifica" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="16a947a1-b653-4543-ae1f-21aed7900de5">
-	<property name="ireport.zoom" value="1.9487171000000263"/>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="fichaPesquisaCientifica" pageWidth="595" pageHeight="900" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="16a947a1-b653-4543-ae1f-21aed7900de5">
+	<property name="ireport.zoom" value="2.3579476910000357"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.y" value="1710"/>
 	<style name="table">
 		<box>
 			<pen lineWidth="1.0" lineColor="#000000"/>
@@ -120,6 +120,18 @@ WHERE
 	<field name="listaVariaveis" class="java.util.List"/>
 	<field name="listaEquipamentos" class="java.util.List"/>
 	<field name="listaDocumentos" class="java.util.List"/>
+	<field name="nome_assinatura1" class="java.lang.String"/>
+	<field name="nome_assinatura2" class="java.lang.String"/>
+	<field name="nome_assinatura3" class="java.lang.String"/>
+	<field name="patente1" class="java.lang.String"/>
+	<field name="patente2" class="java.lang.String"/>
+	<field name="patente3" class="java.lang.String"/>
+	<field name="cargo1" class="java.lang.String"/>
+	<field name="cargo2" class="java.lang.String"/>
+	<field name="cargo3" class="java.lang.String"/>
+	<field name="destino1" class="java.lang.String"/>
+	<field name="destino2" class="java.lang.String"/>
+	<field name="destino3" class="java.lang.String"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
@@ -236,7 +248,7 @@ WHERE
 		</band>
 	</title>
 	<detail>
-		<band height="700" splitType="Stretch">
+		<band height="800" splitType="Stretch">
 			<staticText>
 				<reportElement style="table" mode="Opaque" x="0" y="20" width="101" height="20" forecolor="#000000" backcolor="#CCCCCC" uuid="0772bad7-258c-47bd-a4ea-78d4d85c5c92"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
@@ -716,6 +728,66 @@ Objetivo da Coleta]]></text>
 					<textFieldExpression><![CDATA[$F{resumo}]]></textFieldExpression>
 				</textField>
 			</elementGroup>
+			<textField>
+				<reportElement x="0" y="699" width="185" height="20" uuid="8c1566d4-4aad-4691-9a56-475a1f865d99"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{nome_assinatura1}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="192" y="699" width="178" height="20" uuid="52a56345-b589-425f-b344-7a3a55390df8"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{nome_assinatura2}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="377" y="699" width="178" height="20" uuid="eb112bd6-7254-4c93-b687-ff30ed255fbc"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{nome_assinatura3}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="718" width="185" height="20" uuid="b5a68a5a-86ca-4770-8c94-39d7d53cecc7"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{patente1}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="192" y="718" width="178" height="20" uuid="b184be97-8529-4a7e-bb62-4ef29f5f1795"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{patente2}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="377" y="718" width="178" height="20" uuid="9c58efd1-7234-43ab-8ccf-d0afcf248712"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{patente3}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="737" width="185" height="20" uuid="6b571ba6-06f3-4c92-bfac-b2ee7d18e45e"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{cargo1}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="192" y="737" width="178" height="20" uuid="56b58627-5f71-450d-a4f9-57ee361283cb"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{cargo2}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="377" y="737" width="178" height="20" uuid="e7658715-8a45-4fff-83e5-0a86c4251f51"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{cargo3}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="780" width="185" height="20" uuid="bc369da7-1aae-4b43-8e89-449e42fd1a8c"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{destino1}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="192" y="780" width="178" height="20" uuid="04a399d9-3134-4be9-8366-76adc9e35450"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{destino2}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="377" y="780" width="178" height="20" uuid="89cf18c0-b7b4-4a51-a5d2-869c3e20f9a9"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{destino3}]]></textFieldExpression>
+			</textField>
 		</band>
 	</detail>
 </jasperReport>

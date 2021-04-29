@@ -28,8 +28,12 @@ public class AssinaturaPCApi {
 	
 	private Boolean ativo;
 	
+	private String patente;
+	
+	private String cargo;
+	
 	public AssinaturaPC toEntity() {
-		return new AssinaturaPC(id, nome, null, ativo);
+		return new AssinaturaPC(id, nome, null, ativo, patente, cargo);
 	}
 	
 }

@@ -39,4 +39,8 @@ public class AssinaturaPC implements Serializable {
 	
 	private Boolean ativo;
 	
+	private String patente;
+	
+	private String cargo;
+	
 }

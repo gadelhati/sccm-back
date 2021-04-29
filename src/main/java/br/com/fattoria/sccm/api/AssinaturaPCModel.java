@@ -22,6 +22,10 @@ public class AssinaturaPCModel extends RepresentationModel<AssinaturaPCModel> {
 	
 	private Boolean ativo;
 	
+	private String patente;
+	
+	private String cargo;
+	
 	public AssinaturaPCModel(AssinaturaPC assinaturaPC) {
 		
 		this.id = assinaturaPC.getId();
@@ -31,6 +35,10 @@ public class AssinaturaPCModel extends RepresentationModel<AssinaturaPCModel> {
 		this.destino = assinaturaPC.getDestino() != null ? assinaturaPC.getDestino() : null;
 		
 		this.ativo = assinaturaPC.getAtivo();
+		
+		this.patente = assinaturaPC.getPatente();
+		
+		this.cargo = assinaturaPC.getCargo();
 		
 		add(linkTo(methodOn(AssinaturaPCController.class)).withRel("assinaturas"));
 		

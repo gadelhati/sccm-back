@@ -56,6 +56,7 @@ import br.com.fattoria.sccm.api.PesquisaCientificaModelAssembler;
 import br.com.fattoria.sccm.api.TipoDadoModel;
 import br.com.fattoria.sccm.api.TipoDadoModelAssembler;
 import br.com.fattoria.sccm.persistence.model.AreaConhecimento;
+import br.com.fattoria.sccm.persistence.model.AssinaturaPC;
 import br.com.fattoria.sccm.persistence.model.ControleInterno;
 import br.com.fattoria.sccm.persistence.model.Documento;
 import br.com.fattoria.sccm.persistence.model.Equipamento;
@@ -70,6 +71,7 @@ import br.com.fattoria.sccm.persistence.model.Sigilo;
 import br.com.fattoria.sccm.persistence.model.TipoDado;
 import br.com.fattoria.sccm.persistence.model.XML;
 import br.com.fattoria.sccm.persistence.repository.AreaConhecimentoRepository;
+import br.com.fattoria.sccm.persistence.repository.AssinaturaPCRepository;
 import br.com.fattoria.sccm.persistence.repository.ControleInternoRepository;
 import br.com.fattoria.sccm.persistence.repository.DocumentosRepository;
 import br.com.fattoria.sccm.persistence.repository.EquipamentoRepository;
@@ -117,6 +119,7 @@ public class PesquisaCientificaController {
 	private final ControleInternoRepository controleInternoRepository;
 	private final SequenceGenerator sequenceGenerator;
 	private final XMLRepository xmlRepository;
+	private final AssinaturaPCRepository assinaturaPCRepository;
 	
 	@Autowired
 	private DocumentStorageService documentStorageService;
@@ -129,7 +132,7 @@ public class PesquisaCientificaController {
 			AreaConhecimentoRepository areaConhecimentoRepository, EquipamentoRepository equipamentoRepository,
 			TipoDadoRepository tipoDadoRepository, DocumentosRepository documentosRepository,
 			ControleInternoRepository controleInternoRepository, SequenceGenerator sequenceGenerator,
-			XMLRepository xmlRepository, DocumentStorageService documentStorageService) {
+			XMLRepository xmlRepository, DocumentStorageService documentStorageService, AssinaturaPCRepository assinaturaPCRepository) {
 		super();
 		this.pesquisaCientificaRepository = pesquisaCientificaRepository;
 		this.plataformaRepository = plataformaRepository;
@@ -145,6 +148,7 @@ public class PesquisaCientificaController {
 		this.sequenceGenerator = sequenceGenerator;
 		this.xmlRepository = xmlRepository;
 		this.documentStorageService = documentStorageService;
+		this.assinaturaPCRepository = assinaturaPCRepository;
 	}
 
 	@PostMapping("/pesquisas_cientificas")
@@ -566,6 +570,32 @@ public class PesquisaCientificaController {
 		DocumentosDTO documentosDTO = new DocumentosDTO();		
 		dto.setListaDocumentos(documentosDTO.getListToListDTO((List<Documento>)documentosRepository.findAllByPesquisaCientificaId(id)));
 		
+		List<AssinaturaPC> assinaturas = assinaturaPCRepository.findByAtivo(Boolean.TRUE);
+		
+		int cont = 1;
+		
+		for (AssinaturaPC assinatura : assinaturas) {
+			
+			if (cont == 1) {
+				dto.setNome_assinatura1(assinatura.getNome());
+				dto.setPatente1(assinatura.getPatente());
+				dto.setCargo1(assinatura.getCargo());
+				dto.setDestino1(assinatura.getDestino().getDestino());
+			} else if (cont == 2) {
+				dto.setNome_assinatura2(assinatura.getNome());
+				dto.setPatente2(assinatura.getPatente());
+				dto.setCargo2(assinatura.getCargo());
+				dto.setDestino2(assinatura.getDestino().getDestino());
+			} else {
+				dto.setNome_assinatura3(assinatura.getNome());
+				dto.setPatente3(assinatura.getPatente());
+				dto.setCargo3(assinatura.getCargo());
+				dto.setDestino3(assinatura.getDestino().getDestino());
+			}
+			
+			cont++;
+		}
+		
 		ReportFichaPesquisaCientifica report = new ReportFichaPesquisaCientifica(dto);
 		
 		report.addParametro("IMG_LOGO", ReportFichaPesquisaCientifica.class.
@@ -592,9 +622,5 @@ public class PesquisaCientificaController {
 				.body(byteArrayOutputStream.toByteArray());
 	    
 	}
-	
-	
-
-    
 	
 }

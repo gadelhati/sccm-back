@@ -16,7 +16,9 @@ public class FichaPesquisaCientificaDTO {
 			String limite_oeste_longitude, String nome_plataforma, String tipo_plataforma, String comandante,
 			String indicativo_visual, String bandeira, String paisinstituicao, String telefoneinstituicao,
 			String outrasinstituicoes, String recibo, String oficio, String fitoteca, String arquivo_tecnico,
-			String forma_envio, String numero_autorizacao) {
+			String forma_envio, String numero_autorizacao, String nome_assinatura1, String nome_assinatura2, String nome_assinatura3,
+			String patente1, String patente2, String patente3, String cargo1, String cargo2, String cargo3, 
+			String destino1, String destino2, String destino3) {
 		this.id = new Long(id);
 		this.nome_comissao = nome_comissao;
 		this.descricao = descricao;
@@ -50,6 +52,18 @@ public class FichaPesquisaCientificaDTO {
 		this.arquivo_tecnico = arquivo_tecnico;
 		this.forma_envio = forma_envio;
 		this.numero_autorizacao = numero_autorizacao;
+		this.nome_assinatura1 = nome_assinatura1;
+		this.nome_assinatura2 = nome_assinatura2;
+		this.nome_assinatura3 = nome_assinatura3;		
+		this.patente1 = patente1;
+		this.patente2 = patente2;
+		this.patente3 = patente3;		
+		this.cargo1 = cargo1;
+		this.cargo2 = cargo2;
+		this.cargo3 = cargo3;		
+		this.destino1 = destino1;
+		this.destino2 = destino2;
+		this.destino3 = destino3;
 	}
 	private Long id;	
 	private String nome_comissao;	
@@ -84,6 +98,18 @@ public class FichaPesquisaCientificaDTO {
 	private String arquivo_tecnico;	
 	private String forma_envio;	
 	private String numero_autorizacao; 
+	private String nome_assinatura1;
+	private String nome_assinatura2;
+	private String nome_assinatura3;
+	private String patente1;
+	private String patente2;
+	private String patente3;
+	private String cargo1;
+	private String cargo2;
+	private String cargo3;
+	private String destino1;
+	private String destino2;
+	private String destino3;
 	
 	private List<AreaConhecimentoDTO> listaAreaConhecimento;
 	
