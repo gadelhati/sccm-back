@@ -21,7 +21,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "destino")
+@Table(name = "assinatura_pc")
 @SequenceGenerator(name="assinatura_pc_generator", sequenceName="assinatura_pc_seq", allocationSize = 1)
 public class AssinaturaPC implements Serializable {
 	
