@@ -69,8 +69,8 @@ public class AssinaturaPCController {
                 .body(model);
 	}
 	
-	@PutMapping("/destino/{id}")
-	@ApiOperation(value = "Atualiza um destino")
+	@PutMapping("/assinatura/{id}")
+	@ApiOperation(value = "Atualiza um assinatura")
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "Destino atualizado"),
     })
@@ -86,8 +86,8 @@ public class AssinaturaPCController {
 
 	}
 	
-	@GetMapping("/destino")
-    @ApiOperation(value = "Retorna uma lista de destinos")
+	@GetMapping("/assinatura")
+    @ApiOperation(value = "Retorna uma lista de assinaturas")
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "Destinos"),
     })
@@ -104,8 +104,8 @@ public class AssinaturaPCController {
 	    return ResponseEntity.ok(listPlataformaResource);
 	}
     
-    @GetMapping("/destino/{id}")
-    @ApiOperation(value = "Retorna um Destino")
+    @GetMapping("/assinatura/{id}")
+    @ApiOperation(value = "Retorna uma assinatura")
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "Retorna uma destino"),
     })
@@ -119,8 +119,8 @@ public class AssinaturaPCController {
                 .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
 	}
     
-    @DeleteMapping("/destino/{id}")
-    @ApiOperation(value = "Deleta um destino")
+    @DeleteMapping("/assinatura/{id}")
+    @ApiOperation(value = "Deleta um assinatura")
     public ResponseEntity<?> delete(@PathVariable Long id) throws NotFoundException{
     	
     	 Optional<AssinaturaPC> destino = assinaturaPCRepository.findById(id);
@@ -129,7 +129,7 @@ public class AssinaturaPCController {
     	            p -> {
     	            	assinaturaPCRepository.deleteById(id);
     	              return ResponseEntity.noContent().build();
-    	            }).orElseThrow(() -> new NotFoundException("Destino não encontrado"));
+    	            }).orElseThrow(() -> new NotFoundException("Assinatura não encontrado"));
     	
     }
 	

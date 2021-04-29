@@ -7,6 +7,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.query.Param;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 import org.springframework.stereotype.Repository;
 
@@ -91,7 +92,7 @@ public interface PesquisaCientificaRepository extends CrudRepository<PesquisaCie
 			"    iCI.id = ci.instituicao.id " + 
 			"WHERE " + 
 			"    pc.id = :id")
-	FichaPesquisaCientificaDTO getIdFichaPesquisaCientificaView(Long id);
+	FichaPesquisaCientificaDTO getIdFichaPesquisaCientificaView(@Param("id") Long id);
 
 //	"    ''      AS logobndo, " + 
 //	"    ''      AS logochm, " + 
