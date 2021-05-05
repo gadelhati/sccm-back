@@ -94,6 +94,16 @@ public class PesquisaCientifica implements Serializable {
 	@Column(name = "numero_pc")
 	private String numeroPC;
 	
+	@Column(name = "numero_ie_portaria_autorizacao_pesquisa")
+	private String numeroIEPortariaAutorizacaoPesquisa;
+	
+	@Column(name = "indice_h")
+	private String indiceH;
+	
+	@OneToOne
+	@JoinColumn(name = "fk_situacao")
+	private Situacao situacao;
+	
 	@ManyToMany
     @JoinTable(name = "pesquisa_cientifica_area_conhecimento", 
     joinColumns = {@JoinColumn(name="fk_pesquisa_cientifica")}, 

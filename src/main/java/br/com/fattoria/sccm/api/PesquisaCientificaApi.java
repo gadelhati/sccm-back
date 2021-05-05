@@ -52,6 +52,12 @@ public class PesquisaCientificaApi {
 	
 	private String numeroPC;
 	
+	private String numeroIEPortariaAutorizacaoPesquisa;
+	
+	private String indiceH;
+	
+	private String idSituacao;
+	
 	private ComissaoApi comissao;
 	
 	private List<Long> idsEquipamentos;
@@ -61,7 +67,9 @@ public class PesquisaCientificaApi {
 	private List<Long> idsCoParticipantes;
 	
 	public PesquisaCientifica toEntity() {
-		return new PesquisaCientifica(id, null, comissao != null ? comissao.toEntity() : null, null, null, dataCadastro, comandante, coordenadorCientifico, cartaNautica, limiteNorteLatitude, limiteSulLatitude, limiteLesteLongitude, limiteOesteLongitude, numeroPC, null, null, null, null);
+		return new PesquisaCientifica(id, null, comissao != null ? comissao.toEntity() : null, null, null, dataCadastro, comandante, 
+				coordenadorCientifico, cartaNautica, limiteNorteLatitude, limiteSulLatitude, limiteLesteLongitude, limiteOesteLongitude, 
+				numeroPC, numeroIEPortariaAutorizacaoPesquisa, indiceH, null, null, null, null, null);
 	}
 	
 }

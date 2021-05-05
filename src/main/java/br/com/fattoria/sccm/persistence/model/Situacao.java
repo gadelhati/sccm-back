@@ -2,12 +2,15 @@ package br.com.fattoria.sccm.persistence.model;
 
 import java.io.Serializable;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+
+import org.hibernate.envers.Audited;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -18,17 +21,24 @@ import lombok.NoArgsConstructor;
 @EqualsAndHashCode
 @NoArgsConstructor
 @AllArgsConstructor
+@Audited
 @Entity
-@Table(name = "destino")
-@SequenceGenerator(name="destino_generator", sequenceName="destino_seq", allocationSize = 1)
-public class Destino implements Serializable {
+@Table(name = "situacao")
+@SequenceGenerator(name="situacao_generator", sequenceName="situacao_sec", allocationSize = 1)
+public class Situacao implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator="destino_generator")
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator="situacao_generator")
 	private Long id;
 	
-	private String destino;
+	private String descricao;
+	
+	@Column(name = "para_pesquisa_cientifica")
+	private boolean paraPequisaCientifica;
+	
+	@Column(name = "para_ship_synop")
+	private boolean paraShipSynop;
 	
 }
