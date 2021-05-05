@@ -23,14 +23,14 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Audited
 @Entity
-@Table(name = "estacao_meteolologica")
-@SequenceGenerator(name="estacao_meteolologica_generator", sequenceName="estacao_meteolologica_sec", allocationSize = 1)
-public class EstacaoMeteorologica implements Serializable {
+@Table(name = "estacao_meteriologica")
+@SequenceGenerator(name="estacao_meteriologica_generator", sequenceName="estacao_meteriologica_seq", allocationSize = 1)
+public class EstacaoMeteriologica implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator="estacao_meteolologica_generator")
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator="estacao_meteriologica_generator")
 	private Long id;
 	
 	private String nome;

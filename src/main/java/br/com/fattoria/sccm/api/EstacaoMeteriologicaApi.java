@@ -1,6 +1,6 @@
 package br.com.fattoria.sccm.api;
 
-import br.com.fattoria.sccm.persistence.model.EstacaoMeteorologica;
+import br.com.fattoria.sccm.persistence.model.EstacaoMeteriologica;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @EqualsAndHashCode
 @NoArgsConstructor
 @AllArgsConstructor
-public class EstacaoMeteorologicaApi {
+public class EstacaoMeteriologicaApi {
 
 	private Long id;
 
@@ -20,8 +20,8 @@ public class EstacaoMeteorologicaApi {
 
 	private String longitude;
 
-	public EstacaoMeteorologica toEntity() {
-		return new EstacaoMeteorologica(id, nome, latitude, longitude);
+	public EstacaoMeteriologica toEntity() {
+		return new EstacaoMeteriologica(id, nome, latitude, longitude);
 	}
 
 }

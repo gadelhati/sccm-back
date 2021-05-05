@@ -36,9 +36,11 @@ public class Situacao implements Serializable {
 	private String descricao;
 	
 	@Column(name = "para_pesquisa_cientifica")
-	private boolean paraPequisaCientifica;
+	private boolean paraPesquisaCientifica;
 	
 	@Column(name = "para_ship_synop")
 	private boolean paraShipSynop;
+	
+	private boolean ativo;
 	
 }

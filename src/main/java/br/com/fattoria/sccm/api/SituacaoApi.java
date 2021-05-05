@@ -16,12 +16,14 @@ public class SituacaoApi {
 
 	private String descricao;
 
-	private boolean paraPequisaCientifica;
+	private boolean paraPesquisaCientifica;
 
 	private boolean paraShipSynop;
+	
+	private boolean ativo;
 
 	public Situacao toEntity() {
-		return new Situacao(id, descricao, paraPequisaCientifica, paraShipSynop);
+		return new Situacao(id, descricao, paraPesquisaCientifica, paraShipSynop, ativo);
 	}
 
 }

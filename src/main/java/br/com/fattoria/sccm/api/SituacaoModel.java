@@ -15,15 +15,18 @@ public class SituacaoModel extends RepresentationModel<SituacaoModel>{
 	
 	private String descricao;
 	
-	private boolean paraPequisaCientifica;
+	private boolean paraPesquisaCientifica;
 	
 	private boolean paraShipSynop;
+	
+	private boolean ativo;
 	
 	public SituacaoModel(Situacao situacao) {		
 		this.id = situacao.getId();
 		this.descricao= situacao.getDescricao();
-		this.paraPequisaCientifica = situacao.isParaPequisaCientifica();
+		this.paraPesquisaCientifica = situacao.isParaPesquisaCientifica();
 		this.paraShipSynop = situacao.isParaShipSynop();
+		this.ativo = situacao.isAtivo();
 		
 		add(linkTo(DestinoController.class).withRel("situacoes"));
     	    	

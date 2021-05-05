@@ -35,7 +35,7 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import javassist.NotFoundException;
 
-@Api(value = "situacao")
+@Api(value = "situacoes")
 @RestController
 @RequestMapping(value = "/api", produces = "application/hal+json")
 public class SituacaoController {
@@ -47,7 +47,7 @@ public class SituacaoController {
 		this.situacaoRepository = situacaoRepository;
 	}
 	
-	@PostMapping("/situacao")
+	@PostMapping("/situacoes")
 	@ApiOperation(value = "Cria uma Situacao")
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "Situacao criada"),
@@ -70,24 +70,24 @@ public class SituacaoController {
                 .body(paisModel);
 	}
 	
-	@PutMapping("/situacao/{id}")
+	@PutMapping("/situacoes/{id}")
 	@ApiOperation(value = "Atualiza uma situacao")
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "Situacao atualizada"),
     })
-	ResponseEntity<SituacaoModel> update(@Valid @RequestBody SituacaoApi pais){
+	ResponseEntity<SituacaoModel> update(@Valid @RequestBody SituacaoApi situacao){
 		
-        Situacao paisEntity = pais.toEntity();
+        Situacao situacaoEntity = situacao.toEntity();
         
     	SituacaoModelAssembler assembler = new SituacaoModelAssembler(); 
-    	SituacaoModel paisModel = assembler.toModel(situacaoRepository.save(paisEntity));
+    	SituacaoModel situacaoModel = assembler.toModel(situacaoRepository.save(situacaoEntity));
         
         final URI uri = ServletUriComponentsBuilder.fromCurrentRequest().build().toUri();
-        return ResponseEntity.created(uri).body(paisModel);
+        return ResponseEntity.created(uri).body(situacaoModel);
 
 	}
 	
-	@GetMapping("/situacao")
+	@GetMapping("/situacoes")
     @ApiOperation(value = "Retorna uma lista de situacoes")
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "Situacaos"),
@@ -105,7 +105,7 @@ public class SituacaoController {
 	    return ResponseEntity.ok(listPlataformaResource);
 	}
     
-    @GetMapping("/situacao/{id}")
+    @GetMapping("/situacoes/{id}")
     @ApiOperation(value = "Retorna uma Situacao")
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "Retorna uma situacao"),
@@ -120,7 +120,7 @@ public class SituacaoController {
                 .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
 	}
     
-    @DeleteMapping("/situacao/{id}")
+    @DeleteMapping("/situacoes/{id}")
     @ApiOperation(value = "Deleta uma situacao")
     public ResponseEntity<?> delete(@PathVariable Long id) throws NotFoundException{
     	

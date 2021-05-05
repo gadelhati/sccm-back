@@ -5,11 +5,11 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import org.springframework.hateoas.RepresentationModel;
 
 import br.com.fattoria.sccm.controller.DestinoController;
-import br.com.fattoria.sccm.persistence.model.EstacaoMeteorologica;
+import br.com.fattoria.sccm.persistence.model.EstacaoMeteriologica;
 import lombok.Getter;
 
 @Getter
-public class EstacaoMeteorologicaModel extends RepresentationModel<EstacaoMeteorologicaModel>{
+public class EstacaoMeteriologicaModel extends RepresentationModel<EstacaoMeteriologicaModel>{
 
 	private Long id;
 	
@@ -19,7 +19,7 @@ public class EstacaoMeteorologicaModel extends RepresentationModel<EstacaoMeteor
 	
 	private String longitude;
 	
-	public EstacaoMeteorologicaModel(EstacaoMeteorologica estacoes) {		
+	public EstacaoMeteriologicaModel(EstacaoMeteriologica estacoes) {		
 		this.id = estacoes.getId();
 		this.nome = estacoes.getNome();
 		this.latitude = estacoes.getLatitude();
