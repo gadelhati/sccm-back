@@ -56,7 +56,8 @@ public class PesquisaCientificaApi {
 	
 	private String indiceH;
 	
-	private String idSituacao;
+	@NotNull
+	private Long idSituacao;
 	
 	private ComissaoApi comissao;
 	

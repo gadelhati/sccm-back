@@ -69,6 +69,7 @@ import br.com.fattoria.sccm.persistence.model.PesquisaCientificaCoAutor;
 import br.com.fattoria.sccm.persistence.model.PesquisaCientificaCoAutorPk;
 import br.com.fattoria.sccm.persistence.model.Plataforma;
 import br.com.fattoria.sccm.persistence.model.Sigilo;
+import br.com.fattoria.sccm.persistence.model.Situacao;
 import br.com.fattoria.sccm.persistence.model.TipoDado;
 import br.com.fattoria.sccm.persistence.model.XML;
 import br.com.fattoria.sccm.persistence.repository.AreaConhecimentoRepository;
@@ -82,6 +83,7 @@ import br.com.fattoria.sccm.persistence.repository.PesquisaCientificaCoAutorRepo
 import br.com.fattoria.sccm.persistence.repository.PesquisaCientificaRepository;
 import br.com.fattoria.sccm.persistence.repository.PlataformaRepository;
 import br.com.fattoria.sccm.persistence.repository.SigiloRepository;
+import br.com.fattoria.sccm.persistence.repository.SituacaoRepository;
 import br.com.fattoria.sccm.persistence.repository.TipoDadoRepository;
 import br.com.fattoria.sccm.persistence.repository.XMLRepository;
 import br.com.fattoria.sccm.reports.ReportFichaPesquisaCientifica;
@@ -111,6 +113,7 @@ public class PesquisaCientificaController {
 	private final PesquisaCientificaRepository pesquisaCientificaRepository;
 	private final PlataformaRepository plataformaRepository;
 	private final SigiloRepository sigiloRepository;
+	private final SituacaoRepository situacaoRepository;
 	private final InstituicaoRepository instituicaoRepository;
 	private final PesquisaCientificaCoAutorRepository pesquisaCientificaCoAutorRepository;
 	private final PesquisaCientificaAreaConhecimentoRepository pesquisaCientificaAreaConhecimentoRepository;
@@ -128,6 +131,7 @@ public class PesquisaCientificaController {
 	
 	public PesquisaCientificaController(PesquisaCientificaRepository pesquisaCientificaRepository,
 			PlataformaRepository plataformaRepository, SigiloRepository sigiloRepository,
+			SituacaoRepository situacaoRepository,
 			InstituicaoRepository instituicaoRepository,
 			PesquisaCientificaCoAutorRepository pesquisaCientificaCoAutorRepository,
 			PesquisaCientificaAreaConhecimentoRepository pesquisaCientificaAreaConhecimentoRepository,
@@ -139,6 +143,7 @@ public class PesquisaCientificaController {
 		this.pesquisaCientificaRepository = pesquisaCientificaRepository;
 		this.plataformaRepository = plataformaRepository;
 		this.sigiloRepository = sigiloRepository;
+		this.situacaoRepository = situacaoRepository;
 		this.instituicaoRepository = instituicaoRepository;
 		this.pesquisaCientificaCoAutorRepository = pesquisaCientificaCoAutorRepository;
 		this.pesquisaCientificaAreaConhecimentoRepository = pesquisaCientificaAreaConhecimentoRepository;
@@ -230,12 +235,8 @@ public class PesquisaCientificaController {
 	ResponseEntity<PesquisaCientificaModel> update(HttpServletRequest request, @Valid @RequestBody PesquisaCientificaApi api){
 		
 		log.info("Alterando "+api);
-		
-		AccessToken accessToken = KeycloakAuthenticationTokenUtil.getAccessToken(request);
-		
+
 		//UsuarioApi usuarioApi = UsuarioApi.toUsuarioApi(accessToken.get);
-		
-		log.info("Alterando "+accessToken);
 		
 		Optional<Plataforma> plataforma = plataformaRepository.findById(api.getIdPlataforma());
 		
@@ -243,13 +244,14 @@ public class PesquisaCientificaController {
 		
 		Optional<Sigilo> sigilo = sigiloRepository.findById(api.getIdSigilo());
 		
+		Optional<Situacao> situacao = situacaoRepository.findById(api.getIdSituacao());
+		
         PesquisaCientifica entityPC = api.toEntity();
         
         entityPC.setPlataforma(plataforma.get());
         entityPC.setInstituicao(instituicao.get());
         entityPC.setSigilo(sigilo.get());
-        
-        //entity.setComissao(comissaoRepository.save(entity.getComissao()));
+        entityPC.setSituacao(situacao.get());
         
         entityPC = pesquisaCientificaRepository.save(entityPC);
         

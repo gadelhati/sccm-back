@@ -104,6 +104,42 @@ public class SituacaoController {
     	
 	    return ResponseEntity.ok(listPlataformaResource);
 	}
+	
+	@GetMapping("/situacoes/ativas/pc")
+    @ApiOperation(value = "Retorna uma lista de situacoes ativas para Pesquisas Científicas")
+    @ApiResponses(value = {
+        @ApiResponse(code = 200, message = "Situacaos"),
+    })
+	public ResponseEntity<CollectionModel<SituacaoModel>> getAllAtivasPC() {
+    	
+    	Collection<Situacao> lista = (Collection<Situacao>) situacaoRepository.findAllByAtivoTrueAndParaPesquisaCientificaTrue();
+    	
+    	SituacaoModelAssembler assembler = new SituacaoModelAssembler(); 
+    	CollectionModel<SituacaoModel> listPlataformaResource = assembler.toCollectionModel(lista);
+    	
+    	final String uriString = ServletUriComponentsBuilder.fromCurrentRequest().build().toUriString();
+    	listPlataformaResource.add(Link.of(uriString, "self"));
+    	
+	    return ResponseEntity.ok(listPlataformaResource);
+	}
+	
+	@GetMapping("/situacoes/ativas/ship_synop")
+    @ApiOperation(value = "Retorna uma lista de situacoes ativas para Ship/Synop")
+    @ApiResponses(value = {
+        @ApiResponse(code = 200, message = "Situacaos"),
+    })
+	public ResponseEntity<CollectionModel<SituacaoModel>> getAllAtivasShipSynop() {
+    	
+    	Collection<Situacao> lista = (Collection<Situacao>) situacaoRepository.findAllByAtivoTrueAndParaShipSynopTrue();
+    	
+    	SituacaoModelAssembler assembler = new SituacaoModelAssembler(); 
+    	CollectionModel<SituacaoModel> listPlataformaResource = assembler.toCollectionModel(lista);
+    	
+    	final String uriString = ServletUriComponentsBuilder.fromCurrentRequest().build().toUriString();
+    	listPlataformaResource.add(Link.of(uriString, "self"));
+    	
+	    return ResponseEntity.ok(listPlataformaResource);
+	}
     
     @GetMapping("/situacoes/{id}")
     @ApiOperation(value = "Retorna uma Situacao")
