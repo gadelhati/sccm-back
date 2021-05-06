@@ -53,8 +53,8 @@ public class MidiaParticular {
 	@Column(name="numero_ra")
 	private Long numeroRA;
 	
-	@Column(name="numero_oficio")
-	private String numeroOficio;
+	@Column(name="numero_ficha")
+	private String numeroFicha;
 	
 	@Column(name="codigo_c")
 	private Long codigoC;

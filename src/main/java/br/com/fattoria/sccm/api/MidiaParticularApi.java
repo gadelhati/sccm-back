@@ -22,7 +22,7 @@ public class MidiaParticularApi {
 	
 	private Long numeroRA;
 	
-	private String numeroOficio;
+	private String numeroFicha;
 	
 	private Long codigoC;
 	
@@ -35,7 +35,7 @@ public class MidiaParticularApi {
 	private String observacoes;
 	
 	public MidiaParticular toEntity() {
-		return new MidiaParticular(id, null, null, comissaoProjeto, numeroAutorizacao, numeroRA, numeroOficio, codigoC, data, observacoes);
+		return new MidiaParticular(id, null, null, comissaoProjeto, numeroAutorizacao, numeroRA, numeroFicha, codigoC, data, observacoes);
 	}
 
 }

@@ -22,7 +22,7 @@ public class MidiaParticularModel extends RepresentationModel<MidiaParticularMod
 	
 	private Long numeroRA;
 	
-	private String numeroOficio;
+	private String numeroFicha;
 	
 	private Long codigoC;
 	
@@ -40,7 +40,7 @@ public class MidiaParticularModel extends RepresentationModel<MidiaParticularMod
     	this.comissaoProjeto = midia.getComissaoProjeto();
     	this.numeroAutorizacao = midia.getNumeroAutorizacao();
     	this.numeroRA = midia.getNumeroRA();
-    	this.numeroOficio = midia.getNumeroOficio();
+    	this.numeroFicha = midia.getNumeroFicha();
     	this.codigoC = midia.getCodigoC();
     	this.data = midia.getData();
     	this.plataforma = midia.getPlataforma() != null ? new PlataformaModel(midia.getPlataforma()) : null;
