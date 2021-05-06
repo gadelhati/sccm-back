@@ -22,6 +22,10 @@ public class MidiaParticularApi {
 	
 	private Long numeroRA;
 	
+	private String numeroOficio;
+	
+	private Long codigoC;
+	
 	private Calendar data;
 	
 	private Long idPlataforma;
@@ -31,7 +35,7 @@ public class MidiaParticularApi {
 	private String observacoes;
 	
 	public MidiaParticular toEntity() {
-		return new MidiaParticular(id, null, null, comissaoProjeto, numeroAutorizacao, numeroRA, data, observacoes);
+		return new MidiaParticular(id, null, null, comissaoProjeto, numeroAutorizacao, numeroRA, numeroOficio, codigoC, data, observacoes);
 	}
 
 }

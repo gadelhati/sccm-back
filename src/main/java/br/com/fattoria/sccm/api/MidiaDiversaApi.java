@@ -24,8 +24,14 @@ public class MidiaDiversaApi {
 	
 	private boolean backup;
 	
+	private String numeroOficio;
+	
+	private String numeroH;
+	
+	private Long codigo;
+	
 	public MidiaDiversa toEntity() {
-		return new MidiaDiversa(id, conteudo, data, documento, backup);
+		return new MidiaDiversa(id, conteudo, data, documento, backup, numeroOficio, numeroH, codigo);
 	}
 
 }

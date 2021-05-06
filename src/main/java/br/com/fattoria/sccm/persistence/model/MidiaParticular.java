@@ -53,6 +53,12 @@ public class MidiaParticular {
 	@Column(name="numero_ra")
 	private Long numeroRA;
 	
+	@Column(name="numero_oficio")
+	private String numeroOficio;
+	
+	@Column(name="codigo_c")
+	private Long codigoC;
+	
 	@Temporal(TemporalType.DATE)
 	private Calendar data;
 

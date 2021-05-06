@@ -2,6 +2,7 @@ package br.com.fattoria.sccm.persistence.model;
 
 import java.util.Calendar;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -46,5 +47,12 @@ public class MidiaDiversa {
 	
 	private boolean backup;
 
+	@Column(name = "numero_oficio")
+	private String numeroOficio;
+	
+	@Column(name = "numero_h")
+	private String numeroH;
+	
+	private Long codigo;
 
 }
