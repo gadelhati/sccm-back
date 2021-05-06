@@ -14,7 +14,6 @@ import java.util.Optional;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
-import org.keycloak.representations.AccessToken;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -67,6 +66,8 @@ import br.com.fattoria.sccm.persistence.model.PesquisaCientificaAreaConhecimento
 import br.com.fattoria.sccm.persistence.model.PesquisaCientificaAreaConhecimentoPk;
 import br.com.fattoria.sccm.persistence.model.PesquisaCientificaCoAutor;
 import br.com.fattoria.sccm.persistence.model.PesquisaCientificaCoAutorPk;
+import br.com.fattoria.sccm.persistence.model.PesquisaCientificaEquipamento;
+import br.com.fattoria.sccm.persistence.model.PesquisaCientificaEquipamentoPk;
 import br.com.fattoria.sccm.persistence.model.Plataforma;
 import br.com.fattoria.sccm.persistence.model.Sigilo;
 import br.com.fattoria.sccm.persistence.model.Situacao;
@@ -80,6 +81,7 @@ import br.com.fattoria.sccm.persistence.repository.EquipamentoRepository;
 import br.com.fattoria.sccm.persistence.repository.InstituicaoRepository;
 import br.com.fattoria.sccm.persistence.repository.PesquisaCientificaAreaConhecimentoRepository;
 import br.com.fattoria.sccm.persistence.repository.PesquisaCientificaCoAutorRepository;
+import br.com.fattoria.sccm.persistence.repository.PesquisaCientificaEquipamentoRepository;
 import br.com.fattoria.sccm.persistence.repository.PesquisaCientificaRepository;
 import br.com.fattoria.sccm.persistence.repository.PlataformaRepository;
 import br.com.fattoria.sccm.persistence.repository.SigiloRepository;
@@ -95,7 +97,6 @@ import br.com.fattoria.sccm.reports.data.TipoDadoDTO;
 import br.com.fattoria.sccm.reports.templates.busines.SequenceGenerator;
 import br.com.fattoria.sccm.reports.templates.busines.SequenceModel;
 import br.com.fattoria.sccm.service.DocumentStorageService;
-import br.com.fattoria.sccm.service.KeycloakAuthenticationTokenUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -117,6 +118,7 @@ public class PesquisaCientificaController {
 	private final InstituicaoRepository instituicaoRepository;
 	private final PesquisaCientificaCoAutorRepository pesquisaCientificaCoAutorRepository;
 	private final PesquisaCientificaAreaConhecimentoRepository pesquisaCientificaAreaConhecimentoRepository;
+	private final PesquisaCientificaEquipamentoRepository pesquisaCientificaEquipamentoRepository;
 	private final AreaConhecimentoRepository areaConhecimentoRepository;
 	private final EquipamentoRepository equipamentoRepository;
 	private final TipoDadoRepository tipoDadoRepository;
@@ -135,6 +137,7 @@ public class PesquisaCientificaController {
 			InstituicaoRepository instituicaoRepository,
 			PesquisaCientificaCoAutorRepository pesquisaCientificaCoAutorRepository,
 			PesquisaCientificaAreaConhecimentoRepository pesquisaCientificaAreaConhecimentoRepository,
+			PesquisaCientificaEquipamentoRepository pesquisaCientificaEquipamentoRepository,
 			AreaConhecimentoRepository areaConhecimentoRepository, EquipamentoRepository equipamentoRepository,
 			TipoDadoRepository tipoDadoRepository, DocumentosRepository documentosRepository,
 			ControleInternoRepository controleInternoRepository, SequenceGenerator sequenceGenerator,
@@ -147,6 +150,7 @@ public class PesquisaCientificaController {
 		this.instituicaoRepository = instituicaoRepository;
 		this.pesquisaCientificaCoAutorRepository = pesquisaCientificaCoAutorRepository;
 		this.pesquisaCientificaAreaConhecimentoRepository = pesquisaCientificaAreaConhecimentoRepository;
+		this.pesquisaCientificaEquipamentoRepository = pesquisaCientificaEquipamentoRepository;
 		this.areaConhecimentoRepository = areaConhecimentoRepository;
 		this.equipamentoRepository = equipamentoRepository;
 		this.tipoDadoRepository = tipoDadoRepository;
@@ -173,12 +177,15 @@ public class PesquisaCientificaController {
 		
 		Optional<Sigilo> sigilo = sigiloRepository.findById(api.getIdSigilo());
 		
+		Optional<Situacao> situacao = situacaoRepository.findById(api.getIdSituacao());
+		
         PesquisaCientifica entityPC = api.toEntity();
         entityPC.setDataCadastro(Calendar.getInstance());
         
         entityPC.setPlataforma(plataforma.get());
         entityPC.setInstituicao(instituicao.get());
         entityPC.setSigilo(sigilo.get());
+        entityPC.setSituacao(situacao.get());
         
 		String sequence = sequenceGenerator.getSequence(SequenceModel.build("NUMERO_PC"));
 		log.info("Numero PC gerado "+sequence);
@@ -195,14 +202,14 @@ public class PesquisaCientificaController {
     		}
         }
         
-/*        if(api.getIdsEquipamentos() != null && api.getIdsEquipamentos().size() > 0) {
+        if(api.getIdsEquipamentos() != null && api.getIdsEquipamentos().size() > 0) {
 	        Iterable<Equipamento> equipamentos = equipamentoRepository.findAllById(api.getIdsEquipamentos());
 	        
 	        for (Equipamento equipamento : equipamentos) {
 	        	PesquisaCientificaEquipamento pesquisaCientificaEquipamento = new PesquisaCientificaEquipamento(new PesquisaCientificaEquipamentoPk(entityPC.getId(), equipamento.getId()));
 				pesquisaCientificaEquipamentoRepository.save(pesquisaCientificaEquipamento);
 			}
-        }*/
+        }
         
         if(api.getIdsCoParticipantes() != null && api.getIdsCoParticipantes().size() > 0) {
 	        Iterable<Instituicao> instituicoes = instituicaoRepository.findAllById(api.getIdsCoParticipantes());
@@ -267,7 +274,7 @@ public class PesquisaCientificaController {
     		}
         }
         
-        /*Collection<PesquisaCientificaEquipamento> equipamentosByPesquisaCientifica = pesquisaCientificaEquipamentoRepository.findAllByIdPesquisaCientifica(api.getId());
+        Collection<PesquisaCientificaEquipamento> equipamentosByPesquisaCientifica = pesquisaCientificaEquipamentoRepository.findAllByIdPesquisaCientifica(api.getId());
         pesquisaCientificaEquipamentoRepository.deleteAll(equipamentosByPesquisaCientifica);
         
         if(api.getIdsEquipamentos() != null && api.getIdsEquipamentos().size() > 0) {
@@ -277,7 +284,7 @@ public class PesquisaCientificaController {
 	        	PesquisaCientificaEquipamento pesquisaCientificaEquipamento = new PesquisaCientificaEquipamento(new PesquisaCientificaEquipamentoPk(entityPC.getId(), equipamento.getId()));
 				pesquisaCientificaEquipamentoRepository.save(pesquisaCientificaEquipamento);
 			}
-        }*/
+        }
         
         Collection<PesquisaCientificaCoAutor> coAutoresByPesquisaCientifica = pesquisaCientificaCoAutorRepository.findAllByIdPesquisaCientifica(api.getId());
         pesquisaCientificaCoAutorRepository.deleteAll(coAutoresByPesquisaCientifica);
