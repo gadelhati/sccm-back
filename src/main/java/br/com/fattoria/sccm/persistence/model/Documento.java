@@ -54,8 +54,8 @@ public class Documento implements Serializable {
 	private Destino destino;
 	
 	@ManyToOne
-	@JoinColumn(name = "fk_pesquisa_cientifica")
-	private PesquisaCientifica pesquisaCientifica;
+	@JoinColumn(name = "fk_controle_interno")
+	private ControleInterno controleInterno;
 	
 	private String observacoes;
 		

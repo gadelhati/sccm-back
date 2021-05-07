@@ -31,7 +31,7 @@ public class DocumentosApi {
 	private String observacoes;
 	
 	@NotNull
-	private Long idPesquisaCientifica;
+	private Long idControleInterno;
 	
 	public Documento toEntity() {
 		return new Documento(id, anexo, dataRecebimento, null, null, null, observacoes);

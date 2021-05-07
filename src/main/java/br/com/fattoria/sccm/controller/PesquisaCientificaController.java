@@ -457,26 +457,6 @@ public class PesquisaCientificaController {
 	    return ResponseEntity.ok(listResource);
 	}
 	
-	@GetMapping("/pesquisas_cientificas/{id}/documentos")
-    @ApiOperation(value = "Retorna uma lista de documentos")
-    @ApiResponses(value = {
-        @ApiResponse(code = 200, message = "Retorna uma lista de documentos"),
-    })
-	public ResponseEntity<CollectionModel<DocumentosModel>> getAllDocumentosByIdPesquisaCientifica(@PathVariable Long id) {
-    	
-    	log.info("listando documentos");
-    	 
-    	Collection<Documento> lista = (Collection<Documento>) documentosRepository.findAllByPesquisaCientificaId(id);
-    	
-    	DocumentosModelAssembler assembler = new DocumentosModelAssembler(); 
-    	CollectionModel<DocumentosModel> listResource = assembler.toCollectionModel(lista);
-    	
-    	final String uriString = ServletUriComponentsBuilder.fromCurrentRequest().build().toUriString();
-    	listResource.add(Link.of(uriString, "self"));
-    	
-	    return ResponseEntity.ok(listResource);
-	}
-	
 	@GetMapping("/pesquisas_cientificas/{id}/controleInterno")
     @ApiOperation(value = "Retorna uma lista controles internos")
     @ApiResponses(value = {

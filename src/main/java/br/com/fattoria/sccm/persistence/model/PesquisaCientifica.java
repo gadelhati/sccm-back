@@ -116,9 +116,6 @@ public class PesquisaCientifica implements Serializable {
     inverseJoinColumns = {@JoinColumn(name="fk_equipamento")})
 	private List<Equipamento> listaEquipamentos;
 
-	@OneToMany(mappedBy = "pesquisaCientifica")
-	private List<Documento> listaDocumentos;
-
 	@Transient
 	private List<TipoDado> listaTiposDados;
 	

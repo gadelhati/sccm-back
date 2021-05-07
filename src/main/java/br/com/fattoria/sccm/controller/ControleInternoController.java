@@ -29,11 +29,15 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import br.com.fattoria.sccm.api.ControleInternoApi;
 import br.com.fattoria.sccm.api.ControleInternoModel;
 import br.com.fattoria.sccm.api.ControleInternoModelAssembler;
+import br.com.fattoria.sccm.api.DocumentosModel;
+import br.com.fattoria.sccm.api.DocumentosModelAssembler;
 import br.com.fattoria.sccm.api.ShipSynopModel;
 import br.com.fattoria.sccm.persistence.model.ControleInterno;
+import br.com.fattoria.sccm.persistence.model.Documento;
 import br.com.fattoria.sccm.persistence.model.Instituicao;
 import br.com.fattoria.sccm.persistence.model.PesquisaCientifica;
 import br.com.fattoria.sccm.persistence.repository.ControleInternoRepository;
+import br.com.fattoria.sccm.persistence.repository.DocumentosRepository;
 import br.com.fattoria.sccm.persistence.repository.InstituicaoRepository;
 import br.com.fattoria.sccm.persistence.repository.PesquisaCientificaRepository;
 import io.swagger.annotations.Api;
@@ -51,14 +55,16 @@ public class ControleInternoController {
 	private ControleInternoRepository controleInternoRepository;
 	private InstituicaoRepository instituicaoRepository;
 	private PesquisaCientificaRepository pesquisaCientificaRepository;
+	private DocumentosRepository documentosRepository;
 	
 	private final TypedEntityLinks<ShipSynopModel> links;
 	
 	public ControleInternoController(ControleInternoRepository controleInternoRepository, 
-			InstituicaoRepository instituicaoRepository, PesquisaCientificaRepository pesquisaCientificaRepository, EntityLinks entityLinks) {
+			InstituicaoRepository instituicaoRepository, PesquisaCientificaRepository pesquisaCientificaRepository, DocumentosRepository documentosRepository, EntityLinks entityLinks) {
 		this.controleInternoRepository = controleInternoRepository;
 		this.instituicaoRepository = instituicaoRepository;
 		this.pesquisaCientificaRepository = pesquisaCientificaRepository;
+		this.documentosRepository = documentosRepository;
 		this.links = entityLinks.forType(ShipSynopModel::getId);
 	}
 	
@@ -162,4 +168,25 @@ public class ControleInternoController {
     	            }).orElseThrow(() -> new NotFoundException("Não encontrado"));
     	
     }
+    
+	
+	@GetMapping("/controleInterno/{id}/documentos")
+    @ApiOperation(value = "Retorna uma lista de documentos")
+    @ApiResponses(value = {
+        @ApiResponse(code = 200, message = "Retorna uma lista de documentos"),
+    })
+	public ResponseEntity<CollectionModel<DocumentosModel>> getAllDocumentosByIdPesquisaCientifica(@PathVariable Long id) {
+    	
+    	log.info("listando documentos");
+    	 
+    	Collection<Documento> lista = (Collection<Documento>) documentosRepository.findAllByControleInternoId(id);
+    	
+    	DocumentosModelAssembler assembler = new DocumentosModelAssembler(); 
+    	CollectionModel<DocumentosModel> listResource = assembler.toCollectionModel(lista);
+    	
+    	final String uriString = ServletUriComponentsBuilder.fromCurrentRequest().build().toUriString();
+    	listResource.add(Link.of(uriString, "self"));
+    	
+	    return ResponseEntity.ok(listResource);
+	}
 }

@@ -23,6 +23,8 @@ public class DocumentosModel extends RepresentationModel<DocumentosModel> {
 	
 	private TipoAnexoModel tipoAnexo;
 	
+	private ControleInternoModel controleInterno;
+	
 	private Destino destino;
 	
 	private String observacoes;
@@ -32,6 +34,7 @@ public class DocumentosModel extends RepresentationModel<DocumentosModel> {
 		this.anexo = documento.getAnexo();
 		this.dataRecebimento = documento.getDataRecebimento();
 		this.tipoAnexo = documento.getTipoAnexo() != null ? new TipoAnexoModel(documento.getTipoAnexo()) : null;
+		this.controleInterno = documento.getControleInterno() != null ? new ControleInternoModel(documento.getControleInterno()) : null;
 		this.destino = documento.getDestino();
 		this.observacoes = documento.getObservacoes();
 		
