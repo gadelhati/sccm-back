@@ -32,8 +32,12 @@ public class ControleInternoApi {
 	
 	private String recibo;
 	
+	private Calendar dataRecebimento;
+	
+	private String observacoes;
+	
 	public ControleInterno toEntity() {
-		return new ControleInterno(id, numeroOficio, null, arquivoTecnico, formaEnvio, numeroAutorizacao, null, dataOficio, recibo);
+		return new ControleInterno(id, numeroOficio, null, arquivoTecnico, formaEnvio, numeroAutorizacao, null, dataOficio, recibo, dataRecebimento, observacoes);
 	}
 	
 }

@@ -44,17 +44,17 @@ import br.com.fattoria.sccm.api.AreaConhecimentoModel;
 import br.com.fattoria.sccm.api.AreaConhecimentoModelAssembler;
 import br.com.fattoria.sccm.api.ControleInternoModel;
 import br.com.fattoria.sccm.api.ControleInternoModelAssembler;
-import br.com.fattoria.sccm.api.DocumentosModel;
-import br.com.fattoria.sccm.api.DocumentosModelAssembler;
 import br.com.fattoria.sccm.api.EquipamentoModel;
 import br.com.fattoria.sccm.api.EquipamentoModelAssembler;
 import br.com.fattoria.sccm.api.InstituicaoModel;
 import br.com.fattoria.sccm.api.InstituicaoModelAssembler;
+import br.com.fattoria.sccm.api.Periodo;
 import br.com.fattoria.sccm.api.PesquisaCientificaApi;
 import br.com.fattoria.sccm.api.PesquisaCientificaModel;
 import br.com.fattoria.sccm.api.PesquisaCientificaModelAssembler;
 import br.com.fattoria.sccm.api.TipoDadoModel;
 import br.com.fattoria.sccm.api.TipoDadoModelAssembler;
+import br.com.fattoria.sccm.dto.QuantitativoDTO;
 import br.com.fattoria.sccm.persistence.model.AreaConhecimento;
 import br.com.fattoria.sccm.persistence.model.AssinaturaPC;
 import br.com.fattoria.sccm.persistence.model.ControleInterno;
@@ -84,6 +84,7 @@ import br.com.fattoria.sccm.persistence.repository.PesquisaCientificaCoAutorRepo
 import br.com.fattoria.sccm.persistence.repository.PesquisaCientificaEquipamentoRepository;
 import br.com.fattoria.sccm.persistence.repository.PesquisaCientificaRepository;
 import br.com.fattoria.sccm.persistence.repository.PlataformaRepository;
+import br.com.fattoria.sccm.persistence.repository.RelatorioRepository;
 import br.com.fattoria.sccm.persistence.repository.SigiloRepository;
 import br.com.fattoria.sccm.persistence.repository.SituacaoRepository;
 import br.com.fattoria.sccm.persistence.repository.TipoDadoRepository;
@@ -127,6 +128,7 @@ public class PesquisaCientificaController {
 	private final SequenceGenerator sequenceGenerator;
 	private final XMLRepository xmlRepository;
 	private final AssinaturaPCRepository assinaturaPCRepository;
+	private final RelatorioRepository relatorioRepository;
 	
 	@Autowired
 	private DocumentStorageService documentStorageService;
@@ -141,7 +143,8 @@ public class PesquisaCientificaController {
 			AreaConhecimentoRepository areaConhecimentoRepository, EquipamentoRepository equipamentoRepository,
 			TipoDadoRepository tipoDadoRepository, DocumentosRepository documentosRepository,
 			ControleInternoRepository controleInternoRepository, SequenceGenerator sequenceGenerator,
-			XMLRepository xmlRepository, DocumentStorageService documentStorageService, AssinaturaPCRepository assinaturaPCRepository) {
+			XMLRepository xmlRepository, DocumentStorageService documentStorageService, AssinaturaPCRepository assinaturaPCRepository,
+			RelatorioRepository relatorioRepository) {
 		super();
 		this.pesquisaCientificaRepository = pesquisaCientificaRepository;
 		this.plataformaRepository = plataformaRepository;
@@ -160,6 +163,7 @@ public class PesquisaCientificaController {
 		this.xmlRepository = xmlRepository;
 		this.documentStorageService = documentStorageService;
 		this.assinaturaPCRepository = assinaturaPCRepository;
+		this.relatorioRepository = relatorioRepository;
 	}
 
 	@PostMapping("/pesquisas_cientificas")
@@ -613,5 +617,92 @@ public class PesquisaCientificaController {
 				.body(byteArrayOutputStream.toByteArray());
 	    
 	}
+	
+    @PostMapping("/pesquisas_cientificas/quantidade_cadastradas")
+    @ApiOperation(value = "Retorna Quantidade de Pesquisas Cientificas Cadastradas por periodo")
+    @ApiResponses(value = {
+        @ApiResponse(code = 200, message = "Retorna uma Pesquisa Cientifica"),
+    })
+	public ResponseEntity<Long> getQuantidadeCadastradas(@RequestBody Periodo periodo) {
+    	
+    	log.info("periodo => ", periodo);
+    	log.info("inicio => ", periodo.getDataInicio());
+    	log.info("fim => ", periodo.getDataFim());
+    	log.info("teste => ", periodo.getTeste());
+    	 
+    	Long quantidade = relatorioRepository.countByDataCadastroBetween(periodo);
+    	
+    	return ResponseEntity.ok().body(quantidade);
+    }
+    
+    @PostMapping("/pesquisas_cientificas/quantidade_cadastradas_por_tipo_comissao")
+    @ApiOperation(value = "Retorna Quantidade de Pesquisas Cientificas Cadastradas por tipo de comissão e periodo")
+    @ApiResponses(value = {
+        @ApiResponse(code = 200, message = "Retorna uma Pesquisa Cientifica"),
+    })
+	public ResponseEntity<Collection<QuantitativoDTO>> getQuantidadeCadastradasPorTipoComissao(@RequestBody Periodo periodo) {
+    	
+    	log.info("periodo => ", periodo);
+    	log.info("inicio => ", periodo.getDataInicio());
+    	log.info("fim => ", periodo.getDataFim());
+    	log.info("teste => ", periodo.getTeste());
+    	 
+    	Collection<QuantitativoDTO> countByDataCadastroBetweenGroupByNomeComissao = relatorioRepository.countByDataCadastroBetweenGroupByTipoComissao(periodo);
+    	
+    	return ResponseEntity.ok().body(countByDataCadastroBetweenGroupByNomeComissao);
+    }
+    
+    @PostMapping("/pesquisas_cientificas/quantidade_cadastradas_por_situacao")
+    @ApiOperation(value = "Retorna Quantidade de Pesquisas Cientificas Cadastradas por situação e periodo")
+    @ApiResponses(value = {
+        @ApiResponse(code = 200, message = "Retorna uma Pesquisa Cientifica"),
+    })
+	public ResponseEntity<Collection<QuantitativoDTO>> getQuantidadeCadastradasPorSituacao(@RequestBody Periodo periodo) {
+    	
+    	log.info("periodo => ", periodo);
+    	log.info("inicio => ", periodo.getDataInicio());
+    	log.info("fim => ", periodo.getDataFim());
+    	log.info("teste => ", periodo.getTeste());
+    	 
+    	Collection<QuantitativoDTO> countByDataCadastroBetweenGroupBySituacao = relatorioRepository.countByDataCadastroBetweenGroupBySituacao(periodo);
+    	
+    	return ResponseEntity.ok().body(countByDataCadastroBetweenGroupBySituacao);
+    }
+    
+    @PostMapping("/pesquisas_cientificas/quantidade_cadastradas_por_equipamentos")
+    @ApiOperation(value = "Retorna Quantidade de Pesquisas Cientificas Cadastradas por equipamentos e periodo")
+    @ApiResponses(value = {
+        @ApiResponse(code = 200, message = "Retorna uma Pesquisa Cientifica"),
+    })
+	public ResponseEntity<Collection<QuantitativoDTO>> getQuantidadeCadastradasPorEquipamentos(@RequestBody Periodo periodo) {
+    	
+    	log.info("periodo => ", periodo);
+    	log.info("inicio => ", periodo.getDataInicio());
+    	log.info("fim => ", periodo.getDataFim());
+    	log.info("teste => ", periodo.getTeste());
+    	 
+    	Collection<QuantitativoDTO> countByDataCadastroBetweenGroupBySituacao = relatorioRepository.countByDataCadastroBetweenGroupByEquipamentos(periodo);
+    	
+    	return ResponseEntity.ok().body(countByDataCadastroBetweenGroupBySituacao);
+    }
+    
+    @PostMapping("/pesquisas_cientificas/pendentes_por_periodo")
+    @ApiOperation(value = "Retorna Quantidade de Pesquisas Cientificas Cadastradas por equipamentos e periodo")
+    @ApiResponses(value = {
+        @ApiResponse(code = 200, message = "Retorna uma Pesquisa Cientifica"),
+    })
+	public ResponseEntity<CollectionModel<PesquisaCientificaModel>> findByDataCadastroIdSituacaoBetween(@RequestBody Periodo periodo) {
+    	
+    	log.info("periodo => ", periodo);
+    	log.info("inicio => ", periodo.getDataInicio());
+    	log.info("fim => ", periodo.getDataFim());
+    	log.info("teste => ", periodo.getTeste());
+    	 
+    	Collection<PesquisaCientifica> pesquisaCientificas = relatorioRepository.findByDataCadastroIdSituacaoBetween(periodo, 4L);
+    	
+    	PesquisaCientificaModelAssembler pesquisaCientificaModelAssembler = new PesquisaCientificaModelAssembler();
+    	
+    	return ResponseEntity.ok().body(pesquisaCientificaModelAssembler.toCollectionModel(pesquisaCientificas));
+    }
 	
 }

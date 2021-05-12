@@ -33,6 +33,10 @@ public class ControleInternoModel extends RepresentationModel<ControleInternoMod
 	private Calendar dataOficio;
 	
 	private String recibo;
+	
+	private Calendar dataRecebimento;
+	
+	private String observacoes;
 
 	public ControleInternoModel(ControleInterno controleInterno) {
 		this.id = controleInterno.getId();
@@ -44,6 +48,8 @@ public class ControleInternoModel extends RepresentationModel<ControleInternoMod
 		this.pesquisaCientifica = controleInterno.getPesquisaCientifica() != null ? new PesquisaCientificaModel(controleInterno.getPesquisaCientifica()) : null;
 		this.dataOficio = controleInterno.getDataOficio();
 		this.recibo = controleInterno.getRecibo();
+		this.dataRecebimento = controleInterno.getDataRecebimento();
+		this.observacoes = controleInterno.getObservacoes();
 		
 		add(linkTo(methodOn(ControleInternoController.class).getAll()).withRel("controleInterno"));
 
