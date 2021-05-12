@@ -34,10 +34,12 @@ import br.com.fattoria.sccm.persistence.model.Comissao;
 import br.com.fattoria.sccm.persistence.model.PesquisaCientifica;
 import br.com.fattoria.sccm.persistence.model.Plataforma;
 import br.com.fattoria.sccm.persistence.model.ShipSynop;
+import br.com.fattoria.sccm.persistence.model.Situacao;
 import br.com.fattoria.sccm.persistence.repository.ComissaoRepository;
 import br.com.fattoria.sccm.persistence.repository.PesquisaCientificaRepository;
 import br.com.fattoria.sccm.persistence.repository.PlataformaRepository;
 import br.com.fattoria.sccm.persistence.repository.ShipSynopRepository;
+import br.com.fattoria.sccm.persistence.repository.SituacaoRepository;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -54,24 +56,150 @@ public class ShipSynopController {
 	private ComissaoRepository comissaoRepository;
 	private PlataformaRepository plataformaRepository;
 	private PesquisaCientificaRepository pesquisaCientificaRepository;
+	private SituacaoRepository situacaoRepository;
 	
 	private final TypedEntityLinks<ShipSynopModel> links;
-	
+		
 	public ShipSynopController(ShipSynopRepository shipSynopRepository, ComissaoRepository comissaoRepository,
-			PlataformaRepository plataformaRepository, PesquisaCientificaRepository pesquisaCientificaRepository, EntityLinks entityLinks) {
+			PlataformaRepository plataformaRepository, PesquisaCientificaRepository pesquisaCientificaRepository, SituacaoRepository situacaoRepository,
+			EntityLinks entityLinks) {
 		this.shipSynopRepository = shipSynopRepository;
 		this.comissaoRepository = comissaoRepository;
 		this.plataformaRepository = plataformaRepository;
 		this.pesquisaCientificaRepository = pesquisaCientificaRepository;
+		this.situacaoRepository = situacaoRepository; 
 		this.links = entityLinks.forType(ShipSynopModel::getId);
 	}
 	
-	@PostMapping("/shipSynop")
-	@ApiOperation(value = "Cria um Destino")
+	/**     *      * 
+     * @param api
+     * @return Ship
+     * @throws URISyntaxException
+     */
+	
+	@PostMapping("/ship/criar")
+	@ApiOperation(value = "Criar")
     @ApiResponses(value = {
-        @ApiResponse(code = 200, message = "Destino criado"),
+        @ApiResponse(code = 200, message = "Criado"),
     })
-	ResponseEntity<ShipSynopModel> create(@Valid @RequestBody ShipSynopApi api) throws URISyntaxException {
+	ResponseEntity<ShipSynopModel> createShip(@Valid @RequestBody ShipSynopApi api) throws URISyntaxException {
+        
+        Optional<Plataforma> plataforma = plataformaRepository.findById(api.getIdPlataforma());
+        
+        Optional<Comissao> comissao = comissaoRepository.findById(api.getIdComissao());
+        
+        Optional<PesquisaCientifica> pc = pesquisaCientificaRepository.findById(api.getIdPesquisaCientifica());
+        
+        Optional<Situacao> situacao = situacaoRepository.findById(api.getIdSituacao());
+        
+        ShipSynop entity = api.toEntity();
+    	
+    	entity.setPlataforma(plataforma.get());
+    	entity.setComissao(comissao.get());
+    	entity.setPesquisaCientifica(pc.get());
+    	entity.setSituacao(situacao.get());
+        
+    	ShipSynopModelAssembler assembler = new ShipSynopModelAssembler(); 
+    	ShipSynopModel model = assembler.toModel(shipSynopRepository.save(entity));
+    	 
+        final URI uri =
+                MvcUriComponentsBuilder.fromController(getClass())
+                    .path("/{id}")
+                    .buildAndExpand(entity.getId())
+                    .toUri();
+        
+        return ResponseEntity.created(uri)
+                .body(model);
+	}
+	
+	@PutMapping("/ship/alterar/{id}")
+	@ApiOperation(value = "Atualizar")
+    @ApiResponses(value = {
+        @ApiResponse(code = 200, message = "Atualizado com Sucesso!"),
+    })
+	ResponseEntity<ShipSynopModel> updateShip(@Valid @RequestBody ShipSynopApi api){
+		
+		Optional<Plataforma> plataforma = plataformaRepository.findById(api.getIdPlataforma());
+        
+        Optional<Comissao> comissao = comissaoRepository.findById(api.getIdComissao());
+        
+        Optional<PesquisaCientifica> pc = pesquisaCientificaRepository.findById(api.getIdPesquisaCientifica());
+        		
+        ShipSynop entity = api.toEntity();
+        
+        entity.setPlataforma(plataforma.get());
+    	entity.setComissao(comissao.get());
+    	entity.setPesquisaCientifica(pc.get());
+        
+        
+    	ShipSynopModelAssembler assembler = new ShipSynopModelAssembler(); 
+    	ShipSynopModel model = assembler.toModel(shipSynopRepository.save(entity));
+        
+        final URI uri = ServletUriComponentsBuilder.fromCurrentRequest().build().toUri();
+        return ResponseEntity.created(uri).body(model);
+
+	}
+	
+	@GetMapping("/ship/todos")
+    @ApiOperation(value = "Todos")
+    @ApiResponses(value = {
+        @ApiResponse(code = 200, message = "Sucesso"),
+    })
+	public ResponseEntity<CollectionModel<ShipSynopModel>> getAllShip() {
+    	
+    	Collection<ShipSynop> lista = (Collection<ShipSynop>) shipSynopRepository.findAll();
+    	
+    	ShipSynopModelAssembler assembler = new ShipSynopModelAssembler(); 
+    	CollectionModel<ShipSynopModel> listResource = assembler.toCollectionModel(lista);
+    	
+    	final String uriString = ServletUriComponentsBuilder.fromCurrentRequest().build().toUriString();
+    	listResource.add(Link.of(uriString, "self"));
+    	
+	    return ResponseEntity.ok(listResource);
+	}
+    
+    @GetMapping("/ship/buscar/{id}")
+    @ApiOperation(value = "Retornar")
+    @ApiResponses(value = {
+        @ApiResponse(code = 200, message = "Retornar"),
+    })
+	public ResponseEntity<ShipSynopModel> getByIdShip(@PathVariable Long id) {
+    	 
+    	Optional<ShipSynop> optional = shipSynopRepository.findById(id);
+    	
+    	ShipSynopModelAssembler assembler = new ShipSynopModelAssembler(); 
+    	 
+    	return optional.map(response -> ResponseEntity.ok().body(assembler.toModel(response)))
+                .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+	}
+    
+    @DeleteMapping("/ship/remover/{id}")
+    @ApiOperation(value = "Deletar")
+    public ResponseEntity<?> deleteShip(@PathVariable Long id) throws NotFoundException {
+    	
+    	 Optional<ShipSynop> object = shipSynopRepository.findById(id);
+    	 
+    	 return object.map(
+    	            p -> {
+    	            	shipSynopRepository.deleteById(id);
+    	              return ResponseEntity.noContent().build();
+    	            }).orElseThrow(() -> new NotFoundException("Não encontrado"));
+    	
+    }
+    
+
+    /**     *      * 
+     * @param api
+     * @return Synop
+     * @throws URISyntaxException
+     */
+
+    @PostMapping("/synop/criar")
+	@ApiOperation(value = "Criar")
+    @ApiResponses(value = {
+        @ApiResponse(code = 200, message = "Criado"),
+    })
+	ResponseEntity<ShipSynopModel> createSynop(@Valid @RequestBody ShipSynopApi api) throws URISyntaxException {
         
         Optional<Plataforma> plataforma = plataformaRepository.findById(api.getIdPlataforma());
         
@@ -98,12 +226,12 @@ public class ShipSynopController {
                 .body(model);
 	}
 	
-	@PutMapping("/shipSynop/{id}")
+	@PutMapping("/synop/alterar/{id}")
 	@ApiOperation(value = "Atualizar")
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "Atualizado com Sucesso!"),
     })
-	ResponseEntity<ShipSynopModel> update(@Valid @RequestBody ShipSynopApi api){
+	ResponseEntity<ShipSynopModel> updateSynop(@Valid @RequestBody ShipSynopApi api){
 		
 		Optional<Plataforma> plataforma = plataformaRepository.findById(api.getIdPlataforma());
         
@@ -119,49 +247,49 @@ public class ShipSynopController {
         
         
     	ShipSynopModelAssembler assembler = new ShipSynopModelAssembler(); 
-    	ShipSynopModel paisModel = assembler.toModel(shipSynopRepository.save(entity));
+    	ShipSynopModel model = assembler.toModel(shipSynopRepository.save(entity));
         
         final URI uri = ServletUriComponentsBuilder.fromCurrentRequest().build().toUri();
-        return ResponseEntity.created(uri).body(paisModel);
+        return ResponseEntity.created(uri).body(model);
 
 	}
 	
-	@GetMapping("/shipSynop")
+	@GetMapping("/synop/todos")
     @ApiOperation(value = "Todos")
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "Sucesso"),
     })
-	public ResponseEntity<CollectionModel<ShipSynopModel>> getAll() {
+	public ResponseEntity<CollectionModel<ShipSynopModel>> getAllSynop() {
     	
     	Collection<ShipSynop> lista = (Collection<ShipSynop>) shipSynopRepository.findAll();
     	
     	ShipSynopModelAssembler assembler = new ShipSynopModelAssembler(); 
-    	CollectionModel<ShipSynopModel> listPlataformaResource = assembler.toCollectionModel(lista);
+    	CollectionModel<ShipSynopModel> listResource = assembler.toCollectionModel(lista);
     	
     	final String uriString = ServletUriComponentsBuilder.fromCurrentRequest().build().toUriString();
-    	listPlataformaResource.add(Link.of(uriString, "self"));
+    	listResource.add(Link.of(uriString, "self"));
     	
-	    return ResponseEntity.ok(listPlataformaResource);
+	    return ResponseEntity.ok(listResource);
 	}
     
-    @GetMapping("/shipSynop/{id}")
-    @ApiOperation(value = "Retorna um objeto")
+    @GetMapping("/synop/buscar/{id}")
+    @ApiOperation(value = "Retornar")
     @ApiResponses(value = {
-        @ApiResponse(code = 200, message = "Retornou um objeto"),
+        @ApiResponse(code = 200, message = "Retornar"),
     })
-	public ResponseEntity<ShipSynopModel> getById(@PathVariable Long id) {
+	public ResponseEntity<ShipSynopModel> getByIdSynop(@PathVariable Long id) {
     	 
-    	Optional<ShipSynop> destino = shipSynopRepository.findById(id);
+    	Optional<ShipSynop> object = shipSynopRepository.findById(id);
     	
     	ShipSynopModelAssembler assembler = new ShipSynopModelAssembler(); 
     	 
-    	return destino.map(response -> ResponseEntity.ok().body(assembler.toModel(response)))
+    	return object.map(response -> ResponseEntity.ok().body(assembler.toModel(response)))
                 .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
 	}
     
-    @DeleteMapping("/shipSynop/{id}")
-    @ApiOperation(value = "Deleta")
-    public ResponseEntity<?> delete(@PathVariable Long id) throws NotFoundException {
+    @DeleteMapping("/synop/remover/{id}")
+    @ApiOperation(value = "Deletar")
+    public ResponseEntity<?> deleteSynop(@PathVariable Long id) throws NotFoundException {
     	
     	 Optional<ShipSynop> object = shipSynopRepository.findById(id);
     	 

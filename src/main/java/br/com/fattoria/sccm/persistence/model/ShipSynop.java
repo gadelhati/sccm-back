@@ -10,6 +10,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -85,4 +86,8 @@ public class ShipSynop implements Serializable {
 	
 	@Column(name = "observacoes")
 	private String observacoes;
+	
+	@OneToOne
+	@JoinColumn(name = "fk_situacoes")
+	private Situacao situacao;
 }
