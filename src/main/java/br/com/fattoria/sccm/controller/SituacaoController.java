@@ -140,6 +140,42 @@ public class SituacaoController {
     	
 	    return ResponseEntity.ok(listPlataformaResource);
 	}
+	
+	@GetMapping("/situacoes/ativas/midias_diversas")
+    @ApiOperation(value = "Retorna uma lista de situacoes ativas para Midias Diversas")
+    @ApiResponses(value = {
+        @ApiResponse(code = 200, message = "Situacaos"),
+    })
+	public ResponseEntity<CollectionModel<SituacaoModel>> getAllAtivasMidiasDiversas() {
+    	
+    	Collection<Situacao> lista = (Collection<Situacao>) situacaoRepository.findAllByAtivoTrueAndParaMidiasDiversasTrue();
+    	
+    	SituacaoModelAssembler assembler = new SituacaoModelAssembler(); 
+    	CollectionModel<SituacaoModel> listPlataformaResource = assembler.toCollectionModel(lista);
+    	
+    	final String uriString = ServletUriComponentsBuilder.fromCurrentRequest().build().toUriString();
+    	listPlataformaResource.add(Link.of(uriString, "self"));
+    	
+	    return ResponseEntity.ok(listPlataformaResource);
+	}
+	
+	@GetMapping("/situacoes/ativas/midias_particulares")
+    @ApiOperation(value = "Retorna uma lista de situacoes ativas para Midias Particulares")
+    @ApiResponses(value = {
+        @ApiResponse(code = 200, message = "Situacaos"),
+    })
+	public ResponseEntity<CollectionModel<SituacaoModel>> getAllAtivasMidiasParticulares() {
+    	
+    	Collection<Situacao> lista = (Collection<Situacao>) situacaoRepository.findAllByAtivoTrueAndParaMidiasParticularesTrue();
+    	
+    	SituacaoModelAssembler assembler = new SituacaoModelAssembler(); 
+    	CollectionModel<SituacaoModel> listPlataformaResource = assembler.toCollectionModel(lista);
+    	
+    	final String uriString = ServletUriComponentsBuilder.fromCurrentRequest().build().toUriString();
+    	listPlataformaResource.add(Link.of(uriString, "self"));
+    	
+	    return ResponseEntity.ok(listPlataformaResource);
+	}
     
     @GetMapping("/situacoes/{id}")
     @ApiOperation(value = "Retorna uma Situacao")

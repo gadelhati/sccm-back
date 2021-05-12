@@ -20,10 +20,14 @@ public class SituacaoApi {
 
 	private boolean paraShipSynop;
 	
+	private boolean paraMidiasDiversas;
+	
+	private boolean paraMidiasParticulares;
+	
 	private boolean ativo;
 
 	public Situacao toEntity() {
-		return new Situacao(id, descricao, paraPesquisaCientifica, paraShipSynop, ativo);
+		return new Situacao(id, descricao, paraPesquisaCientifica, paraShipSynop, paraMidiasDiversas, paraMidiasParticulares, ativo);
 	}
 
 }
