@@ -96,4 +96,11 @@ public interface PesquisaCientificaRepository extends CrudRepository<PesquisaCie
 
 //	"    ''      AS logobndo, " + 
 //	"    ''      AS logochm, " + 
+	
+//	@Query("select count(pc.id) from PesquisaCientifica pc where pc.dataCadastro between :dataInicio and :dataFim")
+//	Long countByDataCadastroBetween(@Param("dataInicio") Calendar dataInicio, @Param("dataFim") Calendar dataFim);
+//	
+//	@Query("select new br.com.fattoria.sccm.dto.TipoComissaoDTO(count(pc.comissao.id), pc.comissao.tipoComissao.descricao) "
+//			+ "from TipoComissao tc left join PesquisaCientifica pc on pc.comissao.tipoComissao.id = tc.id where pc.dataCadastro between :dataInicio and :dataFim group by pc.comissao.tipoComissao.descricao")
+//	Collection<TipoComissaoDTO> countByDataCadastroBetweenGroupByTipoComissao(@Param("dataInicio") Calendar dataInicio, @Param("dataFim") Calendar dataFim);
 }

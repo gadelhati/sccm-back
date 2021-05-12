@@ -30,8 +30,10 @@ public class MidiaDiversaApi {
 	
 	private Long codigo;
 	
+	private Long idSituacao;
+	
 	public MidiaDiversa toEntity() {
-		return new MidiaDiversa(id, conteudo, data, documento, backup, numeroOficio, numeroH, codigo);
+		return new MidiaDiversa(id, conteudo, data, documento, backup, numeroOficio, numeroH, codigo, null);
 	}
 
 }

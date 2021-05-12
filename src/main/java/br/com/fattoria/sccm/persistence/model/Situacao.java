@@ -41,6 +41,12 @@ public class Situacao implements Serializable {
 	@Column(name = "para_ship_synop")
 	private boolean paraShipSynop;
 	
+	@Column(name = "para_midias_diversas")
+	private boolean paraMidiasDiversas;
+	
+	@Column(name = "para_midias_particulares")
+	private boolean paraMidiasParticulares;
+	
 	private boolean ativo;
 	
 }

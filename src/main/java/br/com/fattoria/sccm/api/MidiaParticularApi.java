@@ -34,8 +34,10 @@ public class MidiaParticularApi {
 	
 	private String observacoes;
 	
+	private Long idSituacao;
+	
 	public MidiaParticular toEntity() {
-		return new MidiaParticular(id, null, null, comissaoProjeto, numeroAutorizacao, numeroRA, numeroFicha, codigoC, data, observacoes);
+		return new MidiaParticular(id, null, null, comissaoProjeto, numeroAutorizacao, numeroRA, numeroFicha, codigoC, data, null, observacoes);
 	}
 
 }

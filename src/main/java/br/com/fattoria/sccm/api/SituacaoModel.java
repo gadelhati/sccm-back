@@ -19,6 +19,10 @@ public class SituacaoModel extends RepresentationModel<SituacaoModel>{
 	
 	private boolean paraShipSynop;
 	
+	private boolean paraMidiasDiversas;
+	
+	private boolean paraMidiasParticulares;
+	
 	private boolean ativo;
 	
 	public SituacaoModel(Situacao situacao) {		
@@ -26,6 +30,8 @@ public class SituacaoModel extends RepresentationModel<SituacaoModel>{
 		this.descricao= situacao.getDescricao();
 		this.paraPesquisaCientifica = situacao.isParaPesquisaCientifica();
 		this.paraShipSynop = situacao.isParaShipSynop();
+		this.paraMidiasDiversas = situacao.isParaMidiasDiversas();
+		this.paraMidiasParticulares = situacao.isParaMidiasParticulares();
 		this.ativo = situacao.isAtivo();
 		
 		add(linkTo(DestinoController.class).withRel("situacoes"));

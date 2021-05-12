@@ -16,4 +16,8 @@ public interface SituacaoRepository extends CrudRepository<Situacao, Long> {
 
 	Collection<Situacao> findAllByAtivoTrueAndParaShipSynopTrue();
 
+	Collection<Situacao> findAllByAtivoTrueAndParaMidiasDiversasTrue();
+
+	Collection<Situacao> findAllByAtivoTrueAndParaMidiasParticularesTrue();
+
 }

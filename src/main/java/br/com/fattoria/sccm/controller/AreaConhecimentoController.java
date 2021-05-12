@@ -137,7 +137,7 @@ public class AreaConhecimentoController {
     	            p -> {
     	            	areaConhecimentoRepository.deleteById(id);
     	              return ResponseEntity.noContent().build();
-    	            }).orElseThrow(() -> new NotFoundException("País não encontrado"));
+    	            }).orElseThrow(() -> new NotFoundException("Área de conhecimento não encontrada"));
     	
     }
     
