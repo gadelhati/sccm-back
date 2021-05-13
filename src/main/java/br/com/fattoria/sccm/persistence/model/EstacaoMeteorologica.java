@@ -25,7 +25,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name = "estacao_meteriologica")
 @SequenceGenerator(name="estacao_meteriologica_generator", sequenceName="estacao_meteriologica_seq", allocationSize = 1)
-public class EstacaoMeteriologica implements Serializable {
+public class EstacaoMeteorologica implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 

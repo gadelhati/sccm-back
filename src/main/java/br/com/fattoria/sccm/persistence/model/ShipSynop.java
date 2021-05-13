@@ -90,4 +90,8 @@ public class ShipSynop implements Serializable {
 	@OneToOne
 	@JoinColumn(name = "fk_situacoes")
 	private Situacao situacao;
+	
+	@ManyToOne
+	@JoinColumn(name = "fk_estacao_meteorologica")
+	private EstacaoMeteorologica estacaoMeteorologica; 
 }

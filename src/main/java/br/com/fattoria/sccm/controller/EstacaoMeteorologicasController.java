@@ -24,40 +24,40 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import br.com.fattoria.sccm.api.EstacaoMeteriologicaApi;
-import br.com.fattoria.sccm.api.EstacaoMeteriologicaModel;
-import br.com.fattoria.sccm.api.EstacaoMeteriologicaModelAssembler;
-import br.com.fattoria.sccm.persistence.model.EstacaoMeteriologica;
-import br.com.fattoria.sccm.persistence.repository.EstacaoMeteriologicaRepository;
+import br.com.fattoria.sccm.api.EstacaoMeteorologicaApi;
+import br.com.fattoria.sccm.api.EstacaoMeteorologicaModel;
+import br.com.fattoria.sccm.api.EstacaoMeteorologicaModelAssembler;
+import br.com.fattoria.sccm.persistence.model.EstacaoMeteorologica;
+import br.com.fattoria.sccm.persistence.repository.EstacaoMeteorologicaRepository;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import javassist.NotFoundException;
 
-@Api(value = "estacoes_meteriologicas")
+@Api(value = "estacoes_meteorologicas")
 @RestController
 @RequestMapping(value = "/api", produces = "application/hal+json")
-public class EstacaoMeteriologicasController {
+public class EstacaoMeteorologicasController {
 
-	private final Logger log = LoggerFactory.getLogger(EstacaoMeteriologicasController.class);
-	private EstacaoMeteriologicaRepository estacaoMeteriologicaRepository;
+	private final Logger log = LoggerFactory.getLogger(EstacaoMeteorologicasController.class);
+	private EstacaoMeteorologicaRepository estacaoMeteorologicaRepository;
 	
-	public EstacaoMeteriologicasController(EstacaoMeteriologicaRepository estacaoMeteriologicaRepository) {
-		this.estacaoMeteriologicaRepository = estacaoMeteriologicaRepository;
+	public EstacaoMeteorologicasController(EstacaoMeteorologicaRepository estacaoMeteriologicaRepository) {
+		this.estacaoMeteorologicaRepository = estacaoMeteriologicaRepository;
 	}
 	
-	@PostMapping("/estacoes_meteriologicas")
+	@PostMapping("/estacoes_meteorologicas")
 	@ApiOperation(value = "Cria uma Estacao Meteriologica")
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "Estacao Meteriologica criada"),
     })
-	ResponseEntity<EstacaoMeteriologicaModel> create(@Valid @RequestBody EstacaoMeteriologicaApi api) throws URISyntaxException{
+	ResponseEntity<EstacaoMeteorologicaModel> create(@Valid @RequestBody EstacaoMeteorologicaApi api) throws URISyntaxException{
 		
-        EstacaoMeteriologica entity = api.toEntity();
+        EstacaoMeteorologica entity = api.toEntity();
         
-    	EstacaoMeteriologicaModelAssembler assembler = new EstacaoMeteriologicaModelAssembler(); 
-    	EstacaoMeteriologicaModel paisModel = assembler.toModel(estacaoMeteriologicaRepository.save(entity));
+    	EstacaoMeteorologicaModelAssembler assembler = new EstacaoMeteorologicaModelAssembler(); 
+    	EstacaoMeteorologicaModel paisModel = assembler.toModel(estacaoMeteorologicaRepository.save(entity));
  
         
         final URI uri =
@@ -70,34 +70,34 @@ public class EstacaoMeteriologicasController {
                 .body(paisModel);
 	}
 	
-	@PutMapping("/estacoes_meteriologicas/{id}")
+	@PutMapping("/estacoes_meteorologicas/{id}")
 	@ApiOperation(value = "Atualiza uma situacao")
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "Estacao Meteriologica atualizada"),
     })
-	ResponseEntity<EstacaoMeteriologicaModel> update(@Valid @RequestBody EstacaoMeteriologicaApi pais){
+	ResponseEntity<EstacaoMeteorologicaModel> update(@Valid @RequestBody EstacaoMeteorologicaApi api){
 		
-        EstacaoMeteriologica paisEntity = pais.toEntity();
+        EstacaoMeteorologica entity = api.toEntity();
         
-    	EstacaoMeteriologicaModelAssembler assembler = new EstacaoMeteriologicaModelAssembler(); 
-    	EstacaoMeteriologicaModel paisModel = assembler.toModel(estacaoMeteriologicaRepository.save(paisEntity));
+    	EstacaoMeteorologicaModelAssembler assembler = new EstacaoMeteorologicaModelAssembler(); 
+    	EstacaoMeteorologicaModel model = assembler.toModel(estacaoMeteorologicaRepository.save(entity));
         
         final URI uri = ServletUriComponentsBuilder.fromCurrentRequest().build().toUri();
-        return ResponseEntity.created(uri).body(paisModel);
+        return ResponseEntity.created(uri).body(model);
 
 	}
 	
-	@GetMapping("/estacoes_meteriologicas")
+	@GetMapping("/estacoes_meteorologicas")
     @ApiOperation(value = "Retorna uma lista de Estacao")
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "Estacao Meteriologicas"),
     })
-	public ResponseEntity<CollectionModel<EstacaoMeteriologicaModel>> getAll() {
+	public ResponseEntity<CollectionModel<EstacaoMeteorologicaModel>> getAll() {
     	
-    	Collection<EstacaoMeteriologica> lista = (Collection<EstacaoMeteriologica>) estacaoMeteriologicaRepository.findAll();
+    	Collection<EstacaoMeteorologica> lista = (Collection<EstacaoMeteorologica>) estacaoMeteorologicaRepository.findAll();
     	
-    	EstacaoMeteriologicaModelAssembler assembler = new EstacaoMeteriologicaModelAssembler(); 
-    	CollectionModel<EstacaoMeteriologicaModel> listPlataformaResource = assembler.toCollectionModel(lista);
+    	EstacaoMeteorologicaModelAssembler assembler = new EstacaoMeteorologicaModelAssembler(); 
+    	CollectionModel<EstacaoMeteorologicaModel> listPlataformaResource = assembler.toCollectionModel(lista);
     	
     	final String uriString = ServletUriComponentsBuilder.fromCurrentRequest().build().toUriString();
     	listPlataformaResource.add(Link.of(uriString, "self"));
@@ -105,30 +105,30 @@ public class EstacaoMeteriologicasController {
 	    return ResponseEntity.ok(listPlataformaResource);
 	}
     
-    @GetMapping("/estacoes_meteriologicas/{id}")
+    @GetMapping("/estacoes_meteorologicas/{id}")
     @ApiOperation(value = "Retorna uma Estacao Meteriologica")
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "Retorna uma estação"),
     })
-	public ResponseEntity<EstacaoMeteriologicaModel> getById(@PathVariable Long id) {
+	public ResponseEntity<EstacaoMeteorologicaModel> getById(@PathVariable Long id) {
     	 
-    	Optional<EstacaoMeteriologica> estacao = estacaoMeteriologicaRepository.findById(id);
+    	Optional<EstacaoMeteorologica> estacao = estacaoMeteorologicaRepository.findById(id);
     	
-    	EstacaoMeteriologicaModelAssembler assembler = new EstacaoMeteriologicaModelAssembler(); 
+    	EstacaoMeteorologicaModelAssembler assembler = new EstacaoMeteorologicaModelAssembler(); 
     	 
     	return estacao.map(response -> ResponseEntity.ok().body(assembler.toModel(response)))
                 .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
 	}
     
-    @DeleteMapping("/estacoes_meteriologicas/{id}")
+    @DeleteMapping("/estacoes_meteorologicas/{id}")
     @ApiOperation(value = "Deleta uma situacao")
     public ResponseEntity<?> delete(@PathVariable Long id) throws NotFoundException{
     	
-    	 Optional<EstacaoMeteriologica> estacao = estacaoMeteriologicaRepository.findById(id);
+    	 Optional<EstacaoMeteorologica> estacao = estacaoMeteorologicaRepository.findById(id);
     	 
     	 return estacao.map(
     	            p -> {
-    	            	estacaoMeteriologicaRepository.deleteById(id);
+    	            	estacaoMeteorologicaRepository.deleteById(id);
     	              return ResponseEntity.noContent().build();
     	            }).orElseThrow(() -> new NotFoundException("Estacao Meteriologica não encontrado"));
     	

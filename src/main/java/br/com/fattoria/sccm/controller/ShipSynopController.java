@@ -31,11 +31,13 @@ import br.com.fattoria.sccm.api.ShipSynopApi;
 import br.com.fattoria.sccm.api.ShipSynopModel;
 import br.com.fattoria.sccm.api.ShipSynopModelAssembler;
 import br.com.fattoria.sccm.persistence.model.Comissao;
+import br.com.fattoria.sccm.persistence.model.EstacaoMeteorologica;
 import br.com.fattoria.sccm.persistence.model.PesquisaCientifica;
 import br.com.fattoria.sccm.persistence.model.Plataforma;
 import br.com.fattoria.sccm.persistence.model.ShipSynop;
 import br.com.fattoria.sccm.persistence.model.Situacao;
 import br.com.fattoria.sccm.persistence.repository.ComissaoRepository;
+import br.com.fattoria.sccm.persistence.repository.EstacaoMeteorologicaRepository;
 import br.com.fattoria.sccm.persistence.repository.PesquisaCientificaRepository;
 import br.com.fattoria.sccm.persistence.repository.PlataformaRepository;
 import br.com.fattoria.sccm.persistence.repository.ShipSynopRepository;
@@ -57,18 +59,21 @@ public class ShipSynopController {
 	private PlataformaRepository plataformaRepository;
 	private PesquisaCientificaRepository pesquisaCientificaRepository;
 	private SituacaoRepository situacaoRepository;
-	
+	private EstacaoMeteorologicaRepository estacaoMeteorologicaRepository;
+		
 	private final TypedEntityLinks<ShipSynopModel> links;
 		
 	public ShipSynopController(ShipSynopRepository shipSynopRepository, ComissaoRepository comissaoRepository,
-			PlataformaRepository plataformaRepository, PesquisaCientificaRepository pesquisaCientificaRepository, SituacaoRepository situacaoRepository,
+			PlataformaRepository plataformaRepository, PesquisaCientificaRepository pesquisaCientificaRepository, 
+			SituacaoRepository situacaoRepository, EstacaoMeteorologicaRepository estacaoMeteorologicaRepository,
 			EntityLinks entityLinks) {
 		this.shipSynopRepository = shipSynopRepository;
 		this.comissaoRepository = comissaoRepository;
 		this.plataformaRepository = plataformaRepository;
 		this.pesquisaCientificaRepository = pesquisaCientificaRepository;
-		this.situacaoRepository = situacaoRepository; 
-		this.links = entityLinks.forType(ShipSynopModel::getId);
+		this.situacaoRepository = situacaoRepository;
+		this.estacaoMeteorologicaRepository = estacaoMeteorologicaRepository;
+		this.links = entityLinks.forType(ShipSynopModel::getId);		
 	}
 	
 	/**     *      * 
@@ -90,14 +95,12 @@ public class ShipSynopController {
         
         Optional<PesquisaCientifica> pc = pesquisaCientificaRepository.findById(api.getIdPesquisaCientifica());
         
-        Optional<Situacao> situacao = situacaoRepository.findById(api.getIdSituacao());
-        
         ShipSynop entity = api.toEntity();
     	
     	entity.setPlataforma(plataforma.get());
     	entity.setComissao(comissao.get());
     	entity.setPesquisaCientifica(pc.get());
-    	entity.setSituacao(situacao.get());
+    	entity.setDados("SHIP");   	
         
     	ShipSynopModelAssembler assembler = new ShipSynopModelAssembler(); 
     	ShipSynopModel model = assembler.toModel(shipSynopRepository.save(entity));
@@ -124,14 +127,14 @@ public class ShipSynopController {
         Optional<Comissao> comissao = comissaoRepository.findById(api.getIdComissao());
         
         Optional<PesquisaCientifica> pc = pesquisaCientificaRepository.findById(api.getIdPesquisaCientifica());
-        		
+                       		
         ShipSynop entity = api.toEntity();
         
         entity.setPlataforma(plataforma.get());
     	entity.setComissao(comissao.get());
     	entity.setPesquisaCientifica(pc.get());
-        
-        
+    	entity.setDados("SHIP");
+    	        
     	ShipSynopModelAssembler assembler = new ShipSynopModelAssembler(); 
     	ShipSynopModel model = assembler.toModel(shipSynopRepository.save(entity));
         
@@ -147,7 +150,7 @@ public class ShipSynopController {
     })
 	public ResponseEntity<CollectionModel<ShipSynopModel>> getAllShip() {
     	
-    	Collection<ShipSynop> lista = (Collection<ShipSynop>) shipSynopRepository.findAll();
+    	Collection<ShipSynop> lista = (Collection<ShipSynop>) shipSynopRepository.findByDados("SHIP");
     	
     	ShipSynopModelAssembler assembler = new ShipSynopModelAssembler(); 
     	CollectionModel<ShipSynopModel> listResource = assembler.toCollectionModel(lista);
@@ -200,18 +203,16 @@ public class ShipSynopController {
         @ApiResponse(code = 200, message = "Criado"),
     })
 	ResponseEntity<ShipSynopModel> createSynop(@Valid @RequestBody ShipSynopApi api) throws URISyntaxException {
+                
+        Optional<Situacao> situacao = situacaoRepository.findById(api.getIdSituacao());
         
-        Optional<Plataforma> plataforma = plataformaRepository.findById(api.getIdPlataforma());
-        
-        Optional<Comissao> comissao = comissaoRepository.findById(api.getIdComissao());
-        
-        Optional<PesquisaCientifica> pc = pesquisaCientificaRepository.findById(api.getIdPesquisaCientifica());
+        Optional<EstacaoMeteorologica> estacaoMeteorologica = estacaoMeteorologicaRepository.findById(api.getIdEstacaoMeteorologica());
         
         ShipSynop entity = api.toEntity();
     	
-    	entity.setPlataforma(plataforma.get());
-    	entity.setComissao(comissao.get());
-    	entity.setPesquisaCientifica(pc.get());
+    	entity.setSituacao(situacao.get());
+    	entity.setEstacaoMeteorologica(estacaoMeteorologica.get());
+    	entity.setDados("SYNOP");
         
     	ShipSynopModelAssembler assembler = new ShipSynopModelAssembler(); 
     	ShipSynopModel model = assembler.toModel(shipSynopRepository.save(entity));
@@ -233,18 +234,15 @@ public class ShipSynopController {
     })
 	ResponseEntity<ShipSynopModel> updateSynop(@Valid @RequestBody ShipSynopApi api){
 		
-		Optional<Plataforma> plataforma = plataformaRepository.findById(api.getIdPlataforma());
+        Optional<Situacao> situacao = situacaoRepository.findById(api.getIdSituacao());
         
-        Optional<Comissao> comissao = comissaoRepository.findById(api.getIdComissao());
-        
-        Optional<PesquisaCientifica> pc = pesquisaCientificaRepository.findById(api.getIdPesquisaCientifica());
-        		
+        Optional<EstacaoMeteorologica> estacaoMeteorologica = estacaoMeteorologicaRepository.findById(api.getIdEstacaoMeteorologica());
+                 		
         ShipSynop entity = api.toEntity();
         
-        entity.setPlataforma(plataforma.get());
-    	entity.setComissao(comissao.get());
-    	entity.setPesquisaCientifica(pc.get());
-        
+    	entity.setSituacao(situacao.get());
+    	entity.setEstacaoMeteorologica(estacaoMeteorologica.get());
+    	entity.setDados("SYNOP");
         
     	ShipSynopModelAssembler assembler = new ShipSynopModelAssembler(); 
     	ShipSynopModel model = assembler.toModel(shipSynopRepository.save(entity));
@@ -261,7 +259,7 @@ public class ShipSynopController {
     })
 	public ResponseEntity<CollectionModel<ShipSynopModel>> getAllSynop() {
     	
-    	Collection<ShipSynop> lista = (Collection<ShipSynop>) shipSynopRepository.findAll();
+    	Collection<ShipSynop> lista = (Collection<ShipSynop>) shipSynopRepository.findByDados("SYNOP");
     	
     	ShipSynopModelAssembler assembler = new ShipSynopModelAssembler(); 
     	CollectionModel<ShipSynopModel> listResource = assembler.toCollectionModel(lista);
