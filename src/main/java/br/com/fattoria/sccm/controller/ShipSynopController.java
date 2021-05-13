@@ -26,9 +26,11 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import br.com.fattoria.sccm.api.Periodo;
 import br.com.fattoria.sccm.api.ShipSynopApi;
 import br.com.fattoria.sccm.api.ShipSynopModel;
 import br.com.fattoria.sccm.api.ShipSynopModelAssembler;
+import br.com.fattoria.sccm.dto.QuantitativoDTO;
 import br.com.fattoria.sccm.persistence.model.Comissao;
 import br.com.fattoria.sccm.persistence.model.PesquisaCientifica;
 import br.com.fattoria.sccm.persistence.model.Plataforma;
@@ -305,4 +307,74 @@ public class ShipSynopController {
     	            }).orElseThrow(() -> new NotFoundException("Não encontrado"));
     	
     }
+    
+    
+	@PostMapping("/shipSynop/modelos_ship_por_situacao")
+    @ApiOperation(value = "Retorna Quantidade de modelos ship por situacao")
+    @ApiResponses(value = {
+        @ApiResponse(code = 200, message = "Retorna uma Pesquisa Cientifica"),
+    })
+	public ResponseEntity<Collection<QuantitativoDTO>> getModelosShipPorSituacao(@RequestBody Periodo periodo) {
+    	
+    	log.info("periodo => ", periodo);
+    	log.info("inicio => ", periodo.getDataInicio());
+    	log.info("fim => ", periodo.getDataFim());
+    	log.info("teste => ", periodo.getTeste());
+    	 
+    	Collection<QuantitativoDTO> countByDataCadastroBetweenGroupBySituacao = relatorioRepository.sumModelosObservacoesMeteorologicasByDataCadastroBetweenGroupBySituacao(periodo, "ship");
+    	
+    	return ResponseEntity.ok().body(countByDataCadastroBetweenGroupBySituacao);
+    }
+	
+	@PostMapping("/shipSynop/modelos_synop_por_situacao")
+    @ApiOperation(value = "Retorna Quantidade de modelos synop por situacao")
+    @ApiResponses(value = {
+        @ApiResponse(code = 200, message = "Retorna uma Pesquisa Cientifica"),
+    })
+	public ResponseEntity<Collection<QuantitativoDTO>> getModelosSynopPorSituacao(@RequestBody Periodo periodo) {
+    	
+    	log.info("periodo => ", periodo);
+    	log.info("inicio => ", periodo.getDataInicio());
+    	log.info("fim => ", periodo.getDataFim());
+    	log.info("teste => ", periodo.getTeste());
+    	 
+    	Collection<QuantitativoDTO> countByDataCadastroBetweenGroupBySituacao = relatorioRepository.sumModelosObservacoesMeteorologicasByDataCadastroBetweenGroupBySituacao(periodo, "synop");
+    	
+    	return ResponseEntity.ok().body(countByDataCadastroBetweenGroupBySituacao);
+    }
+	
+	@PostMapping("/shipSynop/informacoes_ship_por_situacao")
+    @ApiOperation(value = "Retorna Quantidade de informações ship por situacao")
+    @ApiResponses(value = {
+        @ApiResponse(code = 200, message = "Retorna uma Pesquisa Cientifica"),
+    })
+	public ResponseEntity<Collection<QuantitativoDTO>> getInformacoesShipPorSituacao(@RequestBody Periodo periodo) {
+    	
+    	log.info("periodo => ", periodo);
+    	log.info("inicio => ", periodo.getDataInicio());
+    	log.info("fim => ", periodo.getDataFim());
+    	log.info("teste => ", periodo.getTeste());
+    	 
+    	Collection<QuantitativoDTO> countByDataCadastroBetweenGroupBySituacao = relatorioRepository.sumInformacaoObservacoesMeteorologicasByDataCadastroBetweenGroupBySituacao(periodo, "ship");
+    	
+    	return ResponseEntity.ok().body(countByDataCadastroBetweenGroupBySituacao);
+    }
+	
+	@PostMapping("/shipSynop/informacoes_synop_por_situacao")
+    @ApiOperation(value = "Retorna Quantidade de informações synop por situacao")
+    @ApiResponses(value = {
+        @ApiResponse(code = 200, message = "Retorna uma Pesquisa Cientifica"),
+    })
+	public ResponseEntity<Collection<QuantitativoDTO>> getInformacoesSynopPorSituacao(@RequestBody Periodo periodo) {
+    	
+    	log.info("periodo => ", periodo);
+    	log.info("inicio => ", periodo.getDataInicio());
+    	log.info("fim => ", periodo.getDataFim());
+    	log.info("teste => ", periodo.getTeste());
+    	 
+    	Collection<QuantitativoDTO> countByDataCadastroBetweenGroupBySituacao = relatorioRepository.sumInformacaoObservacoesMeteorologicasByDataCadastroBetweenGroupBySituacao(periodo, "synop");
+    	
+    	return ResponseEntity.ok().body(countByDataCadastroBetweenGroupBySituacao);
+    }
+	
 }
