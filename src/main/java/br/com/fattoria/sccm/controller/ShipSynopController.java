@@ -127,6 +127,8 @@ public class ShipSynopController {
     })
 	ResponseEntity<ShipSynopModel> updateShip(@Valid @RequestBody ShipSynopApi api){
 		
+		Optional<Situacao> situacao = situacaoRepository.findById(api.getIdSituacao());
+		
 		Optional<Plataforma> plataforma = plataformaRepository.findById(api.getIdPlataforma());
         
         Optional<Comissao> comissao = comissaoRepository.findById(api.getIdComissao());
@@ -135,6 +137,7 @@ public class ShipSynopController {
                        		
         ShipSynop entity = api.toEntity();
         
+        entity.setSituacao(situacao.get());
         entity.setPlataforma(plataforma.get());
     	entity.setComissao(comissao.get());
     	entity.setPesquisaCientifica(pc.get());

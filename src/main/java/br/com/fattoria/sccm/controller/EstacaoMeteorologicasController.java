@@ -104,6 +104,24 @@ public class EstacaoMeteorologicasController {
     	
 	    return ResponseEntity.ok(listPlataformaResource);
 	}
+	
+	@GetMapping("/estacoes_meteorologicas/ativas")
+    @ApiOperation(value = "Retorna uma lista de Estacao")
+    @ApiResponses(value = {
+        @ApiResponse(code = 200, message = "Estacao Meteriologicas"),
+    })
+	public ResponseEntity<CollectionModel<EstacaoMeteorologicaModel>> getAllAtivas() {
+    	
+    	Collection<EstacaoMeteorologica> lista = (Collection<EstacaoMeteorologica>) estacaoMeteorologicaRepository.findAllByAtivoTrue();
+    	
+    	EstacaoMeteorologicaModelAssembler assembler = new EstacaoMeteorologicaModelAssembler(); 
+    	CollectionModel<EstacaoMeteorologicaModel> listPlataformaResource = assembler.toCollectionModel(lista);
+    	
+    	final String uriString = ServletUriComponentsBuilder.fromCurrentRequest().build().toUriString();
+    	listPlataformaResource.add(Link.of(uriString, "self"));
+    	
+	    return ResponseEntity.ok(listPlataformaResource);
+	}
     
     @GetMapping("/estacoes_meteorologicas/{id}")
     @ApiOperation(value = "Retorna uma Estacao Meteriologica")
