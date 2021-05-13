@@ -23,4 +23,10 @@ public interface RelatorioRepository {
 
 	Collection<QuantitativoDTO> countMidiasDiversasByDataCadastroBetweenGroupBySituacao(Periodo periodoData);
 
+	Collection<QuantitativoDTO> sumModelosObservacoesMeteorologicasByDataCadastroBetweenGroupBySituacao(Periodo periodoData,
+			String tipo);
+
+	Collection<QuantitativoDTO> sumInformacaoObservacoesMeteorologicasByDataCadastroBetweenGroupBySituacao(
+			Periodo periodoData, String tipo);
+
 }

@@ -207,7 +207,6 @@ public class RelatorioRepositoryImpl implements RelatorioRepository {
 		return collection;
 	}
 
-	@Override
 	public Collection<QuantitativoDTO> countMidiasDiversasByDataCadastroBetweenGroupBySituacao(Periodo periodoData) {
 		
 		String sql = 	
@@ -222,6 +221,86 @@ public class RelatorioRepositoryImpl implements RelatorioRepository {
 		
 		query.setParameter("dataInicio", periodoData.getDataInicio(), TemporalType.DATE);
 		query.setParameter("dataFim", periodoData.getDataFim(), TemporalType.DATE);
+		
+		List<Object[]> resultList = query.getResultList();
+		
+		Collection<QuantitativoDTO> collection = new ArrayList<QuantitativoDTO>();
+		
+		BigDecimal total = BigDecimal.ZERO;
+		for (Object[] resultItem : resultList) {
+			BigInteger quantidade = (BigInteger)resultItem[0];
+			total = total.add(new BigDecimal(quantidade));
+		}
+		
+		for (Object[] resultItem : resultList) {
+			
+			BigInteger quantidade = (BigInteger)resultItem[0];
+			
+			BigDecimal porcentagem = total.compareTo(BigDecimal.ZERO) > 0 ? 
+					new BigDecimal(quantidade).multiply(new BigDecimal(100)).divide(total, 2, RoundingMode.FLOOR) : 
+						BigDecimal.ZERO;
+			
+			collection.add(new QuantitativoDTO(quantidade.longValue(), (String)resultItem[1], porcentagem));
+		}
+		
+		return collection;
+	}
+	
+	public Collection<QuantitativoDTO> sumModelosObservacoesMeteorologicasByDataCadastroBetweenGroupBySituacao(Periodo periodoData, String tipo) {
+		
+		String sql = 	
+			"SELECT " +
+			    " COALESCE(SUM(sum.numero_modelos),0) AS count_, s.descricao AS desc_ " +
+			"FROM situacao s LEFT OUTER JOIN  " +
+			"(SELECT ss.numero_modelos, ss.fk_situacoes as situacao FROM ship_synop ss where dados = :tipo "
+			+ "and ss.data_entrada BETWEEN :dataInicio AND :dataFim) as sum " + 
+			"ON sum.situacao = s.id where s.para_ship_synop = true GROUP BY s.descricao";
+		
+		Query query = entityManager.createNativeQuery(sql);
+		
+		query.setParameter("dataInicio", periodoData.getDataInicio(), TemporalType.DATE);
+		query.setParameter("dataFim", periodoData.getDataFim(), TemporalType.DATE);
+		query.setParameter("tipo", tipo);
+		
+		List<Object[]> resultList = query.getResultList();
+		
+		Collection<QuantitativoDTO> collection = new ArrayList<QuantitativoDTO>();
+		
+		BigDecimal total = BigDecimal.ZERO;
+		for (Object[] resultItem : resultList) {
+			BigInteger quantidade = (BigInteger)resultItem[0];
+			total = total.add(new BigDecimal(quantidade));
+		}
+		
+		for (Object[] resultItem : resultList) {
+			
+			BigInteger quantidade = (BigInteger)resultItem[0];
+			
+			BigDecimal porcentagem = total.compareTo(BigDecimal.ZERO) > 0 ? 
+					new BigDecimal(quantidade).multiply(new BigDecimal(100)).divide(total, 2, RoundingMode.FLOOR) : 
+						BigDecimal.ZERO;
+			
+			collection.add(new QuantitativoDTO(quantidade.longValue(), (String)resultItem[1], porcentagem));
+		}
+		
+		return collection;
+	}
+	
+	public Collection<QuantitativoDTO> sumInformacaoObservacoesMeteorologicasByDataCadastroBetweenGroupBySituacao(Periodo periodoData, String tipo) {
+		
+		String sql = 	
+				"SELECT " +
+				    " COALESCE(SUM(sum.numero_informacoes),0) AS count_, s.descricao AS desc_ " +
+				"FROM situacao s LEFT OUTER JOIN  " +
+				"(SELECT ss.numero_informacoes, ss.fk_situacoes as situacao FROM ship_synop ss where dados = :tipo "
+				+ "and ss.data_entrada BETWEEN :dataInicio AND :dataFim) as sum " + 
+				"ON sum.situacao = s.id where s.para_ship_synop = true GROUP BY s.descricao";
+			
+			Query query = entityManager.createNativeQuery(sql);
+			
+			query.setParameter("dataInicio", periodoData.getDataInicio(), TemporalType.DATE);
+			query.setParameter("dataFim", periodoData.getDataFim(), TemporalType.DATE);
+			query.setParameter("tipo", tipo);
 		
 		List<Object[]> resultList = query.getResultList();
 		
