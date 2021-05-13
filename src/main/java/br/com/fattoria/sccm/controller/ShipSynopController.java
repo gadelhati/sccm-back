@@ -26,7 +26,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import br.com.fattoria.sccm.api.PlataformaModel;
 import br.com.fattoria.sccm.api.ShipSynopApi;
 import br.com.fattoria.sccm.api.ShipSynopModel;
 import br.com.fattoria.sccm.api.ShipSynopModelAssembler;
@@ -38,6 +37,7 @@ import br.com.fattoria.sccm.persistence.model.Situacao;
 import br.com.fattoria.sccm.persistence.repository.ComissaoRepository;
 import br.com.fattoria.sccm.persistence.repository.PesquisaCientificaRepository;
 import br.com.fattoria.sccm.persistence.repository.PlataformaRepository;
+import br.com.fattoria.sccm.persistence.repository.RelatorioRepository;
 import br.com.fattoria.sccm.persistence.repository.ShipSynopRepository;
 import br.com.fattoria.sccm.persistence.repository.SituacaoRepository;
 import io.swagger.annotations.Api;
@@ -57,17 +57,22 @@ public class ShipSynopController {
 	private PlataformaRepository plataformaRepository;
 	private PesquisaCientificaRepository pesquisaCientificaRepository;
 	private SituacaoRepository situacaoRepository;
+	private final RelatorioRepository relatorioRepository;
 	
 	private final TypedEntityLinks<ShipSynopModel> links;
 		
 	public ShipSynopController(ShipSynopRepository shipSynopRepository, ComissaoRepository comissaoRepository,
-			PlataformaRepository plataformaRepository, PesquisaCientificaRepository pesquisaCientificaRepository, SituacaoRepository situacaoRepository,
+			PlataformaRepository plataformaRepository, 
+			PesquisaCientificaRepository pesquisaCientificaRepository, 
+			RelatorioRepository relatorioRepository,
+			SituacaoRepository situacaoRepository,
 			EntityLinks entityLinks) {
 		this.shipSynopRepository = shipSynopRepository;
 		this.comissaoRepository = comissaoRepository;
 		this.plataformaRepository = plataformaRepository;
 		this.pesquisaCientificaRepository = pesquisaCientificaRepository;
 		this.situacaoRepository = situacaoRepository; 
+		this.relatorioRepository = relatorioRepository;
 		this.links = entityLinks.forType(ShipSynopModel::getId);
 	}
 	
