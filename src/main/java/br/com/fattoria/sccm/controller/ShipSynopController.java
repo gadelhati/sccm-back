@@ -30,6 +30,7 @@ import br.com.fattoria.sccm.api.Periodo;
 import br.com.fattoria.sccm.api.ShipSynopApi;
 import br.com.fattoria.sccm.api.ShipSynopModel;
 import br.com.fattoria.sccm.api.ShipSynopModelAssembler;
+import br.com.fattoria.sccm.dto.ListagemSynopDTO;
 import br.com.fattoria.sccm.dto.QuantitativoDTO;
 import br.com.fattoria.sccm.persistence.model.Comissao;
 import br.com.fattoria.sccm.persistence.model.EstacaoMeteorologica;
@@ -371,6 +372,23 @@ public class ShipSynopController {
     	log.info("teste => ", periodo.getTeste());
     	 
     	Collection<QuantitativoDTO> countByDataCadastroBetweenGroupBySituacao = relatorioRepository.sumInformacaoObservacoesMeteorologicasByDataCadastroBetweenGroupBySituacao(periodo, "synop");
+    	
+    	return ResponseEntity.ok().body(countByDataCadastroBetweenGroupBySituacao);
+    }
+	
+	@PostMapping("/shipSynop/listagem_dados_situacao_modelos")
+    @ApiOperation(value = "Retorna Quantidade de informações synop por situacao")
+    @ApiResponses(value = {
+        @ApiResponse(code = 200, message = "Retorna uma Pesquisa Cientifica"),
+    })
+	public ResponseEntity<Collection<ListagemSynopDTO>> listagemDadosEstacoesMeteorologicasByDataCadastroBetweenGroupBySituacao(@RequestBody Periodo periodo) {
+    	
+    	log.info("periodo => ", periodo);
+    	log.info("inicio => ", periodo.getDataInicio());
+    	log.info("fim => ", periodo.getDataFim());
+    	log.info("teste => ", periodo.getTeste());
+    	 
+    	Collection<ListagemSynopDTO> countByDataCadastroBetweenGroupBySituacao = relatorioRepository.listagemDadosEstacoesMeteorologicasByDataCadastroBetweenGroupBySituacao(periodo);
     	
     	return ResponseEntity.ok().body(countByDataCadastroBetweenGroupBySituacao);
     }
