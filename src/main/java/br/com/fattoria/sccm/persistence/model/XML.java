@@ -40,8 +40,8 @@ public class XML implements Serializable {
 		
 		this.xml = this.xml.replace("${FILE_IDENTIFIER}", pc.getId().toString());		
 		this.xml = this.xml.replace("${DATA_GERACAO_XML}", dateTimeFormatXML.format(new Date()));		
-		this.xml = this.xml.replace("${TITULO}", "");
-		this.xml = this.xml.replace("${DATA_RECEBIMENTO}", "");
+		this.xml = this.xml.replace("${TITULO}", pc.getComissao().getNomeComissao());
+		this.xml = this.xml.replace("${DATA_RECEBIMENTO}", dateTimeFormatXML.format(pc.getDataCadastro().getTime()));
 		this.xml = this.xml.replace("${RESUMO}", pc.getComissao().getResumo());
 		this.xml = this.xml.replace("${NAVIO}", pc.getPlataforma().getNome());
 		this.xml = this.xml.replace("${COORDENADOR_PROJETO}", pc.getCoordenadorCientifico());
