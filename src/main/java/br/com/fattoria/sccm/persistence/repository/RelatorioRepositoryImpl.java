@@ -3,6 +3,8 @@ package br.com.fattoria.sccm.persistence.repository;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.math.RoundingMode;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -15,6 +17,7 @@ import javax.persistence.TemporalType;
 import org.springframework.stereotype.Repository;
 
 import br.com.fattoria.sccm.api.Periodo;
+import br.com.fattoria.sccm.dto.ListagemSynopDTO;
 import br.com.fattoria.sccm.dto.QuantitativoDTO;
 import br.com.fattoria.sccm.persistence.domain.PeriodoData;
 import br.com.fattoria.sccm.persistence.model.PesquisaCientifica;
@@ -321,6 +324,57 @@ public class RelatorioRepositoryImpl implements RelatorioRepository {
 						BigDecimal.ZERO;
 			
 			collection.add(new QuantitativoDTO(quantidade.longValue(), (String)resultItem[1], porcentagem));
+		}
+		
+		return collection;
+	}
+	
+	public Collection<ListagemSynopDTO> listagemDadosEstacoesMeteorologicasByDataCadastroBetweenGroupBySituacao(Periodo periodoData) {
+		
+		String sql = 
+				" SELECT DISTINCT " +
+					" estacao.id_estacao_meteorologica, " +
+					" estacao.nome_estacao_meteorologica, " +
+					" estacao.primeiro_recebimento, " +
+					" estacao.ultimo_recebimento, " +
+					" COALESCE(synop_m_r.numero_modelos,0) as modelos_recebidos, " +
+					" COALESCE(synop_m_d.numero_modelos,0) as modelos_digitados " +
+				" FROM " +
+					" estacao_meteorologica_recebimento_view estacao LEFT JOIN synop_view synop_m_r " +
+				" ON " +
+					" (synop_m_r.fk_estacao_meteorologica = estacao.id_estacao_meteorologica and synop_m_r.fk_situacoes = 6) LEFT JOIN synop_view synop_m_d " +
+				" ON " +
+					" (synop_m_d.fk_estacao_meteorologica = estacao.id_estacao_meteorologica  and synop_m_d.fk_situacoes = 7) " +
+				" WHERE (synop_m_d.data_entrada BETWEEN :dataInicio AND :dataFim ) and (synop_m_r.data_entrada BETWEEN :dataInicio AND :dataFim ) ";
+		
+		Query query = entityManager.createNativeQuery(sql);
+		
+		query.setParameter("dataInicio", periodoData.getDataInicio(), TemporalType.DATE);
+		query.setParameter("dataFim", periodoData.getDataFim(), TemporalType.DATE);
+		
+		List<Object[]> resultList = query.getResultList();
+		
+		Collection<ListagemSynopDTO> collection = new ArrayList<ListagemSynopDTO>();
+		
+		SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+
+		
+		for (Object[] resultItem : resultList) {
+
+			String codigoEstacaoMeteorologica = ((BigInteger) resultItem[0]).toString();
+			String estacaoMeteorologica = (String) resultItem[1];
+			String primeiroRecebimento = resultItem[2] != null ? dateFormat.format((Timestamp)resultItem[2]) : "";
+			String ultimoRecebimento = resultItem[3] != null ? dateFormat.format((Timestamp)resultItem[3]) : "";
+			Integer totalModelosRecebidos = (Integer) resultItem[4];
+			Integer totalModelosDigitados = (Integer) resultItem[5];
+			
+			collection.add(new ListagemSynopDTO(
+					primeiroRecebimento, 
+					ultimoRecebimento, 
+					totalModelosRecebidos, 
+					totalModelosDigitados, 
+					estacaoMeteorologica, 
+					codigoEstacaoMeteorologica));
 		}
 		
 		return collection;

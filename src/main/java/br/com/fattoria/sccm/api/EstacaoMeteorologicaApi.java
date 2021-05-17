@@ -19,9 +19,11 @@ public class EstacaoMeteorologicaApi {
 	private String latitude;
 
 	private String longitude;
+	
+	private boolean ativo;
 
 	public EstacaoMeteorologica toEntity() {
-		return new EstacaoMeteorologica(id, nome, latitude, longitude);
+		return new EstacaoMeteorologica(id, nome, latitude, longitude, ativo);
 	}
 
 }

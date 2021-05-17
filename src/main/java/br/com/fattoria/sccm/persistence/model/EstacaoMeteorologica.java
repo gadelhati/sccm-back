@@ -41,4 +41,6 @@ public class EstacaoMeteorologica implements Serializable {
 	@Column(name = "longitude")
 	private String longitude;
 	
+	private boolean ativo;
+	
 }

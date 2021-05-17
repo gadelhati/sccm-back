@@ -19,11 +19,14 @@ public class EstacaoMeteorologicaModel extends RepresentationModel<EstacaoMeteor
 	
 	private String longitude;
 	
+	private boolean ativo;
+	
 	public EstacaoMeteorologicaModel(EstacaoMeteorologica estacoes) {		
 		this.id = estacoes.getId();
 		this.nome = estacoes.getNome();
 		this.latitude = estacoes.getLatitude();
 		this.longitude = estacoes.getLongitude();
+		this.ativo = estacoes.isAtivo();
 		
 		add(linkTo(DestinoController.class).withRel("estacoes_meteorologicas"));
     	    	

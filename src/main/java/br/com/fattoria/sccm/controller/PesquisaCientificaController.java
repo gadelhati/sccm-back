@@ -52,6 +52,7 @@ import br.com.fattoria.sccm.api.Periodo;
 import br.com.fattoria.sccm.api.PesquisaCientificaApi;
 import br.com.fattoria.sccm.api.PesquisaCientificaModel;
 import br.com.fattoria.sccm.api.PesquisaCientificaModelAssembler;
+import br.com.fattoria.sccm.api.SearchApi;
 import br.com.fattoria.sccm.api.TipoDadoModel;
 import br.com.fattoria.sccm.api.TipoDadoModelAssembler;
 import br.com.fattoria.sccm.dto.QuantitativoDTO;
@@ -704,5 +705,26 @@ public class PesquisaCientificaController {
     	
     	return ResponseEntity.ok().body(pesquisaCientificaModelAssembler.toCollectionModel(pesquisaCientificas));
     }
+    
+    @PostMapping("/pesquisas_cientificas/serchNumeroPC")
+    @ApiOperation(value = "Retorna uma lista de Pesquisa Cientifica")
+    @ApiResponses(value = {
+        @ApiResponse(code = 200, message = "Pesquisa Cientifica"),
+    })
+	public ResponseEntity<CollectionModel<PesquisaCientificaModel>> getAllByNumeroPC(@RequestBody SearchApi searchApi) {
+    	
+    	log.info(searchApi.getSearch());
+    	
+    	Collection<PesquisaCientifica> lista = (Collection<PesquisaCientifica>) pesquisaCientificaRepository.findByNumeroPCContainingIgnoreCase(
+    			searchApi.getSearch() != null ? searchApi.getSearch() : "");
+    	
+    	PesquisaCientificaModelAssembler assembler = new PesquisaCientificaModelAssembler(); 
+    	CollectionModel<PesquisaCientificaModel> listResource = assembler.toCollectionModel(lista);
+    	
+    	final String uriString = ServletUriComponentsBuilder.fromCurrentRequest().build().toUriString();
+    	listResource.add(Link.of(uriString, "self"));
+    	
+	    return ResponseEntity.ok(listResource);
+	}
 	
 }
