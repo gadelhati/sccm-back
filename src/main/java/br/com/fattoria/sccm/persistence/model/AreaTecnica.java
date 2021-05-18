@@ -41,5 +41,7 @@ public class AreaTecnica implements Serializable {
 	@NotEmpty
 	@Column(name = "descricao")
 	private String descricao;
+	
+	private boolean ativo;
 
 }
