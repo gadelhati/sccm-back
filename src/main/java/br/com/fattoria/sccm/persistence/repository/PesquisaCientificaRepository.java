@@ -88,7 +88,8 @@ public interface PesquisaCientificaRepository extends CrudRepository<PesquisaCie
 			"    bI.id = i.pais.id " + 
 			"LEFT JOIN ControleInterno ci " + 
 			"ON " + 
-			"    pc.id = ci.pesquisaCientifica.id " + 
+			"    pc.id = ci.pesquisaCientifica.id " +
+			"AND  ci.dataRecebimento = (SELECT MAX(c.dataRecebimento) FROM ControleInterno c WHERE c.pesquisaCientifica.id = pc.id)" + 
 			"LEFT JOIN Instituicao iCI " + 
 			"ON " + 
 			"    iCI.id = ci.instituicao.id " + 

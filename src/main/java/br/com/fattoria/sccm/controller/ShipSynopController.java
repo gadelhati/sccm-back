@@ -26,30 +26,31 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import br.com.fattoria.sccm.api.Periodo;
+import br.com.fattoria.sccm.api.ShipSynopApi;
+import br.com.fattoria.sccm.api.ShipSynopModel;
+import br.com.fattoria.sccm.api.ShipSynopModelAssembler;
+import br.com.fattoria.sccm.dto.ListagemSynopDTO;
+import br.com.fattoria.sccm.dto.QuantitativoDTO;
+import br.com.fattoria.sccm.persistence.model.Comissao;
+import br.com.fattoria.sccm.persistence.model.EstacaoMeteorologica;
+import br.com.fattoria.sccm.persistence.model.PesquisaCientifica;
+import br.com.fattoria.sccm.persistence.model.Plataforma;
+import br.com.fattoria.sccm.persistence.model.ShipSynop;
+import br.com.fattoria.sccm.persistence.model.Situacao;
+import br.com.fattoria.sccm.persistence.repository.ComissaoRepository;
+import br.com.fattoria.sccm.persistence.repository.EstacaoMeteorologicaRepository;
+import br.com.fattoria.sccm.persistence.repository.PesquisaCientificaRepository;
+import br.com.fattoria.sccm.persistence.repository.PlataformaRepository;
+import br.com.fattoria.sccm.persistence.repository.RelatorioRepository;
+import br.com.fattoria.sccm.persistence.repository.ShipSynopRepository;
+import br.com.fattoria.sccm.persistence.repository.SituacaoRepository;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import javassist.NotFoundException;
-import src.main.java.br.com.fattoria.sccm.api.Periodo;
-import src.main.java.br.com.fattoria.sccm.api.ShipSynopApi;
-import src.main.java.br.com.fattoria.sccm.api.ShipSynopModel;
-import src.main.java.br.com.fattoria.sccm.api.ShipSynopModelAssembler;
-import src.main.java.br.com.fattoria.sccm.dto.ListagemSynopDTO;
-import src.main.java.br.com.fattoria.sccm.dto.QuantitativoDTO;
-import src.main.java.br.com.fattoria.sccm.persistence.model.Comissao;
-import src.main.java.br.com.fattoria.sccm.persistence.model.EstacaoMeteorologica;
-import src.main.java.br.com.fattoria.sccm.persistence.model.PesquisaCientifica;
-import src.main.java.br.com.fattoria.sccm.persistence.model.Plataforma;
-import src.main.java.br.com.fattoria.sccm.persistence.model.ShipSynop;
-import src.main.java.br.com.fattoria.sccm.persistence.model.Situacao;
-import src.main.java.br.com.fattoria.sccm.persistence.repository.ComissaoRepository;
-import src.main.java.br.com.fattoria.sccm.persistence.repository.EstacaoMeteorologicaRepository;
-import src.main.java.br.com.fattoria.sccm.persistence.repository.PesquisaCientificaRepository;
-import src.main.java.br.com.fattoria.sccm.persistence.repository.PlataformaRepository;
-import src.main.java.br.com.fattoria.sccm.persistence.repository.RelatorioRepository;
-import src.main.java.br.com.fattoria.sccm.persistence.repository.ShipSynopRepository;
-import src.main.java.br.com.fattoria.sccm.persistence.repository.SituacaoRepository;
+
 
 @Api(value = "shipSynop")
 @RestController
@@ -393,20 +394,4 @@ public class ShipSynopController {
     	return ResponseEntity.ok().body(countByDataCadastroBetweenGroupBySituacao);
     }
 	
-	@PostMapping("/shipSynop/listagem_dados_situacao_modelos")
-    @ApiOperation(value = "Retorna Quantidade de informações synop por situacao")
-    @ApiResponses(value = {
-        @ApiResponse(code = 200, message = "Retorna uma Pesquisa Cientifica"),
-    })
-	public ResponseEntity<Collection<ListagemSynopDTO>> listagemDadosEstacoesMeteorologicasByDataCadastroBetweenGroupBySituacao(@RequestBody Periodo periodo) {
-    	
-    	log.info("periodo => ", periodo);
-    	log.info("inicio => ", periodo.getDataInicio());
-    	log.info("fim => ", periodo.getDataFim());
-    	log.info("teste => ", periodo.getTeste());
-    	 
-    	Collection<ListagemSynopDTO> countByDataCadastroBetweenGroupBySituacao = relatorioRepository.listagemDadosEstacoesMeteorologicasByDataCadastroBetweenGroupBySituacao(periodo);
-    	
-    	return ResponseEntity.ok().body(countByDataCadastroBetweenGroupBySituacao);
-    }
 }

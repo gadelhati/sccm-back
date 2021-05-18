@@ -582,7 +582,7 @@ public class PesquisaCientificaController {
 				dto.setPatente2(assinatura.getPatente());
 				dto.setCargo2(assinatura.getCargo());
 				dto.setDestino2(assinatura.getDestino().getDestino());
-			} else {
+			} else if (cont == 3) {
 				dto.setNome_assinatura3(assinatura.getNome());
 				dto.setPatente3(assinatura.getPatente());
 				dto.setCargo3(assinatura.getCargo());
