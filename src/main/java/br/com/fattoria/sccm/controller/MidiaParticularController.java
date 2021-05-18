@@ -251,11 +251,6 @@ public class MidiaParticularController {
         @ApiResponse(code = 200, message = "Retorna uma Pesquisa Cientifica"),
     })
 	public ResponseEntity<Collection<QuantitativoDTO>> getQuantidadeCadastradasPorSituacao(@RequestBody Periodo periodo) {
-    	
-    	log.info("periodo => ", periodo);
-    	log.info("inicio => ", periodo.getDataInicio());
-    	log.info("fim => ", periodo.getDataFim());
-    	log.info("teste => ", periodo.getTeste());
     	 
     	Collection<QuantitativoDTO> countByDataCadastroBetweenGroupBySituacao = relatorioRepository.countMidiasParticularesByDataCadastroBetweenGroupBySituacao(periodo);
     	

@@ -625,11 +625,6 @@ public class PesquisaCientificaController {
         @ApiResponse(code = 200, message = "Retorna uma Pesquisa Cientifica"),
     })
 	public ResponseEntity<Long> getQuantidadeCadastradas(@RequestBody Periodo periodo) {
-    	
-    	log.info("periodo => ", periodo);
-    	log.info("inicio => ", periodo.getDataInicio());
-    	log.info("fim => ", periodo.getDataFim());
-    	log.info("teste => ", periodo.getTeste());
     	 
     	Long quantidade = relatorioRepository.countByDataCadastroBetween(periodo);
     	
@@ -642,11 +637,6 @@ public class PesquisaCientificaController {
         @ApiResponse(code = 200, message = "Retorna uma Pesquisa Cientifica"),
     })
 	public ResponseEntity<Collection<QuantitativoDTO>> getQuantidadeCadastradasPorTipoComissao(@RequestBody Periodo periodo) {
-    	
-    	log.info("periodo => ", periodo);
-    	log.info("inicio => ", periodo.getDataInicio());
-    	log.info("fim => ", periodo.getDataFim());
-    	log.info("teste => ", periodo.getTeste());
     	 
     	Collection<QuantitativoDTO> countByDataCadastroBetweenGroupByNomeComissao = relatorioRepository.countByDataCadastroBetweenGroupByTipoComissao(periodo);
     	
@@ -660,11 +650,6 @@ public class PesquisaCientificaController {
     })
 	public ResponseEntity<Collection<QuantitativoDTO>> getQuantidadeCadastradasPorSituacao(@RequestBody Periodo periodo) {
     	
-    	log.info("periodo => ", periodo);
-    	log.info("inicio => ", periodo.getDataInicio());
-    	log.info("fim => ", periodo.getDataFim());
-    	log.info("teste => ", periodo.getTeste());
-    	 
     	Collection<QuantitativoDTO> countByDataCadastroBetweenGroupBySituacao = relatorioRepository.countByDataCadastroBetweenGroupBySituacao(periodo);
     	
     	return ResponseEntity.ok().body(countByDataCadastroBetweenGroupBySituacao);
@@ -676,11 +661,6 @@ public class PesquisaCientificaController {
         @ApiResponse(code = 200, message = "Retorna uma Pesquisa Cientifica"),
     })
 	public ResponseEntity<Collection<QuantitativoDTO>> getQuantidadeCadastradasPorEquipamentos(@RequestBody Periodo periodo) {
-    	
-    	log.info("periodo => ", periodo);
-    	log.info("inicio => ", periodo.getDataInicio());
-    	log.info("fim => ", periodo.getDataFim());
-    	log.info("teste => ", periodo.getTeste());
     	 
     	Collection<QuantitativoDTO> countByDataCadastroBetweenGroupBySituacao = relatorioRepository.countByDataCadastroBetweenGroupByEquipamentos(periodo);
     	
@@ -693,11 +673,6 @@ public class PesquisaCientificaController {
         @ApiResponse(code = 200, message = "Retorna uma Pesquisa Cientifica"),
     })
 	public ResponseEntity<CollectionModel<PesquisaCientificaModel>> findByDataCadastroIdSituacaoBetween(@RequestBody Periodo periodo) {
-    	
-    	log.info("periodo => ", periodo);
-    	log.info("inicio => ", periodo.getDataInicio());
-    	log.info("fim => ", periodo.getDataFim());
-    	log.info("teste => ", periodo.getTeste());
     	 
     	Collection<PesquisaCientifica> pesquisaCientificas = relatorioRepository.findByDataCadastroIdSituacaoBetween(periodo, 4L);
     	
@@ -712,8 +687,6 @@ public class PesquisaCientificaController {
         @ApiResponse(code = 200, message = "Pesquisa Cientifica"),
     })
 	public ResponseEntity<CollectionModel<PesquisaCientificaModel>> getAllByNumeroPC(@RequestBody SearchApi searchApi) {
-    	
-    	log.info(searchApi.getSearch());
     	
     	Collection<PesquisaCientifica> lista = (Collection<PesquisaCientifica>) pesquisaCientificaRepository.findByNumeroPCContainingIgnoreCase(
     			searchApi.getSearch() != null ? searchApi.getSearch() : "");
