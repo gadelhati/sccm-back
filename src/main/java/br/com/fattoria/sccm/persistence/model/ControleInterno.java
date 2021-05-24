@@ -12,6 +12,11 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+
+import org.hibernate.envers.Audited;
+import org.hibernate.envers.RelationTargetAuditMode;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -22,6 +27,7 @@ import lombok.NoArgsConstructor;
 @EqualsAndHashCode
 @NoArgsConstructor
 @AllArgsConstructor
+@Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
 @Entity
 @Table(name = "controle_interno")
 @SequenceGenerator(name="controle_interno_generator", sequenceName="controle_interno_seq", allocationSize = 1)
@@ -53,5 +59,17 @@ public class ControleInterno implements Serializable {
 	@ManyToOne
 	@JoinColumn(name = "fk_pc")
 	private PesquisaCientifica pesquisaCientifica;
+	
+	@Column(name = "data_oficio")
+	private Calendar dataOficio;
+	
+	@Column(name = "recibo")
+	private String recibo;
+	
+	@Column(name = "data_recebimento")
+	@Temporal(TemporalType.TIMESTAMP)
+	private Calendar dataRecebimento;
+	
+	private String observacoes;
 
 }

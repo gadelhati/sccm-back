@@ -10,10 +10,14 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+
+import org.hibernate.envers.Audited;
+import org.hibernate.envers.RelationTargetAuditMode;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -24,6 +28,7 @@ import lombok.NoArgsConstructor;
 @EqualsAndHashCode
 @NoArgsConstructor
 @AllArgsConstructor
+@Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
 @Entity
 @Table(name = "ship_synop")
 @SequenceGenerator(name="ship_synop_generator", sequenceName="ship_synop_seq", allocationSize = 1)
@@ -81,4 +86,12 @@ public class ShipSynop implements Serializable {
 	
 	@Column(name = "observacoes")
 	private String observacoes;
+	
+	@OneToOne
+	@JoinColumn(name = "fk_situacoes")
+	private Situacao situacao;
+	
+	@ManyToOne
+	@JoinColumn(name = "fk_estacao_meteorologica")
+	private EstacaoMeteorologica estacaoMeteorologica; 
 }

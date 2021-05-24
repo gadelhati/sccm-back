@@ -22,11 +22,17 @@ public class MidiaParticularModel extends RepresentationModel<MidiaParticularMod
 	
 	private Long numeroRA;
 	
+	private String numeroFicha;
+	
+	private Long codigoC;
+	
 	private Calendar data;
 	
 	private PlataformaModel plataforma;
 	
 	private InstituicaoModel instituicao;
+	
+	private SituacaoModel situacao;
 	
 	private String observacoes;
 
@@ -36,10 +42,13 @@ public class MidiaParticularModel extends RepresentationModel<MidiaParticularMod
     	this.comissaoProjeto = midia.getComissaoProjeto();
     	this.numeroAutorizacao = midia.getNumeroAutorizacao();
     	this.numeroRA = midia.getNumeroRA();
+    	this.numeroFicha = midia.getNumeroFicha();
+    	this.codigoC = midia.getCodigoC();
     	this.data = midia.getData();
     	this.plataforma = midia.getPlataforma() != null ? new PlataformaModel(midia.getPlataforma()) : null;
     	this.instituicao = midia.getInstituicao() != null ? new InstituicaoModel(midia.getInstituicao()) : null;
     	this.observacoes = midia.getObservacoes();
+    	this.situacao = midia.getSituacao() != null ? new SituacaoModel(midia.getSituacao()) : null;
     	add(linkTo(MidiaParticularController.class).withRel("midias_particulares"));
         add(linkTo(methodOn(MidiaParticularController.class).getById(midia.getId())).withSelfRel());
         add(linkTo(methodOn(MidiaParticularController.class).getAllMidiaParticularTipoMidiaByIdMidiaParticular(midia.getId())).withSelfRel());

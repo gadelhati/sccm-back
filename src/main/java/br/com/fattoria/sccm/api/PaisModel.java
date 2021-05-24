@@ -22,7 +22,7 @@ public class PaisModel extends RepresentationModel<PaisModel> {
     	this.id = pais.getId();
     	this.nome = pais.getNome();
     	this.nomeIngles = pais.getNomeIngles();
-    	add(linkTo(PaisController.class).withRel("paises"));
+    	add(linkTo(methodOn(PaisController.class).getAll()).withRel("paises"));
         add(linkTo(methodOn(PaisController.class).getById(pais.getId())).withSelfRel());
 	}
 

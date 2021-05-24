@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="subReport_fichaPesquisaCientifica_dados" pageWidth="555" pageHeight="802" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="9596a407-edc7-4bd2-a6e8-55ea4a3aea01">
+	<property name="ireport.zoom" value="1.9487171000000019"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="cod_pc" class="java.lang.Integer"/>
+	<queryString>
+		<![CDATA[SELECT
+    td.*
+FROM
+    tipo_dados td
+LEFT JOIN pesquisa_cientifica_dados pcd ON td.id = pcd.fk_tipo_dados
+WHERE
+    pcd.fk_pesquisa_cientifica = $P{cod_pc}]]>
+	</queryString>
+	<field name="descricao" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="20" splitType="Stretch">
+			<rectangle>
+				<reportElement x="0" y="0" width="555" height="20" backcolor="#CCCCCC" uuid="6f1db063-35a2-4156-89e3-d82af9419f5d"/>
+			</rectangle>
+			<staticText>
+				<reportElement mode="Opaque" x="1" y="1" width="553" height="18" backcolor="#CCCCCC" uuid="f53c3198-85a0-48e4-8e04-faa9885e150e"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Variáveis Coletadas]]></text>
+			</staticText>
+		</band>
+	</title>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<rectangle>
+				<reportElement x="0" y="0" width="555" height="20" uuid="0b495ff3-46bc-4ab9-891d-774581d94a32"/>
+			</rectangle>
+			<textField>
+				<reportElement x="0" y="0" width="555" height="20" uuid="8ab4a239-3039-4360-97dd-0330c83468ef"/>
+				<textElement verticalAlignment="Middle">
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{descricao}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

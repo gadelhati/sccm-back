@@ -26,7 +26,7 @@ public class Destino implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator="destino_cientifica_generator")
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator="destino_generator")
 	private Long id;
 	
 	private String destino;

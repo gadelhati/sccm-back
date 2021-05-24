@@ -15,6 +15,7 @@ import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.Link;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -32,21 +33,27 @@ import br.com.fattoria.sccm.api.MidiaParticularModelAssembler;
 import br.com.fattoria.sccm.api.MidiaParticularTipoMidiaApi;
 import br.com.fattoria.sccm.api.MidiaParticularTipoMidiaModel;
 import br.com.fattoria.sccm.api.MidiaParticularTipoMidiaModelAssembler;
+import br.com.fattoria.sccm.api.Periodo;
 import br.com.fattoria.sccm.api.WrapperListApi;
+import br.com.fattoria.sccm.dto.QuantitativoDTO;
 import br.com.fattoria.sccm.persistence.model.Instituicao;
 import br.com.fattoria.sccm.persistence.model.MidiaParticular;
 import br.com.fattoria.sccm.persistence.model.MidiaParticularTipoMidia;
 import br.com.fattoria.sccm.persistence.model.Plataforma;
+import br.com.fattoria.sccm.persistence.model.Situacao;
 import br.com.fattoria.sccm.persistence.repository.InstituicaoRepository;
 import br.com.fattoria.sccm.persistence.repository.MidiaParticularRepository;
 import br.com.fattoria.sccm.persistence.repository.MidiaParticularTipoMidiaRepository;
 import br.com.fattoria.sccm.persistence.repository.PlataformaRepository;
+import br.com.fattoria.sccm.persistence.repository.RelatorioRepository;
+import br.com.fattoria.sccm.persistence.repository.SituacaoRepository;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import javassist.NotFoundException;
 
+@CrossOrigin(origins = "*", maxAge = 3600)
 @Api(value = "Midia Particular")
 @RestController
 @RequestMapping(value = "/api", produces = "application/hal+json")
@@ -57,15 +64,20 @@ public class MidiaParticularController {
 	private final MidiaParticularTipoMidiaRepository midiaParticularTipoMidiaRepository;
 	private final InstituicaoRepository instituicaoRepository;
 	private final PlataformaRepository plataformaRepository;
+	private final SituacaoRepository situacaoRepository;
+	private final RelatorioRepository relatorioRepository;
 		
 	public MidiaParticularController(MidiaParticularRepository midiaParticularRepository,
 			MidiaParticularTipoMidiaRepository midiaParticularTipoMidiaRepository,
-			InstituicaoRepository instituicaoRepository, PlataformaRepository plataformaRepository) {
+			InstituicaoRepository instituicaoRepository, PlataformaRepository plataformaRepository, 
+			SituacaoRepository situacaoRepository, RelatorioRepository relatorioRepository) {
 		super();
 		this.midiaParticularRepository = midiaParticularRepository;
 		this.midiaParticularTipoMidiaRepository = midiaParticularTipoMidiaRepository;
 		this.instituicaoRepository = instituicaoRepository;
 		this.plataformaRepository = plataformaRepository;
+		this.situacaoRepository = situacaoRepository;
+		this.relatorioRepository = relatorioRepository;
 	}
 
 	@PostMapping("/midias_particulares")
@@ -87,6 +99,11 @@ public class MidiaParticularController {
         if(midiaParticular.getIdPlataforma() != null) {
         	Optional<Plataforma> plataforma = plataformaRepository.findById(midiaParticular.getIdPlataforma());
         	midiaParticularEntity.setPlataforma(plataforma.get());
+        }
+        
+        if(midiaParticular.getIdSituacao() != null) {
+        	Optional<Situacao> situacao = situacaoRepository.findById(midiaParticular.getIdSituacao());
+        	midiaParticularEntity.setSituacao(situacao.get());
         }
         
     	MidiaParticularModelAssembler assembler = new MidiaParticularModelAssembler(); 
@@ -115,6 +132,11 @@ public class MidiaParticularController {
         if(midiaParticular.getIdPlataforma() != null) {
         	Optional<Plataforma> plataforma = plataformaRepository.findById(midiaParticular.getIdPlataforma());
         	midiaParticularEntity.setPlataforma(plataforma.get());
+        }
+        
+        if(midiaParticular.getIdSituacao() != null) {
+        	Optional<Situacao> situacao = situacaoRepository.findById(midiaParticular.getIdSituacao());
+        	midiaParticularEntity.setSituacao(situacao.get());
         }
         
     	MidiaParticularModelAssembler assembler = new MidiaParticularModelAssembler(); 
@@ -222,5 +244,17 @@ public class MidiaParticularController {
         final URI uri = ServletUriComponentsBuilder.fromCurrentRequest().build().toUri();
         return ResponseEntity.created(uri).body(listResource);
 	}
+	
+	@PostMapping("/midias_particulares/quantidade_cadastradas_por_situacao")
+    @ApiOperation(value = "Retorna Quantidade de mídias particulares cadastradas por situacao")
+    @ApiResponses(value = {
+        @ApiResponse(code = 200, message = "Retorna uma Pesquisa Cientifica"),
+    })
+	public ResponseEntity<Collection<QuantitativoDTO>> getQuantidadeCadastradasPorSituacao(@RequestBody Periodo periodo) {
+    	 
+    	Collection<QuantitativoDTO> countByDataCadastroBetweenGroupBySituacao = relatorioRepository.countMidiasParticularesByDataCadastroBetweenGroupBySituacao(periodo);
+    	
+    	return ResponseEntity.ok().body(countByDataCadastroBetweenGroupBySituacao);
+    }
 	
 }

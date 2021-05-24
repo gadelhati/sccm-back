@@ -1,5 +1,7 @@
 package br.com.fattoria.sccm.api;
 
+import java.util.Calendar;
+
 import br.com.fattoria.sccm.persistence.model.ControleInterno;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -26,8 +28,16 @@ public class ControleInternoApi {
 	
 	private Long idPesquisaCientifica;
 	
+	private Calendar dataOficio;
+	
+	private String recibo;
+	
+	private Calendar dataRecebimento;
+	
+	private String observacoes;
+	
 	public ControleInterno toEntity() {
-		return new ControleInterno(id, numeroOficio, null, arquivoTecnico, formaEnvio, numeroAutorizacao, null);
+		return new ControleInterno(id, numeroOficio, null, arquivoTecnico, formaEnvio, numeroAutorizacao, null, dataOficio, recibo, dataRecebimento, observacoes);
 	}
 	
 }

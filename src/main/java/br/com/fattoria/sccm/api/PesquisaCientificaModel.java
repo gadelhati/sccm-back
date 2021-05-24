@@ -27,6 +27,8 @@ public class PesquisaCientificaModel  extends RepresentationModel<PesquisaCienti
 	private InstituicaoModel instituicao;
 
 	private PlataformaModel plataforma;
+	
+	private SituacaoModel situacao;
 
 	private Calendar dataCadastro;
 
@@ -46,10 +48,15 @@ public class PesquisaCientificaModel  extends RepresentationModel<PesquisaCienti
 	
 	private String numeroPC;
 	
+	private String numeroIEPortariaAutorizacaoPesquisa;
+	
+	private String indiceH;
+	
 	public PesquisaCientificaModel(PesquisaCientifica pesquisaCientifica) {		
 		this.id                   = pesquisaCientifica.getId();
 		this.numeroPC             = pesquisaCientifica.getNumeroPC();
 		this.sigilo               = pesquisaCientifica.getSigilo(); 
+		this.situacao             = pesquisaCientifica.getSituacao() != null ? new SituacaoModel(pesquisaCientifica.getSituacao()) : null; 
 		this.comissao             = pesquisaCientifica.getComissao() != null ? new ComissaoModel(pesquisaCientifica.getComissao()) : null;
 		this.instituicao          = pesquisaCientifica.getInstituicao() != null ? new InstituicaoModel(pesquisaCientifica.getInstituicao()) : null;
 		this.plataforma           = pesquisaCientifica.getPlataforma() != null ? new PlataformaModel(pesquisaCientifica.getPlataforma()) : null;
@@ -61,8 +68,11 @@ public class PesquisaCientificaModel  extends RepresentationModel<PesquisaCienti
 		this.limiteSulLatitude    = pesquisaCientifica.getLimiteSulLatitude();
 		this.limiteLesteLongitude = pesquisaCientifica.getLimiteLesteLongitude();
 		this.limiteOesteLongitude = pesquisaCientifica.getLimiteOesteLongitude();
+		this.numeroIEPortariaAutorizacaoPesquisa = pesquisaCientifica.getNumeroIEPortariaAutorizacaoPesquisa();
+		this.indiceH = pesquisaCientifica.getIndiceH();
 		
-		add(linkTo(PesquisaCientificaController.class).withRel("pesquisas_cientificas"));
+		add(linkTo(methodOn(PesquisaCientificaController.class).getAll()).withRel("pesquisas_cientificas"));
+		add(linkTo(methodOn(PesquisaCientificaController.class).getById(pesquisaCientifica.getId())).withSelfRel());
 		
 		if (pesquisaCientifica.getComissao() != null && pesquisaCientifica.getComissao().getId() != null) {
     		add(linkTo(methodOn(ComissaoController.class).getById(pesquisaCientifica.getComissao().getId())).withRel("comissao"));

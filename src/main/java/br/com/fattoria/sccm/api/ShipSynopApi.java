@@ -51,8 +51,12 @@ public class ShipSynopApi {
 	private Calendar dataSaida;
 
 	private String observacoes;
+	
+	private Long idSituacao;
+	
+	private Long idEstacaoMeteorologica;
 
 	public ShipSynop toEntity() {
-		return new ShipSynop(id, null, null, periodoInicial, periodoFinal, null, protocolo, numeroModelos, dados, numeroInformacoes, corrigido, dataEntrada, dataSaida, observacoes);
+		return new ShipSynop(id, null, null, periodoInicial, periodoFinal, null, protocolo, numeroModelos, dados, numeroInformacoes, corrigido, dataEntrada, dataSaida, observacoes, null, null);
 	}
 }

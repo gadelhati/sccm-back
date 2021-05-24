@@ -27,10 +27,12 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import br.com.fattoria.sccm.api.DocumentosApi;
 import br.com.fattoria.sccm.api.DocumentosModel;
 import br.com.fattoria.sccm.api.DocumentosModelAssembler;
+import br.com.fattoria.sccm.persistence.model.ControleInterno;
 import br.com.fattoria.sccm.persistence.model.Destino;
 import br.com.fattoria.sccm.persistence.model.Documento;
 import br.com.fattoria.sccm.persistence.model.PesquisaCientifica;
 import br.com.fattoria.sccm.persistence.model.TipoAnexo;
+import br.com.fattoria.sccm.persistence.repository.ControleInternoRepository;
 import br.com.fattoria.sccm.persistence.repository.DestinoRepository;
 import br.com.fattoria.sccm.persistence.repository.DocumentosRepository;
 import br.com.fattoria.sccm.persistence.repository.PesquisaCientificaRepository;
@@ -49,15 +51,15 @@ public class DocumentosController {
 	private final Logger log = LoggerFactory.getLogger(DocumentosController.class);
 	private final DocumentosRepository documentosRepository;
 	private final TipoAnexoRepository tipoAnexoRepository;
-	private final PesquisaCientificaRepository pesquisaCientificaRepository;
+	private final ControleInternoRepository controleInternoRepository;
 	private final DestinoRepository destinoRepository;
 	
 	public DocumentosController(DocumentosRepository documentosRepository, TipoAnexoRepository tipoAnexoRepository,
-			PesquisaCientificaRepository pesquisaCientificaRepository, DestinoRepository destinoRepository) {
+			ControleInternoRepository controleInternoRepository, DestinoRepository destinoRepository) {
 		super();
 		this.documentosRepository = documentosRepository;
 		this.tipoAnexoRepository = tipoAnexoRepository;
-		this.pesquisaCientificaRepository = pesquisaCientificaRepository;
+		this.controleInternoRepository = controleInternoRepository;
 		this.destinoRepository = destinoRepository;
 	}
 
@@ -74,9 +76,9 @@ public class DocumentosController {
 		
         Documento entity = api.toEntity();
         
-        if(api.getIdPesquisaCientifica() != null) {
-        	Optional<PesquisaCientifica> pesquisaCientifica = pesquisaCientificaRepository.findById(api.getIdPesquisaCientifica());
-        	entity.setPesquisaCientifica(pesquisaCientifica.get());
+        if(api.getIdControleInterno() != null) {
+        	Optional<ControleInterno> controleInterno = controleInternoRepository.findById(api.getIdControleInterno());
+        	entity.setControleInterno(controleInterno.get());
         }
         
         if(api.getIdDestino() != null) {
@@ -113,9 +115,9 @@ public class DocumentosController {
 		
         Documento entity = api.toEntity();
         
-        if(api.getIdPesquisaCientifica() != null) {
-        	Optional<PesquisaCientifica> pesquisaCientifica = pesquisaCientificaRepository.findById(api.getIdPesquisaCientifica());
-        	entity.setPesquisaCientifica(pesquisaCientifica.get());
+        if(api.getIdControleInterno() != null) {
+        	Optional<ControleInterno> controleInterno = controleInternoRepository.findById(api.getIdControleInterno());
+        	entity.setControleInterno(controleInterno.get());
         }
         
         if(api.getIdDestino() != null) {

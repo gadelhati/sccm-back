@@ -18,6 +18,10 @@ public class EnderecoModel extends RepresentationModel<EnderecoModel>{
 	
 	private String cidade;
 	
+	private String estado;
+	
+	private String bairro;
+	
 	private String cep;
 	
     public EnderecoModel(Endereco endereco) {
@@ -26,13 +30,15 @@ public class EnderecoModel extends RepresentationModel<EnderecoModel>{
     	this.numero = endereco.getNumero();
     	this.complemento = endereco.getComplemento();
     	this.cidade = endereco.getCidade();
+    	this.bairro = endereco.getBairro();
+    	this.estado = endereco.getEstado();
     	this.cep = endereco.getCep();
 //    	add(linkTo(EnderecoController.class).withRel("paises"));
 //        add(linkTo(methodOn(EnderecoController.class).getById(pais.getId())).withSelfRel());
 	}
 	
 	public Endereco toEntity() {
-		return new Endereco(id, null, logradouro, numero, complemento, cidade, cep);
+		return new Endereco(id, null, logradouro, numero, complemento, cidade, estado, bairro, cep);
 	}
 
 }

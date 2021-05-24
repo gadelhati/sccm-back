@@ -15,6 +15,7 @@ import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.Link;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -32,17 +33,23 @@ import br.com.fattoria.sccm.api.MidiaDiversaModelAssembler;
 import br.com.fattoria.sccm.api.MidiaDiversaTipoMidiaApi;
 import br.com.fattoria.sccm.api.MidiaDiversaTipoMidiaModel;
 import br.com.fattoria.sccm.api.MidiaDiversaTipoMidiaModelAssembler;
+import br.com.fattoria.sccm.api.Periodo;
 import br.com.fattoria.sccm.api.WrapperListApi;
+import br.com.fattoria.sccm.dto.QuantitativoDTO;
 import br.com.fattoria.sccm.persistence.model.MidiaDiversa;
 import br.com.fattoria.sccm.persistence.model.MidiaDiversaTipoMidia;
+import br.com.fattoria.sccm.persistence.model.Situacao;
 import br.com.fattoria.sccm.persistence.repository.MidiaDiversaRepository;
 import br.com.fattoria.sccm.persistence.repository.MidiaDiversaTipoMidiaRepository;
+import br.com.fattoria.sccm.persistence.repository.RelatorioRepository;
+import br.com.fattoria.sccm.persistence.repository.SituacaoRepository;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import javassist.NotFoundException;
 
+@CrossOrigin(origins = "*", maxAge = 3600)
 @Api(value = "Midia Diversa")
 @RestController
 @RequestMapping(value = "/api", produces = "application/hal+json")
@@ -51,12 +58,19 @@ public class MidiaDiversaController {
 	private final Logger log = LoggerFactory.getLogger(MidiaDiversaController.class);
 	private MidiaDiversaRepository midiaDiversaRepository;
 	private MidiaDiversaTipoMidiaRepository midiaDiversaTipoMidiaRepository;
+	private final SituacaoRepository situacaoRepository;
+	private final RelatorioRepository relatorioRepository;
 		
-	public MidiaDiversaController(MidiaDiversaRepository midiaDiversaRepository, MidiaDiversaTipoMidiaRepository midiaDiversaTipoMidiaRepository) {
+	public MidiaDiversaController(MidiaDiversaRepository midiaDiversaRepository,
+			MidiaDiversaTipoMidiaRepository midiaDiversaTipoMidiaRepository, 
+			SituacaoRepository situacaoRepository, RelatorioRepository relatorioRepository) {
+		super();
 		this.midiaDiversaRepository = midiaDiversaRepository;
 		this.midiaDiversaTipoMidiaRepository = midiaDiversaTipoMidiaRepository;
+		this.situacaoRepository = situacaoRepository;
+		this.relatorioRepository = relatorioRepository;
 	}
-	
+
 	@PostMapping("/midias_diversas")
 	@ApiOperation(value = "Adiciona uma mídia diversa")
     @ApiResponses(value = {
@@ -67,6 +81,11 @@ public class MidiaDiversaController {
 		log.info("criando midia");
 	
         MidiaDiversa midiaDiversaEntity = midiaDiversa.toEntity();
+        
+        if(midiaDiversa.getIdSituacao() != null) {
+        	Optional<Situacao> situacao = situacaoRepository.findById(midiaDiversa.getIdSituacao());
+        	midiaDiversaEntity.setSituacao(situacao.get());
+        }
         
     	MidiaDiversaModelAssembler assembler = new MidiaDiversaModelAssembler(); 
     	MidiaDiversaModel midiaDiversaModel = assembler.toModel(midiaDiversaRepository.save(midiaDiversaEntity));
@@ -85,6 +104,11 @@ public class MidiaDiversaController {
 		log.info("alterando midia");
 	
         MidiaDiversa midiaDiversaEntity = midiaDiversa.toEntity();
+        
+        if(midiaDiversa.getIdSituacao() != null) {
+        	Optional<Situacao> situacao = situacaoRepository.findById(midiaDiversa.getIdSituacao());
+        	midiaDiversaEntity.setSituacao(situacao.get());
+        }
         
     	MidiaDiversaModelAssembler assembler = new MidiaDiversaModelAssembler(); 
     	MidiaDiversaModel MidiaDiversaModel = assembler.toModel(midiaDiversaRepository.save(midiaDiversaEntity));
@@ -191,5 +215,17 @@ public class MidiaDiversaController {
         final URI uri = ServletUriComponentsBuilder.fromCurrentRequest().build().toUri();
         return ResponseEntity.created(uri).body(listResource);
 	}
+	
+	@PostMapping("/midias_diversas/quantidade_cadastradas_por_situacao")
+    @ApiOperation(value = "Retorna Quantidade de mídias particulares cadastradas por situacao")
+    @ApiResponses(value = {
+        @ApiResponse(code = 200, message = "Retorna uma Pesquisa Cientifica"),
+    })
+	public ResponseEntity<Collection<QuantitativoDTO>> getQuantidadeCadastradasPorSituacao(@RequestBody Periodo periodo) {
+    	 
+    	Collection<QuantitativoDTO> countByDataCadastroBetweenGroupBySituacao = relatorioRepository.countMidiasDiversasByDataCadastroBetweenGroupBySituacao(periodo);
+    	
+    	return ResponseEntity.ok().body(countByDataCadastroBetweenGroupBySituacao);
+    }
 	
 }

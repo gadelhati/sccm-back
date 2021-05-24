@@ -23,6 +23,14 @@ public class MidiaDiversaModel extends RepresentationModel<MidiaDiversaModel> {
 	private boolean documento;
 	
 	private boolean backup;
+	
+	private String numeroOficio;
+	
+	private String numeroH;
+	
+	private Long codigo;
+	
+	private SituacaoModel situacao;
 
     public MidiaDiversaModel(MidiaDiversa midia) {
 
@@ -31,6 +39,10 @@ public class MidiaDiversaModel extends RepresentationModel<MidiaDiversaModel> {
     	this.data = midia.getData();
     	this.documento = midia.isDocumento();
     	this.backup = midia.isBackup();
+    	this.numeroOficio = midia.getNumeroOficio();
+    	this.numeroH = midia.getNumeroH();
+    	this.codigo = midia.getCodigo();
+    	this.situacao = midia.getSituacao() != null ? new SituacaoModel(midia.getSituacao()) : null;
     	add(linkTo(MidiaDiversaController.class).withRel("midias_diversas"));
         add(linkTo(methodOn(MidiaDiversaController.class).getById(midia.getId())).withSelfRel());
         add(linkTo(methodOn(MidiaDiversaController.class).getAllMidiaDiversaTipoMidiaByIdMidiaDiversa(midia.getId())).withSelfRel());

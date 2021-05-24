@@ -15,6 +15,9 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import org.hibernate.envers.Audited;
+import org.hibernate.envers.RelationTargetAuditMode;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -24,6 +27,7 @@ import lombok.NoArgsConstructor;
 @EqualsAndHashCode
 @NoArgsConstructor
 @AllArgsConstructor
+@Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
 @Entity
 @Table(name = "documentos")
 @SequenceGenerator(name="documento_generator", sequenceName="documento_seq", allocationSize = 1)
@@ -50,8 +54,8 @@ public class Documento implements Serializable {
 	private Destino destino;
 	
 	@ManyToOne
-	@JoinColumn(name = "fk_pesquisa_cientifica")
-	private PesquisaCientifica pesquisaCientifica;
+	@JoinColumn(name = "fk_controle_interno")
+	private ControleInterno controleInterno;
 	
 	private String observacoes;
 		

@@ -15,13 +15,15 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
+
+import org.hibernate.envers.Audited;
+import org.hibernate.envers.RelationTargetAuditMode;
 
 import br.com.fattoria.sccm.persistence.listener.PequisaCientificaListener;
 import lombok.AllArgsConstructor;
@@ -33,6 +35,7 @@ import lombok.NoArgsConstructor;
 @EqualsAndHashCode
 @NoArgsConstructor
 @AllArgsConstructor
+@Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
 @Entity
 @Table(name = "pesquisa_cientifica")
 @EntityListeners(PequisaCientificaListener.class)
@@ -90,6 +93,16 @@ public class PesquisaCientifica implements Serializable {
 	@Column(name = "numero_pc")
 	private String numeroPC;
 	
+	@Column(name = "numero_ie_portaria_autorizacao_pesquisa")
+	private String numeroIEPortariaAutorizacaoPesquisa;
+	
+	@Column(name = "indice_h")
+	private String indiceH;
+	
+	@OneToOne
+	@JoinColumn(name = "fk_situacao")
+	private Situacao situacao;
+	
 	@ManyToMany
     @JoinTable(name = "pesquisa_cientifica_area_conhecimento", 
     joinColumns = {@JoinColumn(name="fk_pesquisa_cientifica")}, 
@@ -101,9 +114,6 @@ public class PesquisaCientifica implements Serializable {
     joinColumns = {@JoinColumn(name="fk_pesquisa_cientifica")}, 
     inverseJoinColumns = {@JoinColumn(name="fk_equipamento")})
 	private List<Equipamento> listaEquipamentos;
-
-	@OneToMany(mappedBy = "pesquisaCientifica")
-	private List<Documento> listaDocumentos;
 
 	@Transient
 	private List<TipoDado> listaTiposDados;

@@ -8,9 +8,11 @@ import java.util.Calendar;
 import org.springframework.hateoas.RepresentationModel;
 
 import br.com.fattoria.sccm.controller.ComissaoController;
+import br.com.fattoria.sccm.controller.EstacaoMeteorologicasController;
 import br.com.fattoria.sccm.controller.PesquisaCientificaController;
 import br.com.fattoria.sccm.controller.PlataformaController;
 import br.com.fattoria.sccm.controller.ShipSynopController;
+import br.com.fattoria.sccm.controller.SituacaoController;
 import br.com.fattoria.sccm.persistence.model.ShipSynop;
 import lombok.Getter;
 
@@ -44,6 +46,10 @@ public class ShipSynopModel extends RepresentationModel<ShipSynopModel> {
 	private Calendar dataSaida;
 
 	private String observacoes;
+	
+	private SituacaoModel situacao;
+	
+	private EstacaoMeteorologicaModel estacaoMeteorologica;
 
 	public ShipSynopModel(ShipSynop shipSynop) {
 		this.id = shipSynop.getId();
@@ -60,8 +66,12 @@ public class ShipSynopModel extends RepresentationModel<ShipSynopModel> {
 		this.dataEntrada = shipSynop.getDataEntrada();
 		this.dataSaida = shipSynop.getDataSaida();
 		this.observacoes = shipSynop.getObservacoes();
+		this.situacao = shipSynop.getSituacao() != null ? new SituacaoModel(shipSynop.getSituacao()) : null;
+		this.estacaoMeteorologica = shipSynop.getEstacaoMeteorologica() != null ? new EstacaoMeteorologicaModel(shipSynop.getEstacaoMeteorologica()) : null;
 		
-		add(linkTo(methodOn(ShipSynopController.class).getAll()).withRel("shipSynop"));
+		add(linkTo(methodOn(ShipSynopController.class).getAllShip()).withRel("ship"));
+		
+		add(linkTo(methodOn(ShipSynopController.class).getAllSynop()).withRel("synop"));
 		
 		if (shipSynop.getPlataforma() != null && shipSynop.getPlataforma().getId() != null) {
     		add(linkTo(methodOn(PlataformaController.class).getById(shipSynop.getPlataforma().getId())).withRel("plataforma"));
@@ -75,6 +85,13 @@ public class ShipSynopModel extends RepresentationModel<ShipSynopModel> {
     		add(linkTo(methodOn(PesquisaCientificaController.class).getById(shipSynop.getPesquisaCientifica().getId())).withRel("pesquisaCientifica"));
     	}
 		
+		if (shipSynop.getSituacao() != null && shipSynop.getSituacao().getId() != null) {
+    		add(linkTo(methodOn(SituacaoController.class).getById(shipSynop.getSituacao().getId())).withRel("situacao"));
+    	}
+		
+		if (shipSynop.getEstacaoMeteorologica() != null && shipSynop.getEstacaoMeteorologica().getId() != null) {
+    		add(linkTo(methodOn(EstacaoMeteorologicasController.class).getById(shipSynop.getEstacaoMeteorologica().getId())).withRel("estacaoMeteorologica"));
+    	}
 		
 	}
 	

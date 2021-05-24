@@ -11,6 +11,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.slf4j.Logger;
@@ -19,7 +20,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.Link;
@@ -28,6 +28,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.ObjectUtils;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -44,18 +45,20 @@ import br.com.fattoria.sccm.api.AreaConhecimentoModel;
 import br.com.fattoria.sccm.api.AreaConhecimentoModelAssembler;
 import br.com.fattoria.sccm.api.ControleInternoModel;
 import br.com.fattoria.sccm.api.ControleInternoModelAssembler;
-import br.com.fattoria.sccm.api.DocumentosModel;
-import br.com.fattoria.sccm.api.DocumentosModelAssembler;
 import br.com.fattoria.sccm.api.EquipamentoModel;
 import br.com.fattoria.sccm.api.EquipamentoModelAssembler;
 import br.com.fattoria.sccm.api.InstituicaoModel;
 import br.com.fattoria.sccm.api.InstituicaoModelAssembler;
+import br.com.fattoria.sccm.api.Periodo;
 import br.com.fattoria.sccm.api.PesquisaCientificaApi;
 import br.com.fattoria.sccm.api.PesquisaCientificaModel;
 import br.com.fattoria.sccm.api.PesquisaCientificaModelAssembler;
+import br.com.fattoria.sccm.api.SearchApi;
 import br.com.fattoria.sccm.api.TipoDadoModel;
 import br.com.fattoria.sccm.api.TipoDadoModelAssembler;
+import br.com.fattoria.sccm.dto.QuantitativoDTO;
 import br.com.fattoria.sccm.persistence.model.AreaConhecimento;
+import br.com.fattoria.sccm.persistence.model.AssinaturaPC;
 import br.com.fattoria.sccm.persistence.model.ControleInterno;
 import br.com.fattoria.sccm.persistence.model.Documento;
 import br.com.fattoria.sccm.persistence.model.Equipamento;
@@ -65,22 +68,35 @@ import br.com.fattoria.sccm.persistence.model.PesquisaCientificaAreaConhecimento
 import br.com.fattoria.sccm.persistence.model.PesquisaCientificaAreaConhecimentoPk;
 import br.com.fattoria.sccm.persistence.model.PesquisaCientificaCoAutor;
 import br.com.fattoria.sccm.persistence.model.PesquisaCientificaCoAutorPk;
+import br.com.fattoria.sccm.persistence.model.PesquisaCientificaEquipamento;
+import br.com.fattoria.sccm.persistence.model.PesquisaCientificaEquipamentoPk;
 import br.com.fattoria.sccm.persistence.model.Plataforma;
 import br.com.fattoria.sccm.persistence.model.Sigilo;
+import br.com.fattoria.sccm.persistence.model.Situacao;
 import br.com.fattoria.sccm.persistence.model.TipoDado;
 import br.com.fattoria.sccm.persistence.model.XML;
 import br.com.fattoria.sccm.persistence.repository.AreaConhecimentoRepository;
+import br.com.fattoria.sccm.persistence.repository.AssinaturaPCRepository;
 import br.com.fattoria.sccm.persistence.repository.ControleInternoRepository;
 import br.com.fattoria.sccm.persistence.repository.DocumentosRepository;
 import br.com.fattoria.sccm.persistence.repository.EquipamentoRepository;
 import br.com.fattoria.sccm.persistence.repository.InstituicaoRepository;
 import br.com.fattoria.sccm.persistence.repository.PesquisaCientificaAreaConhecimentoRepository;
 import br.com.fattoria.sccm.persistence.repository.PesquisaCientificaCoAutorRepository;
+import br.com.fattoria.sccm.persistence.repository.PesquisaCientificaEquipamentoRepository;
 import br.com.fattoria.sccm.persistence.repository.PesquisaCientificaRepository;
 import br.com.fattoria.sccm.persistence.repository.PlataformaRepository;
+import br.com.fattoria.sccm.persistence.repository.RelatorioRepository;
 import br.com.fattoria.sccm.persistence.repository.SigiloRepository;
+import br.com.fattoria.sccm.persistence.repository.SituacaoRepository;
 import br.com.fattoria.sccm.persistence.repository.TipoDadoRepository;
 import br.com.fattoria.sccm.persistence.repository.XMLRepository;
+import br.com.fattoria.sccm.reports.ReportFichaPesquisaCientifica;
+import br.com.fattoria.sccm.reports.data.AreaConhecimentoDTO;
+import br.com.fattoria.sccm.reports.data.DocumentosDTO;
+import br.com.fattoria.sccm.reports.data.EquipamentoDTO;
+import br.com.fattoria.sccm.reports.data.FichaPesquisaCientificaDTO;
+import br.com.fattoria.sccm.reports.data.TipoDadoDTO;
 import br.com.fattoria.sccm.reports.templates.busines.SequenceGenerator;
 import br.com.fattoria.sccm.reports.templates.busines.SequenceModel;
 import br.com.fattoria.sccm.service.DocumentStorageService;
@@ -89,7 +105,9 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import javassist.NotFoundException;
+import net.sf.jasperreports.engine.JRException;
 
+@CrossOrigin(origins = "*", maxAge = 3600)
 @Api(value = "Pesquisa Cientifica")
 @RestController
 @RequestMapping(value = "/api", produces = "application/hal+json")
@@ -99,9 +117,11 @@ public class PesquisaCientificaController {
 	private final PesquisaCientificaRepository pesquisaCientificaRepository;
 	private final PlataformaRepository plataformaRepository;
 	private final SigiloRepository sigiloRepository;
+	private final SituacaoRepository situacaoRepository;
 	private final InstituicaoRepository instituicaoRepository;
 	private final PesquisaCientificaCoAutorRepository pesquisaCientificaCoAutorRepository;
 	private final PesquisaCientificaAreaConhecimentoRepository pesquisaCientificaAreaConhecimentoRepository;
+	private final PesquisaCientificaEquipamentoRepository pesquisaCientificaEquipamentoRepository;
 	private final AreaConhecimentoRepository areaConhecimentoRepository;
 	private final EquipamentoRepository equipamentoRepository;
 	private final TipoDadoRepository tipoDadoRepository;
@@ -109,26 +129,33 @@ public class PesquisaCientificaController {
 	private final ControleInternoRepository controleInternoRepository;
 	private final SequenceGenerator sequenceGenerator;
 	private final XMLRepository xmlRepository;
+	private final AssinaturaPCRepository assinaturaPCRepository;
+	private final RelatorioRepository relatorioRepository;
 	
 	@Autowired
 	private DocumentStorageService documentStorageService;
 	
 	public PesquisaCientificaController(PesquisaCientificaRepository pesquisaCientificaRepository,
 			PlataformaRepository plataformaRepository, SigiloRepository sigiloRepository,
+			SituacaoRepository situacaoRepository,
 			InstituicaoRepository instituicaoRepository,
 			PesquisaCientificaCoAutorRepository pesquisaCientificaCoAutorRepository,
 			PesquisaCientificaAreaConhecimentoRepository pesquisaCientificaAreaConhecimentoRepository,
+			PesquisaCientificaEquipamentoRepository pesquisaCientificaEquipamentoRepository,
 			AreaConhecimentoRepository areaConhecimentoRepository, EquipamentoRepository equipamentoRepository,
 			TipoDadoRepository tipoDadoRepository, DocumentosRepository documentosRepository,
 			ControleInternoRepository controleInternoRepository, SequenceGenerator sequenceGenerator,
-			XMLRepository xmlRepository, DocumentStorageService documentStorageService) {
+			XMLRepository xmlRepository, DocumentStorageService documentStorageService, AssinaturaPCRepository assinaturaPCRepository,
+			RelatorioRepository relatorioRepository) {
 		super();
 		this.pesquisaCientificaRepository = pesquisaCientificaRepository;
 		this.plataformaRepository = plataformaRepository;
 		this.sigiloRepository = sigiloRepository;
+		this.situacaoRepository = situacaoRepository;
 		this.instituicaoRepository = instituicaoRepository;
 		this.pesquisaCientificaCoAutorRepository = pesquisaCientificaCoAutorRepository;
 		this.pesquisaCientificaAreaConhecimentoRepository = pesquisaCientificaAreaConhecimentoRepository;
+		this.pesquisaCientificaEquipamentoRepository = pesquisaCientificaEquipamentoRepository;
 		this.areaConhecimentoRepository = areaConhecimentoRepository;
 		this.equipamentoRepository = equipamentoRepository;
 		this.tipoDadoRepository = tipoDadoRepository;
@@ -137,6 +164,8 @@ public class PesquisaCientificaController {
 		this.sequenceGenerator = sequenceGenerator;
 		this.xmlRepository = xmlRepository;
 		this.documentStorageService = documentStorageService;
+		this.assinaturaPCRepository = assinaturaPCRepository;
+		this.relatorioRepository = relatorioRepository;
 	}
 
 	@PostMapping("/pesquisas_cientificas")
@@ -154,12 +183,15 @@ public class PesquisaCientificaController {
 		
 		Optional<Sigilo> sigilo = sigiloRepository.findById(api.getIdSigilo());
 		
+		Optional<Situacao> situacao = situacaoRepository.findById(api.getIdSituacao());
+		
         PesquisaCientifica entityPC = api.toEntity();
         entityPC.setDataCadastro(Calendar.getInstance());
         
         entityPC.setPlataforma(plataforma.get());
         entityPC.setInstituicao(instituicao.get());
         entityPC.setSigilo(sigilo.get());
+        entityPC.setSituacao(situacao.get());
         
 		String sequence = sequenceGenerator.getSequence(SequenceModel.build("NUMERO_PC"));
 		log.info("Numero PC gerado "+sequence);
@@ -176,14 +208,14 @@ public class PesquisaCientificaController {
     		}
         }
         
-/*        if(api.getIdsEquipamentos() != null && api.getIdsEquipamentos().size() > 0) {
+        if(api.getIdsEquipamentos() != null && api.getIdsEquipamentos().size() > 0) {
 	        Iterable<Equipamento> equipamentos = equipamentoRepository.findAllById(api.getIdsEquipamentos());
 	        
 	        for (Equipamento equipamento : equipamentos) {
 	        	PesquisaCientificaEquipamento pesquisaCientificaEquipamento = new PesquisaCientificaEquipamento(new PesquisaCientificaEquipamentoPk(entityPC.getId(), equipamento.getId()));
 				pesquisaCientificaEquipamentoRepository.save(pesquisaCientificaEquipamento);
 			}
-        }*/
+        }
         
         if(api.getIdsCoParticipantes() != null && api.getIdsCoParticipantes().size() > 0) {
 	        Iterable<Instituicao> instituicoes = instituicaoRepository.findAllById(api.getIdsCoParticipantes());
@@ -213,9 +245,11 @@ public class PesquisaCientificaController {
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "Pesquisa Cientifica atualizada"),
     })
-	ResponseEntity<PesquisaCientificaModel> update(@Valid @RequestBody PesquisaCientificaApi api){
+	ResponseEntity<PesquisaCientificaModel> update(HttpServletRequest request, @Valid @RequestBody PesquisaCientificaApi api){
 		
 		log.info("Alterando "+api);
+
+		//UsuarioApi usuarioApi = UsuarioApi.toUsuarioApi(accessToken.get);
 		
 		Optional<Plataforma> plataforma = plataformaRepository.findById(api.getIdPlataforma());
 		
@@ -223,13 +257,14 @@ public class PesquisaCientificaController {
 		
 		Optional<Sigilo> sigilo = sigiloRepository.findById(api.getIdSigilo());
 		
+		Optional<Situacao> situacao = situacaoRepository.findById(api.getIdSituacao());
+		
         PesquisaCientifica entityPC = api.toEntity();
         
         entityPC.setPlataforma(plataforma.get());
         entityPC.setInstituicao(instituicao.get());
         entityPC.setSigilo(sigilo.get());
-        
-        //entity.setComissao(comissaoRepository.save(entity.getComissao()));
+        entityPC.setSituacao(situacao.get());
         
         entityPC = pesquisaCientificaRepository.save(entityPC);
         
@@ -245,7 +280,7 @@ public class PesquisaCientificaController {
     		}
         }
         
-        /*Collection<PesquisaCientificaEquipamento> equipamentosByPesquisaCientifica = pesquisaCientificaEquipamentoRepository.findAllByIdPesquisaCientifica(api.getId());
+        Collection<PesquisaCientificaEquipamento> equipamentosByPesquisaCientifica = pesquisaCientificaEquipamentoRepository.findAllByIdPesquisaCientifica(api.getId());
         pesquisaCientificaEquipamentoRepository.deleteAll(equipamentosByPesquisaCientifica);
         
         if(api.getIdsEquipamentos() != null && api.getIdsEquipamentos().size() > 0) {
@@ -255,7 +290,7 @@ public class PesquisaCientificaController {
 	        	PesquisaCientificaEquipamento pesquisaCientificaEquipamento = new PesquisaCientificaEquipamento(new PesquisaCientificaEquipamentoPk(entityPC.getId(), equipamento.getId()));
 				pesquisaCientificaEquipamentoRepository.save(pesquisaCientificaEquipamento);
 			}
-        }*/
+        }
         
         Collection<PesquisaCientificaCoAutor> coAutoresByPesquisaCientifica = pesquisaCientificaCoAutorRepository.findAllByIdPesquisaCientifica(api.getId());
         pesquisaCientificaCoAutorRepository.deleteAll(coAutoresByPesquisaCientifica);
@@ -431,26 +466,6 @@ public class PesquisaCientificaController {
 	    return ResponseEntity.ok(listResource);
 	}
 	
-	@GetMapping("/pesquisas_cientificas/{id}/documentos")
-    @ApiOperation(value = "Retorna uma lista de documentos")
-    @ApiResponses(value = {
-        @ApiResponse(code = 200, message = "Retorna uma lista de documentos"),
-    })
-	public ResponseEntity<CollectionModel<DocumentosModel>> getAllDocumentosByIdPesquisaCientifica(@PathVariable Long id) {
-    	
-    	log.info("listando documentos");
-    	 
-    	Collection<Documento> lista = (Collection<Documento>) documentosRepository.findAllByPesquisaCientificaId(id);
-    	
-    	DocumentosModelAssembler assembler = new DocumentosModelAssembler(); 
-    	CollectionModel<DocumentosModel> listResource = assembler.toCollectionModel(lista);
-    	
-    	final String uriString = ServletUriComponentsBuilder.fromCurrentRequest().build().toUriString();
-    	listResource.add(Link.of(uriString, "self"));
-    	
-	    return ResponseEntity.ok(listResource);
-	}
-	
 	@GetMapping("/pesquisas_cientificas/{id}/controleInterno")
     @ApiOperation(value = "Retorna uma lista controles internos")
     @ApiResponses(value = {
@@ -485,28 +500,28 @@ public class PesquisaCientificaController {
 		
 		Optional<XML> entityXML = xmlRepository.findById(1L);
 		
-		Optional<PesquisaCientifica> entityPC = pesquisaCientificaRepository.findById(101L);
+		Optional<PesquisaCientifica> entityPC = pesquisaCientificaRepository.findById(id);
 		
 		XML xml = entityXML.get();
 		
-/*		String path = "C:\\Users\\Victor\\";
-		
-		File file = new File(path + "teste.xml");
-				
-		FileWriter archive = new FileWriter(file);
-		PrintWriter writer = new PrintWriter(archive);
-			
-		writer.println(xml.getXml().toString());			
-		archive.close();
-			
-		Resource resource = null;
-		try {
-			resource = documentStorageService.loadFileAsResource(file.getName());
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		
-		String contentType = null;*/
+//		String path = "C:\\Users\\Victor\\";
+//		
+//		File file = new File(path + "teste.xml");
+//				
+//		FileWriter archive = new FileWriter(file);
+//		PrintWriter writer = new PrintWriter(archive);
+//			
+//		writer.println(xml.getXml().toString());			
+//		archive.close();
+//			
+//		Resource resource = null;
+//		try {
+//			resource = documentStorageService.loadFileAsResource(file.getName());
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
+//		
+//		String contentType = null;
 		
 		ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
 		PrintWriter writer = new PrintWriter(byteArrayOutputStream);
@@ -523,8 +538,8 @@ public class PesquisaCientificaController {
 			pesquisaCientifica.setListaEquipamentos((List<Equipamento>) listaEquipamentos);
 			pesquisaCientifica.setListaTiposDados((List<TipoDado>) listaTiposDados);
 			
-			xml.getFormat(pesquisaCientifica);
-			writer.println(xml.getXml());
+			
+			writer.println(xml.getFormat(pesquisaCientifica));
 		}
 		
 		writer.close();
@@ -538,9 +553,155 @@ public class PesquisaCientificaController {
 	    
 	}
 	
+	@GetMapping({"/pesquisas_cientificas/pdf", "/pesquisas_cientificas/{id}/pdf"})
+	public ResponseEntity<?> getPDF(@PathVariable Long id) throws IOException, JRException {
+		
+		FichaPesquisaCientificaDTO dto = pesquisaCientificaRepository.getIdFichaPesquisaCientificaView(id);
+		
+		AreaConhecimentoDTO areaConhecimentoDTO = new AreaConhecimentoDTO();		
+		dto.setListaAreaConhecimento(areaConhecimentoDTO.getListToListDTO(areaConhecimentoRepository.findAllByPesquisaCientificaId(id)));
+		
+		TipoDadoDTO tipoDadoDTO = new TipoDadoDTO();		
+		dto.setListaVariaveis(tipoDadoDTO.getListToListDTO(tipoDadoRepository.findAllByPesquisaCientificaId(id)));
+		
+		EquipamentoDTO equipamentoDTO = new EquipamentoDTO();		
+		dto.setListaEquipamentos(equipamentoDTO.getListToListDTO(equipamentoRepository.findAllByPesquisaCientificaId(id)));
+		
+		DocumentosDTO documentosDTO = new DocumentosDTO();		
+		dto.setListaDocumentos(documentosDTO.getListToListDTO((List<Documento>)documentosRepository.findAllByPesquisaCientificaId(id)));
+		
+		List<AssinaturaPC> assinaturas = assinaturaPCRepository.findByAtivo(Boolean.TRUE);
+		
+		int cont = 1;
+		
+		for (AssinaturaPC assinatura : assinaturas) {
+			
+			if (cont == 1) {
+				dto.setNome_assinatura1(assinatura.getNome());
+				dto.setPatente1(assinatura.getPatente());
+				dto.setCargo1(assinatura.getCargo());
+				dto.setDestino1(assinatura.getDestino().getDestino());
+			} else if (cont == 2) {
+				dto.setNome_assinatura2(assinatura.getNome());
+				dto.setPatente2(assinatura.getPatente());
+				dto.setCargo2(assinatura.getCargo());
+				dto.setDestino2(assinatura.getDestino().getDestino());
+			} else if (cont == 3) {
+				dto.setNome_assinatura3(assinatura.getNome());
+				dto.setPatente3(assinatura.getPatente());
+				dto.setCargo3(assinatura.getCargo());
+				dto.setDestino3(assinatura.getDestino().getDestino());
+			}
+			
+			cont++;
+		}
+		
+		ReportFichaPesquisaCientifica report = new ReportFichaPesquisaCientifica(dto);
+		
+		report.addParametro("IMG_LOGO", ReportFichaPesquisaCientifica.class.
+				getResourceAsStream("/br/com/fattoria/sccm/reports/img/logo-chm.png"));
+		
+		report.addJasperSubReport("SUB_AREA_CONHECIMENTO", ReportFichaPesquisaCientifica.class.
+				getResourceAsStream("/br/com/fattoria/sccm/reports/templates/subReport_fichaPesquisaCientifica_areaConhecimento.jasper"));
+		
+		report.addJasperSubReport("SUB_VARIAVEIS_COLETADAS", ReportFichaPesquisaCientifica.class.
+				getResourceAsStream("/br/com/fattoria/sccm/reports/templates/subReport_fichaPesquisaCientifica_dados.jasper"));
+		
+		report.addJasperSubReport("SUB_EQUIPAMENTOS", ReportFichaPesquisaCientifica.class.
+				getResourceAsStream("/br/com/fattoria/sccm/reports/templates/subReport_fichaPesquisaCientifica_equipamento.jasper"));
+		
+		report.addJasperSubReport("SUB_DOCUMENTOS", ReportFichaPesquisaCientifica.class.
+				getResourceAsStream("/br/com/fattoria/sccm/reports/templates/subReport_fichaPesquisaCientifica_documentos.jasper"));
+		
+		ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+		report.geraPDF(byteArrayOutputStream);
+		
+		return ResponseEntity.ok()
+				.contentType(MediaType.parseMediaType("application/pdf"))
+				.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + dto.getFitoteca() + ".pdf\"")								
+				.body(byteArrayOutputStream.toByteArray());
+	    
+	}
 	
-	
-
+    @PostMapping("/pesquisas_cientificas/quantidade_cadastradas")
+    @ApiOperation(value = "Retorna Quantidade de Pesquisas Cientificas Cadastradas por periodo")
+    @ApiResponses(value = {
+        @ApiResponse(code = 200, message = "Retorna uma Pesquisa Cientifica"),
+    })
+	public ResponseEntity<Long> getQuantidadeCadastradas(@RequestBody Periodo periodo) {
+    	 
+    	Long quantidade = relatorioRepository.countByDataCadastroBetween(periodo);
+    	
+    	return ResponseEntity.ok().body(quantidade);
+    }
     
+    @PostMapping("/pesquisas_cientificas/quantidade_cadastradas_por_tipo_comissao")
+    @ApiOperation(value = "Retorna Quantidade de Pesquisas Cientificas Cadastradas por tipo de comissão e periodo")
+    @ApiResponses(value = {
+        @ApiResponse(code = 200, message = "Retorna uma Pesquisa Cientifica"),
+    })
+	public ResponseEntity<Collection<QuantitativoDTO>> getQuantidadeCadastradasPorTipoComissao(@RequestBody Periodo periodo) {
+    	 
+    	Collection<QuantitativoDTO> countByDataCadastroBetweenGroupByNomeComissao = relatorioRepository.countByDataCadastroBetweenGroupByTipoComissao(periodo);
+    	
+    	return ResponseEntity.ok().body(countByDataCadastroBetweenGroupByNomeComissao);
+    }
+    
+    @PostMapping("/pesquisas_cientificas/quantidade_cadastradas_por_situacao")
+    @ApiOperation(value = "Retorna Quantidade de Pesquisas Cientificas Cadastradas por situação e periodo")
+    @ApiResponses(value = {
+        @ApiResponse(code = 200, message = "Retorna uma Pesquisa Cientifica"),
+    })
+	public ResponseEntity<Collection<QuantitativoDTO>> getQuantidadeCadastradasPorSituacao(@RequestBody Periodo periodo) {
+    	
+    	Collection<QuantitativoDTO> countByDataCadastroBetweenGroupBySituacao = relatorioRepository.countByDataCadastroBetweenGroupBySituacao(periodo);
+    	
+    	return ResponseEntity.ok().body(countByDataCadastroBetweenGroupBySituacao);
+    }
+    
+    @PostMapping("/pesquisas_cientificas/quantidade_cadastradas_por_equipamentos")
+    @ApiOperation(value = "Retorna Quantidade de Pesquisas Cientificas Cadastradas por equipamentos e periodo")
+    @ApiResponses(value = {
+        @ApiResponse(code = 200, message = "Retorna uma Pesquisa Cientifica"),
+    })
+	public ResponseEntity<Collection<QuantitativoDTO>> getQuantidadeCadastradasPorEquipamentos(@RequestBody Periodo periodo) {
+    	 
+    	Collection<QuantitativoDTO> countByDataCadastroBetweenGroupBySituacao = relatorioRepository.countByDataCadastroBetweenGroupByEquipamentos(periodo);
+    	
+    	return ResponseEntity.ok().body(countByDataCadastroBetweenGroupBySituacao);
+    }
+    
+    @PostMapping("/pesquisas_cientificas/pendentes_por_periodo")
+    @ApiOperation(value = "Retorna Quantidade de Pesquisas Cientificas Cadastradas por equipamentos e periodo")
+    @ApiResponses(value = {
+        @ApiResponse(code = 200, message = "Retorna uma Pesquisa Cientifica"),
+    })
+	public ResponseEntity<CollectionModel<PesquisaCientificaModel>> findByDataCadastroIdSituacaoBetween(@RequestBody Periodo periodo) {
+    	 
+    	Collection<PesquisaCientifica> pesquisaCientificas = relatorioRepository.findByDataCadastroIdSituacaoBetween(periodo, 4L);
+    	
+    	PesquisaCientificaModelAssembler pesquisaCientificaModelAssembler = new PesquisaCientificaModelAssembler();
+    	
+    	return ResponseEntity.ok().body(pesquisaCientificaModelAssembler.toCollectionModel(pesquisaCientificas));
+    }
+    
+    @PostMapping("/pesquisas_cientificas/serchNumeroPC")
+    @ApiOperation(value = "Retorna uma lista de Pesquisa Cientifica")
+    @ApiResponses(value = {
+        @ApiResponse(code = 200, message = "Pesquisa Cientifica"),
+    })
+	public ResponseEntity<CollectionModel<PesquisaCientificaModel>> getAllByNumeroPC(@RequestBody SearchApi searchApi) {
+    	
+    	Collection<PesquisaCientifica> lista = (Collection<PesquisaCientifica>) pesquisaCientificaRepository.findByNumeroPCContainingIgnoreCase(
+    			searchApi.getSearch() != null ? searchApi.getSearch() : "");
+    	
+    	PesquisaCientificaModelAssembler assembler = new PesquisaCientificaModelAssembler(); 
+    	CollectionModel<PesquisaCientificaModel> listResource = assembler.toCollectionModel(lista);
+    	
+    	final String uriString = ServletUriComponentsBuilder.fromCurrentRequest().build().toUriString();
+    	listResource.add(Link.of(uriString, "self"));
+    	
+	    return ResponseEntity.ok(listResource);
+	}
 	
 }

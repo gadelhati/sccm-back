@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="subReport_fichaPesquisaCientifica_equipamento" pageWidth="555" pageHeight="802" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="faa127be-bcdc-4338-9b0f-77aafb94f69f">
+	<property name="ireport.zoom" value="1.9487171000000019"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="cod_pc" class="java.lang.Integer"/>
+	<queryString>
+		<![CDATA[SELECT
+    e.*
+FROM
+    equipamento e
+LEFT JOIN pesquisa_cientifica_equipamento pce ON e.id = pce.fk_equipamento
+WHERE
+    pce.fk_pesquisa_cientifica = $P{cod_pc}]]>
+	</queryString>
+	<field name="nome" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="20" splitType="Stretch">
+			<rectangle>
+				<reportElement x="0" y="0" width="555" height="20" backcolor="#CCCCCC" uuid="b9abb394-1162-4f48-9222-2eee79dee3d2"/>
+			</rectangle>
+			<staticText>
+				<reportElement mode="Opaque" x="1" y="1" width="553" height="18" backcolor="#CCCCCC" uuid="c1385806-bab0-4ff3-8083-e8176aab74bc"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Equipamentos]]></text>
+			</staticText>
+		</band>
+	</title>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<rectangle>
+				<reportElement x="0" y="0" width="555" height="20" uuid="a23ec434-1d4d-4bd2-a8b0-52942c76f097"/>
+			</rectangle>
+			<textField>
+				<reportElement x="0" y="0" width="278" height="20" uuid="a4b2818b-ff20-437b-b909-46ef08da2310"/>
+				<textElement verticalAlignment="Middle">
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nome}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

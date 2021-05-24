@@ -15,9 +15,12 @@ public class AreaTecnicaModel extends RepresentationModel<AreaTecnicaModel> {
 	
 	private String descricao;
 	
+	private boolean ativo;
+	
 	public AreaTecnicaModel(AreaTecnica areaTecnica) {
 		this.id = areaTecnica.getId();
 		this.descricao = areaTecnica.getDescricao();
+		this.ativo = areaTecnica.isAtivo();
 		add(linkTo(AreaTecnicaController.class).withRel("areaTecnica"));		
 	}
 	
