@@ -11,10 +11,15 @@ import javax.validation.Valid;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.Link;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,6 +28,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -116,6 +122,31 @@ public class MidiaDiversaController {
         final URI uri = ServletUriComponentsBuilder.fromCurrentRequest().build().toUri();
         return ResponseEntity.created(uri).body(MidiaDiversaModel);
 
+	}
+	
+	@GetMapping("/midias_diversas/pagina")
+    @ApiOperation(value = "Retorna uma lista de midias diversas")
+    @ApiResponses(value = {
+        @ApiResponse(code = 200, message = "Retorna lista de midias diversas"),
+    })
+	public ResponseEntity<Page<MidiaDiversaModel>> getAll(@RequestParam("page") int page, @RequestParam("size") int size, @RequestParam(required = false) String search) {
+		
+		log.info("ObjectUtils.isEmpty(search) "+ObjectUtils.isEmpty(search));
+		log.info("paginando midias diversas "+search);
+		
+		PageRequest pageRequest = PageRequest.of(page, size, Sort.by("id").descending());
+    	
+    	Page<MidiaDiversa> lista = null;
+    	
+    	lista = ObjectUtils.isEmpty(search) ? midiaDiversaRepository.findAll(pageRequest) : 
+    		midiaDiversaRepository.findAllBySearch(pageRequest, "%"+search+"%");
+    	
+    	MidiaDiversaModelAssembler assembler = new MidiaDiversaModelAssembler(); 
+    	CollectionModel<MidiaDiversaModel> listResource = assembler.toCollectionModel(lista.toList());
+    	
+    	Page<MidiaDiversaModel> pageFull = new PageImpl<MidiaDiversaModel>(new ArrayList<MidiaDiversaModel>(listResource.getContent()), lista.getPageable(), lista.getTotalElements());
+    	
+	    return ResponseEntity.ok(pageFull);
 	}
 	
 	@GetMapping("/midias_diversas")
