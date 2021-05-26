@@ -98,9 +98,9 @@ public interface PesquisaCientificaRepository extends CrudRepository<PesquisaCie
 	FichaPesquisaCientificaDTO getIdFichaPesquisaCientificaView(@Param("id") Long id);
 
 	@Query("select pc from PesquisaCientifica pc where "
-			+ "(pc.comissao.nomeComissao like :search or pc.instituicao.nome like :search "
-			+ "or pc.instituicao.sigla like :search or pc.plataforma.nome like :search "
-			+ "or pc.comandante like :search or pc.coordenadorCientifico like :search or pc.numeroPC like :search or pc.situacao like :search)")
+			+ "(UPPER(pc.comissao.nomeComissao) like UPPER(:search) or UPPER(pc.instituicao.nome) like UPPER(:search) "
+			+ "or UPPER(pc.instituicao.sigla) like UPPER(:search) or UPPER(pc.plataforma.nome) like UPPER(:search) "
+			+ "or UPPER(pc.comandante) like UPPER(:search) or UPPER(pc.coordenadorCientifico) like UPPER(:search) or UPPER(pc.numeroPC) like UPPER(:search) or UPPER(pc.situacao.descricao) like UPPER(:search))")
 	Page<PesquisaCientifica> findAllBySearch(Pageable page, @Param("search") String search);
 
 }
