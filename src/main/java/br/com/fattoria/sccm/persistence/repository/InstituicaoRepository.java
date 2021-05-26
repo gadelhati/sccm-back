@@ -3,6 +3,8 @@ package br.com.fattoria.sccm.persistence.repository;
 import java.util.Collection;
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
@@ -25,5 +27,12 @@ public interface InstituicaoRepository extends CrudRepository<Instituicao, Long>
 
 	@Query("select pcca.instituicao from PesquisaCientificaCoAutor pcca where pcca.pesquisaCientifica.id =:id")
 	Collection<Instituicao> findAllByPesquisaCientificaId(@Param("id") Long id);
+
+	Page<Instituicao> findAll(Pageable page);
+
+		@Query("select i from Instituicao i where "
+			+ "(UPPER(i.nome) like UPPER(:search) or UPPER(i.sigla) like UPPER(:search) or CAST(i.numeroInscricao as text) like UPPER(:search) "
+			+ "or CAST(i.numeroControle as text) like UPPER(:search) or UPPER(i.tipoInstituicao) like UPPER(:search))")
+	Page<Instituicao> findAllBySearch(Pageable page, @Param("search") String search);
 
 }
