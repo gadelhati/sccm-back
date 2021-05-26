@@ -2,6 +2,7 @@ package br.com.fattoria.sccm.controller;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Optional;
 
@@ -9,10 +10,15 @@ import javax.validation.Valid;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.Link;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,6 +26,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -87,10 +94,35 @@ public class EstacaoMeteorologicasController {
 
 	}
 	
+	@GetMapping("/estacoes_meteorologicas/pagina")
+    @ApiOperation(value = "Retorna uma lista de estações meteriologicas")
+    @ApiResponses(value = {
+        @ApiResponse(code = 200, message = "Retorna lista de estações meteriologicas"),
+    })
+	public ResponseEntity<Page<EstacaoMeteorologicaModel>> getAll(@RequestParam("page") int page, @RequestParam("size") int size, @RequestParam(required = false) String search) {
+		
+		log.info("ObjectUtils.isEmpty(search) "+ObjectUtils.isEmpty(search));
+		log.info("paginando plataformas "+search);
+		
+		PageRequest pageRequest = PageRequest.of(page, size, Sort.by("nome").descending());
+    	
+    	Page<EstacaoMeteorologica> lista = null;
+    	
+    	lista = ObjectUtils.isEmpty(search) ? estacaoMeteorologicaRepository.findAll(pageRequest) : 
+    		estacaoMeteorologicaRepository.findAllBySearch(pageRequest, "%"+search+"%");
+    	
+    	EstacaoMeteorologicaModelAssembler assembler = new EstacaoMeteorologicaModelAssembler(); 
+    	CollectionModel<EstacaoMeteorologicaModel> listResource = assembler.toCollectionModel(lista.toList());
+    	
+    	Page<EstacaoMeteorologicaModel> pageFull = new PageImpl<EstacaoMeteorologicaModel>(new ArrayList<EstacaoMeteorologicaModel>(listResource.getContent()), lista.getPageable(), lista.getTotalElements());
+    	
+	    return ResponseEntity.ok(pageFull);
+	}
+	
 	@GetMapping("/estacoes_meteorologicas")
     @ApiOperation(value = "Retorna uma lista de Estacao")
     @ApiResponses(value = {
-        @ApiResponse(code = 200, message = "Estacao Meteriologicas"),
+        @ApiResponse(code = 200, message = "Retorna lista de estações meteriologicas"),
     })
 	public ResponseEntity<CollectionModel<EstacaoMeteorologicaModel>> getAll() {
     	
