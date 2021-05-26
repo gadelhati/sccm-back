@@ -2,6 +2,7 @@ package br.com.fattoria.sccm.controller;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Optional;
 
@@ -9,12 +10,16 @@ import javax.validation.Valid;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.server.EntityLinks;
-import org.springframework.hateoas.server.TypedEntityLinks;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,6 +27,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -67,8 +73,6 @@ public class ShipSynopController {
 		
 	private final RelatorioRepository relatorioRepository;
 	
-	private final TypedEntityLinks<ShipSynopModel> links;
-		
 	public ShipSynopController(ShipSynopRepository shipSynopRepository, ComissaoRepository comissaoRepository,
 			PlataformaRepository plataformaRepository, PesquisaCientificaRepository pesquisaCientificaRepository, 
 			SituacaoRepository situacaoRepository, EstacaoMeteorologicaRepository estacaoMeteorologicaRepository,
@@ -80,7 +84,6 @@ public class ShipSynopController {
 		this.situacaoRepository = situacaoRepository;
 		this.estacaoMeteorologicaRepository = estacaoMeteorologicaRepository;
 		this.relatorioRepository = relatorioRepository;
-		this.links = entityLinks.forType(ShipSynopModel::getId);		
 	}
 	
 	/**     *      * 
@@ -151,6 +154,31 @@ public class ShipSynopController {
         final URI uri = ServletUriComponentsBuilder.fromCurrentRequest().build().toUri();
         return ResponseEntity.created(uri).body(model);
 
+	}
+	
+	@GetMapping("/ship/pagina")
+    @ApiOperation(value = "Retorna uma lista de ship")
+    @ApiResponses(value = {
+        @ApiResponse(code = 200, message = "Retorna lista de ship"),
+    })
+	public ResponseEntity<Page<ShipSynopModel>> getAllShip(@RequestParam("page") int page, @RequestParam("size") int size, @RequestParam(required = false) String search) {
+		
+		log.info("ObjectUtils.isEmpty(search) "+ObjectUtils.isEmpty(search));
+		log.info("paginando synop "+search);
+		
+		PageRequest pageRequest = PageRequest.of(page, size, Sort.by("id").descending());
+    	
+    	Page<ShipSynop> lista = null;
+    	
+    	lista = ObjectUtils.isEmpty(search) ? shipSynopRepository.findAllByDados(pageRequest, "SHIP") : 
+    		shipSynopRepository.findAllBySearch(pageRequest, "%"+search+"%", "SHIP");
+    	
+    	ShipSynopModelAssembler assembler = new ShipSynopModelAssembler(); 
+    	CollectionModel<ShipSynopModel> listResource = assembler.toCollectionModel(lista.toList());
+    	
+    	Page<ShipSynopModel> pageFull = new PageImpl<ShipSynopModel>(new ArrayList<ShipSynopModel>(listResource.getContent()), lista.getPageable(), lista.getTotalElements());
+    	
+	    return ResponseEntity.ok(pageFull);
 	}
 	
 	@GetMapping("/ship/todos")
@@ -260,6 +288,31 @@ public class ShipSynopController {
         final URI uri = ServletUriComponentsBuilder.fromCurrentRequest().build().toUri();
         return ResponseEntity.created(uri).body(model);
 
+	}
+	
+	@GetMapping("/synop/pagina")
+    @ApiOperation(value = "Retorna uma lista de synop")
+    @ApiResponses(value = {
+        @ApiResponse(code = 200, message = "Retorna lista de synop"),
+    })
+	public ResponseEntity<Page<ShipSynopModel>> getAllSynop(@RequestParam("page") int page, @RequestParam("size") int size, @RequestParam(required = false) String search) {
+		
+		log.info("ObjectUtils.isEmpty(search) "+ObjectUtils.isEmpty(search));
+		log.info("paginando synop "+search);
+		
+		PageRequest pageRequest = PageRequest.of(page, size, Sort.by("id").descending());
+    	
+    	Page<ShipSynop> lista = null;
+    	
+    	lista = ObjectUtils.isEmpty(search) ? shipSynopRepository.findAllByDados(pageRequest, "SYNOP") : 
+    		shipSynopRepository.findAllBySearch(pageRequest, "%"+search+"%", "SYNOP");
+    	
+    	ShipSynopModelAssembler assembler = new ShipSynopModelAssembler(); 
+    	CollectionModel<ShipSynopModel> listResource = assembler.toCollectionModel(lista.toList());
+    	
+    	Page<ShipSynopModel> pageFull = new PageImpl<ShipSynopModel>(new ArrayList<ShipSynopModel>(listResource.getContent()), lista.getPageable(), lista.getTotalElements());
+    	
+	    return ResponseEntity.ok(pageFull);
 	}
 	
 	@GetMapping("/synop/todos")
