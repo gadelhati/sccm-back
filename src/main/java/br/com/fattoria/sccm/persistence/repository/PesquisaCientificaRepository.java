@@ -100,7 +100,7 @@ public interface PesquisaCientificaRepository extends CrudRepository<PesquisaCie
 	@Query("select pc from PesquisaCientifica pc where "
 			+ "(pc.comissao.nomeComissao like :search or pc.instituicao.nome like :search "
 			+ "or pc.instituicao.sigla like :search or pc.plataforma.nome like :search "
-			+ "or pc.comandante like :search or pc.coordenadorCientifico like :search or pc.numeroPC like :search)")
+			+ "or pc.comandante like :search or pc.coordenadorCientifico like :search or pc.numeroPC like :search or pc.situacao like :search)")
 	Page<PesquisaCientifica> findAllBySearch(Pageable page, @Param("search") String search);
 
 }

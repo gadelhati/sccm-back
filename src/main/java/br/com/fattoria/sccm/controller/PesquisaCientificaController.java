@@ -335,13 +335,15 @@ public class PesquisaCientificaController {
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "Pesquisa Cientifica"),
     })
-	public ResponseEntity<Page<PesquisaCientificaModel>> getAll(@RequestParam("page") int page, @RequestParam("size") int size, @RequestParam String search) {
+	public ResponseEntity<Page<PesquisaCientificaModel>> getAll(@RequestParam("page") int page, @RequestParam("size") int size, @RequestParam(required = false) String search) {
 		
-		log.info("paginando pesquisas_cientificas");
+		log.info("paginando pesquisas_cientificas "+search);
 		
 		PageRequest pageRequest = PageRequest.of(page, size, Sort.by("numeroPC").descending());
     	
     	Page<PesquisaCientifica> lista = null;
+    	
+    	log.info("ObjectUtils.isEmpty(search) "+ObjectUtils.isEmpty(search));
     	
     	lista = ObjectUtils.isEmpty(search) ? pesquisaCientificaRepository.findAll(pageRequest) : 
     		pesquisaCientificaRepository.findAllBySearch(pageRequest, "%"+search+"%");
