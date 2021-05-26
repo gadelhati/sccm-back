@@ -2,6 +2,7 @@ package br.com.fattoria.sccm.controller;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Optional;
 
@@ -9,12 +10,17 @@ import javax.validation.Valid;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.server.EntityLinks;
 import org.springframework.hateoas.server.TypedEntityLinks;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,6 +28,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -118,6 +125,31 @@ public class PlataformaController {
         final URI uri = ServletUriComponentsBuilder.fromCurrentRequest().build().toUri();
         return ResponseEntity.created(uri).body(plataformaModel);
 
+	}
+	
+	@GetMapping("/plataformas/pagina")
+    @ApiOperation(value = "Retorna uma lista de plataformas")
+    @ApiResponses(value = {
+        @ApiResponse(code = 200, message = "Retorna a lista de plataformas"),
+    })
+	public ResponseEntity<Page<PlataformaModel>> getAll(@RequestParam("page") int page, @RequestParam("size") int size, @RequestParam(required = false) String search) {
+		
+		log.info("ObjectUtils.isEmpty(search) "+ObjectUtils.isEmpty(search));
+		log.info("paginando plataformas "+search);
+		
+		PageRequest pageRequest = PageRequest.of(page, size, Sort.by("nome").descending());
+    	
+    	Page<Plataforma> lista = null;
+    	
+    	lista = ObjectUtils.isEmpty(search) ? plataformaRepository.findAll(pageRequest) : 
+    		plataformaRepository.findAllBySearch(pageRequest, "%"+search+"%");
+    	
+    	PlataformaModelAssembler assembler = new PlataformaModelAssembler(); 
+    	CollectionModel<PlataformaModel> listResource = assembler.toCollectionModel(lista.toList());
+    	
+    	Page<PlataformaModel> pageFull = new PageImpl<PlataformaModel>(new ArrayList<PlataformaModel>(listResource.getContent()), lista.getPageable(), lista.getTotalElements());
+    	
+	    return ResponseEntity.ok(pageFull);
 	}
 	
 	@GetMapping("/plataformas")
