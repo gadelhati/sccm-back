@@ -31,4 +31,6 @@ public class Destino implements Serializable {
 	
 	private String destino;
 	
+	private boolean ativo;
+	
 }

@@ -15,9 +15,12 @@ public class DestinoModel extends RepresentationModel<DestinoModel>{
 	
 	private String destino;
 	
+	private boolean ativo;
+	
 	public DestinoModel(Destino destino) {		
 		this.id = destino.getId();
-		this.destino= destino.getDestino();
+		this.destino = destino.getDestino();
+		this.ativo = destino.isAtivo();
 		
 		add(linkTo(DestinoController.class).withRel("destino"));
     	    	

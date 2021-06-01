@@ -16,8 +16,10 @@ public class DestinoApi {
 	
 	private String destino;
 	
+	private boolean ativo;
+	
 	public Destino toEntity() {
-		return new Destino(id, destino);
+		return new Destino(id, destino, ativo);
 	}
 
 }
