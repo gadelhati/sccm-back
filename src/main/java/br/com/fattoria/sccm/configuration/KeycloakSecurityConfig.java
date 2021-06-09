@@ -5,7 +5,6 @@ import org.keycloak.adapters.springboot.KeycloakSpringBootConfigResolver;
 import org.keycloak.adapters.springsecurity.authentication.KeycloakAuthenticationProvider;
 import org.keycloak.adapters.springsecurity.config.KeycloakWebSecurityConfigurerAdapter;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -21,18 +20,6 @@ import org.springframework.security.web.authentication.session.SessionAuthentica
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(jsr250Enabled = true)
 public class KeycloakSecurityConfig extends KeycloakWebSecurityConfigurerAdapter {
-	
-	@Value("${keycloak.auth-server-url}")
-	public static String AUTH_SERVER;
-
-	@Value("${keycloak.credentials.secret}")
-	public static String CLIENT_SECRET;
-
-	@Value("${keycloak.resource}")
-	public static String CLIENT_ID;
-
-	@Value("${keycloak.realm}")
-	public static String REALM;
 	
     @Override
     protected void configure(HttpSecurity http) throws Exception {
