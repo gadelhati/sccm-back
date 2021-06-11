@@ -174,5 +174,25 @@ public class TipoDadoController {
     	}).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
 
 	}
+	
+	@GetMapping("/tipos_dado/ativos")
+    @ApiOperation(value = "Retorna uma lista de tipoDado")
+    @ApiResponses(value = {
+        @ApiResponse(code = 200, message = "Retorna a lista de tipoDado"),
+    })
+	public ResponseEntity<CollectionModel<TipoDadoModel>> getAllAtivos() {
+    	
+    	log.info("listando tipoDado");
+    	 
+    	Collection<TipoDado> lista = (Collection<TipoDado>) tipoDadoRepository.findAllByAtivoTrue();
+    	
+    	TipoDadoModelAssembler assembler = new TipoDadoModelAssembler(); 
+    	CollectionModel<TipoDadoModel> listTipoDadoResource = assembler.toCollectionModel(lista);
+    	
+    	final String uriString = ServletUriComponentsBuilder.fromCurrentRequest().build().toUriString();
+    	listTipoDadoResource.add(Link.of(uriString, "self"));
+    	
+	    return ResponseEntity.ok(listTipoDadoResource);
+	}
 
 }

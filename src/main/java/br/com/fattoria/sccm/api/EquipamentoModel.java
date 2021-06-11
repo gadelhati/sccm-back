@@ -30,8 +30,6 @@ public class EquipamentoModel extends RepresentationModel<EquipamentoModel> {
 	
 	private MetodoAmostragemModel metodoAmostragem;
 	
-	private UnidadeMedidaModel unidadeMedida;
-	
 	public EquipamentoModel(Equipamento equipamento) {		
 		this.id = equipamento.getId();
 		this.nome = equipamento.getNome();

@@ -38,6 +38,6 @@ public class MetodoAmostragem implements Serializable {
 	@NotNull @NotBlank @NotEmpty
 	private String descricao;
 
-	
+	private boolean ativo;
 	
 }

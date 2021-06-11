@@ -131,5 +131,25 @@ public class AreaTecnicaController {
     	 return areaTecnica.map(p -> {areaTecnicaRepository.deleteById(id);
     	 return ResponseEntity.noContent().build();}).orElseThrow(() -> new NotFoundException("Area Técnica não encontrada"));    	
     }
+    
+	@GetMapping("/areas_tecnica/ativas")
+    @ApiOperation(value = "Retorna lista de Area Técnicas")
+    @ApiResponses(value = {
+        @ApiResponse(code = 200, message = "Retorna a lista de Area Técnicas"),
+    })
+	public ResponseEntity<CollectionModel<AreaTecnicaModel>> getAllAtivas() {
+    	
+    	log.info("listando Area Técnicas");
+    	 
+    	Collection<AreaTecnica> lista = (Collection<AreaTecnica>) areaTecnicaRepository.findAllByAtivoTrue();
+    	
+    	AreaTecnicaModelAssembler assembler = new AreaTecnicaModelAssembler(); 
+    	CollectionModel<AreaTecnicaModel> listPlataformaResource = assembler.toCollectionModel(lista);
+    	
+    	final String uriString = ServletUriComponentsBuilder.fromCurrentRequest().build().toUriString();
+    	listPlataformaResource.add(Link.of(uriString, "self"));
+    	
+	    return ResponseEntity.ok(listPlataformaResource);
+	}
 	
 }
