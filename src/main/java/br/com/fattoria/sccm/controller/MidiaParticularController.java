@@ -220,11 +220,18 @@ public class MidiaParticularController {
     	
     	 log.info("midia por id "+id);
     	
-    	 midiaParticularRepository.deleteById(id);
     	 Optional<MidiaParticular> midiaParticular = midiaParticularRepository.findById(id);
     	 
-    	 return midiaParticular.map(p -> {midiaParticularRepository.deleteById(id);
-    	 return ResponseEntity.noContent().build();}).orElseThrow(() -> new NotFoundException("Mídia particular não encontrada"));    	
+    	 return midiaParticular.map(p -> {
+    		 
+	    	List<MidiaParticularTipoMidia> allByMidiaParticularId = midiaParticularTipoMidiaRepository.findAllByMidiaParticularId(id);
+	    	if(allByMidiaParticularId != null && allByMidiaParticularId.size() > 0) {
+	    		midiaParticularTipoMidiaRepository.deleteAll(allByMidiaParticularId);
+	    	}
+    	    	
+    		 midiaParticularRepository.deleteById(id);
+    		 return ResponseEntity.noContent().build();
+    	 }).orElseThrow(() -> new NotFoundException("Mídia particular não encontrada"));    	
     }
     
 	@GetMapping("/midias_particulares/{id}/midias_particulares_tipos_midias")
