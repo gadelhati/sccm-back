@@ -227,11 +227,27 @@ public class EquipamentoController {
     	
     	 log.info("Equipamento por id "+id);
     	
-    	 equipamentoRepository.deleteById(id);
-    	 Optional<Equipamento> pais = equipamentoRepository.findById(id);
+    	 Optional<Equipamento> equipamento = equipamentoRepository.findById(id);
     	 
-    	 return pais.map(p -> {equipamentoRepository.deleteById(id); 
-    	 return ResponseEntity.noContent().build();}).orElseThrow(() -> new NotFoundException("Equipamento não encontrada"));    	
+    	 return equipamento.map(p -> 
+	    	 {
+	    		 
+	    	     	List<AreaConhecimentoEquipamento> areasConhecimento = areaConhecimentoEquipamentoRepository.findAllByEquipamentoId(id);
+	    	    	
+	    	     	if(areasConhecimento != null && areasConhecimento.size() > 0) {
+	    	     		areaConhecimentoEquipamentoRepository.deleteAll(areasConhecimento);
+	    	     	}
+	    	     	
+	    	    	List<EquipamentoDados> dadosEquipamentos = equipamentoDadosRepository.findAllByEquipamentoId(id);
+	    	        
+	    	    	if(dadosEquipamentos != null && dadosEquipamentos.size() > 0) {
+	    	    		equipamentoDadosRepository.deleteAll(dadosEquipamentos);
+	    	    	}
+	    	    	
+	    	    	equipamentoRepository.deleteById(id); 
+	    	     	
+	    	 	 return ResponseEntity.noContent().build();
+	    	 }).orElseThrow(() -> new NotFoundException("Equipamento não encontrado"));    	
     }
     
 	@PutMapping("/equipamentos/active/{id}")
