@@ -24,6 +24,7 @@
 		<keycloak.version>12.0.1</keycloak.version>
 		<jasperreports.version>5.6.0</jasperreports.version>
 		<xstream.version>1.4.15</xstream.version>
+		<hateoas.version>2.5.0</hateoas.version>
 	</properties>
 
 	<dependencies>
@@ -34,8 +35,15 @@
 		</dependency> -->
 		
 		<dependency>
+		    <groupId>org.webjars</groupId>
+		    <artifactId>bootstrap</artifactId>
+		    <version>4.5.0</version>
+		</dependency>		
+		
+		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-hateoas</artifactId>
+			<version>${hateoas.version}</version>
 		</dependency>
 
 		<dependency>

@@ -99,12 +99,12 @@ public class AreaConhecimentoController {
     	Collection<AreaConhecimento> lista = (Collection<AreaConhecimento>) areaConhecimentoRepository.findAll();
     	
     	AreaConhecimentoModelAssembler assembler = new AreaConhecimentoModelAssembler(); 
-    	CollectionModel<AreaConhecimentoModel> listPlataformaResource = assembler.toCollectionModel(lista);
+    	CollectionModel<AreaConhecimentoModel> listAreasResource = assembler.toCollectionModel(lista);
     	
     	final String uriString = ServletUriComponentsBuilder.fromCurrentRequest().build().toUriString();
-    	listPlataformaResource.add(Link.of(uriString, "self"));
+    	listAreasResource.add(Link.of(uriString, "self"));
     	
-	    return ResponseEntity.ok(listPlataformaResource);
+	    return ResponseEntity.ok(listAreasResource);
 	}
     
     @GetMapping("/areas_conhecimento/{id}")
