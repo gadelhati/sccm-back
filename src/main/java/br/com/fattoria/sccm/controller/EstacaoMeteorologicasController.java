@@ -102,7 +102,7 @@ public class EstacaoMeteorologicasController {
 	public ResponseEntity<Page<EstacaoMeteorologicaModel>> getAll(@RequestParam("page") int page, @RequestParam("size") int size, @RequestParam(required = false) String search) {
 		
 		log.info("ObjectUtils.isEmpty(search) "+ObjectUtils.isEmpty(search));
-		log.info("paginando plataformas "+search);
+		log.info("paginando estacoes "+search);
 		
 		PageRequest pageRequest = PageRequest.of(page, size, Sort.by("nome").descending());
     	

@@ -13,6 +13,8 @@ import lombok.NoArgsConstructor;
 public class EstacaoMeteorologicaApi {
 
 	private Long id;
+	
+	private Long codigo;
 
 	private String nome;
 
@@ -23,7 +25,7 @@ public class EstacaoMeteorologicaApi {
 	private boolean ativo;
 
 	public EstacaoMeteorologica toEntity() {
-		return new EstacaoMeteorologica(id, nome, latitude, longitude, ativo);
+		return new EstacaoMeteorologica(id, codigo, nome, latitude, longitude, ativo);
 	}
 
 }
