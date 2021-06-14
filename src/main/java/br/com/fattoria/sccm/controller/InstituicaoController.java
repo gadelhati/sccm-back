@@ -36,6 +36,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import br.com.fattoria.sccm.api.InstituicaoApi;
 import br.com.fattoria.sccm.api.InstituicaoModel;
 import br.com.fattoria.sccm.api.InstituicaoModelAssembler;
+import br.com.fattoria.sccm.api.SearchApi;
 import br.com.fattoria.sccm.persistence.model.Endereco;
 import br.com.fattoria.sccm.persistence.model.Instituicao;
 import br.com.fattoria.sccm.persistence.model.Pais;
@@ -280,6 +281,66 @@ public class InstituicaoController {
     	log.info("listando instituicao");
     	 
     	Collection<Instituicao> lista = (Collection<Instituicao>) instituicaoRepository.findAllByTipoInstituicaoPublicoAndAtivoTrue();
+    	
+    	InstituicaoModelAssembler assembler = new InstituicaoModelAssembler(); 
+    	CollectionModel<InstituicaoModel> listInstituicaoResource = assembler.toCollectionModel(lista);
+    	
+    	final String uriString = ServletUriComponentsBuilder.fromCurrentRequest().build().toUriString();
+    	listInstituicaoResource.add(Link.of(uriString, "self"));
+    	
+	    return ResponseEntity.ok(listInstituicaoResource);
+	}
+	
+	@PostMapping("/instituicoes/ativas/searchNomeSigla")
+    @ApiOperation(value = "Retorna uma lista de instituicoes ativas")
+    @ApiResponses(value = {
+        @ApiResponse(code = 200, message = "Retorna a lista de instituicoes ativas"),
+    })
+	public ResponseEntity<CollectionModel<InstituicaoModel>> getAllAtivasByNomeOrSigla(@RequestBody SearchApi searchApi) {
+    	
+    	log.info("listando instituicao");
+    	 
+    	Collection<Instituicao> lista = (Collection<Instituicao>) instituicaoRepository.findAllByAtivoTrueAndNomeContainingIgnoreCaseOrSiglaContainingIgnoreCase(searchApi.getSearch() != null ? "%"+searchApi.getSearch()+"%" : "");
+    	
+    	InstituicaoModelAssembler assembler = new InstituicaoModelAssembler(); 
+    	CollectionModel<InstituicaoModel> listInstituicaoResource = assembler.toCollectionModel(lista);
+    	
+    	final String uriString = ServletUriComponentsBuilder.fromCurrentRequest().build().toUriString();
+    	listInstituicaoResource.add(Link.of(uriString, "self"));
+    	
+	    return ResponseEntity.ok(listInstituicaoResource);
+	}
+	
+	@PostMapping("/instituicoes/privada/ativas/searchNomeSigla")
+    @ApiOperation(value = "Retorna uma lista de instituicoes ativas")
+    @ApiResponses(value = {
+        @ApiResponse(code = 200, message = "Retorna a lista de instituicoes privadas ativas"),
+    })
+	public ResponseEntity<CollectionModel<InstituicaoModel>> getAllPrivadasAtivasByNomeOrSigla(@RequestBody SearchApi searchApi) {
+    	
+    	log.info("listando instituicao");
+    	 
+    	Collection<Instituicao> lista = (Collection<Instituicao>) instituicaoRepository.findAllByTipoInstituicaoPrivadoAndAtivoTrueAndNomeContainingIgnoreCaseOrSiglaContainingIgnoreCase(searchApi.getSearch() != null ? "%"+searchApi.getSearch()+"%" : "");
+    	
+    	InstituicaoModelAssembler assembler = new InstituicaoModelAssembler(); 
+    	CollectionModel<InstituicaoModel> listInstituicaoResource = assembler.toCollectionModel(lista);
+    	
+    	final String uriString = ServletUriComponentsBuilder.fromCurrentRequest().build().toUriString();
+    	listInstituicaoResource.add(Link.of(uriString, "self"));
+    	
+	    return ResponseEntity.ok(listInstituicaoResource);
+	}
+	
+	@PostMapping("/instituicoes/publica/ativas/searchNomeSigla")
+    @ApiOperation(value = "Retorna uma lista de instituicoes ativas")
+    @ApiResponses(value = {
+        @ApiResponse(code = 200, message = "Retorna a lista de instituicoes publicas ativas"),
+    })
+	public ResponseEntity<CollectionModel<InstituicaoModel>> getAllPublicasAtivasByNomeOrSigla(@RequestBody SearchApi searchApi) {
+    	
+    	log.info("listando instituicao");
+    	 
+    	Collection<Instituicao> lista = (Collection<Instituicao>) instituicaoRepository.findAllByTipoInstituicaoPublicoAndAtivoTrueAndNomeContainingIgnoreCaseOrSiglaContainingIgnoreCase(searchApi.getSearch() != null ? "%"+searchApi.getSearch()+"%" : "");
     	
     	InstituicaoModelAssembler assembler = new InstituicaoModelAssembler(); 
     	CollectionModel<InstituicaoModel> listInstituicaoResource = assembler.toCollectionModel(lista);
