@@ -687,7 +687,7 @@ public class PesquisaCientificaController {
     	return ResponseEntity.ok().body(pesquisaCientificaModelAssembler.toCollectionModel(pesquisaCientificas));
     }
     
-    @PostMapping("/pesquisas_cientificas/serchNumeroPC")
+    @PostMapping("/pesquisas_cientificas/searchNumeroPC")
     @ApiOperation(value = "Retorna uma lista de Pesquisa Cientifica")
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "Pesquisa Cientifica"),

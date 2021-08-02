@@ -191,11 +191,18 @@ public class MidiaDiversaController {
     	
     	 log.info("midia por id "+id);
     	
-    	 midiaDiversaRepository.deleteById(id);
     	 Optional<MidiaDiversa> midiaDiversa = midiaDiversaRepository.findById(id);
     	 
-    	 return midiaDiversa.map(p -> {midiaDiversaRepository.deleteById(id);
-    	 return ResponseEntity.noContent().build();}).orElseThrow(() -> new NotFoundException("Mídia diversa não encontrada"));    	
+    	 return midiaDiversa.map(p -> {
+    		 
+	    	List<MidiaDiversaTipoMidia> allByMidiaDiversaId = midiaDiversaTipoMidiaRepository.findAllByMidiaDiversaId(id);
+	    	if(allByMidiaDiversaId != null && allByMidiaDiversaId.size() > 0) {
+	    		midiaDiversaTipoMidiaRepository.deleteAll(allByMidiaDiversaId);
+	    	}
+    	    	
+    		 midiaDiversaRepository.deleteById(id);
+    		 return ResponseEntity.noContent().build();
+    	 }).orElseThrow(() -> new NotFoundException("Mídia diversa não encontrada"));    	
     }
     
 	@GetMapping("/midias_diversas/{id}/midias_diversas_tipos_midias")

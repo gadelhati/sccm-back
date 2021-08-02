@@ -13,6 +13,8 @@ public class EstacaoMeteorologicaModel extends RepresentationModel<EstacaoMeteor
 
 	private Long id;
 	
+	private Long codigo;
+	
 	private String nome;
 	
 	private String latitude;
@@ -23,6 +25,7 @@ public class EstacaoMeteorologicaModel extends RepresentationModel<EstacaoMeteor
 	
 	public EstacaoMeteorologicaModel(EstacaoMeteorologica estacoes) {		
 		this.id = estacoes.getId();
+		this.codigo = estacoes.getCodigo();
 		this.nome = estacoes.getNome();
 		this.latitude = estacoes.getLatitude();
 		this.longitude = estacoes.getLongitude();

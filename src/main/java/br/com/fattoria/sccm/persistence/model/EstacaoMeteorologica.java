@@ -33,6 +33,8 @@ public class EstacaoMeteorologica implements Serializable {
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator="estacao_meteriologica_generator")
 	private Long id;
 	
+	private Long codigo;
+	
 	private String nome;
 	
 	@Column(name = "latitude")

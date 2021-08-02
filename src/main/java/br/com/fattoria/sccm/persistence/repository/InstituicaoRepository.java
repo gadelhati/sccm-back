@@ -14,14 +14,14 @@ import org.springframework.stereotype.Repository;
 import br.com.fattoria.sccm.persistence.model.Instituicao;
 
 @Repository
-@RepositoryRestResource(collectionResourceRel = "instituicoes", path="instituicoes", exported = false)
+@RepositoryRestResource(collectionResourceRel = "instituicoes", path = "instituicoes", exported = false)
 public interface InstituicaoRepository extends CrudRepository<Instituicao, Long> {
-	
+
 	List<Instituicao> findAllByAtivoTrue();
-	
+
 	@Query("select i from Instituicao i where i.ativo=true and i.tipoInstituicao='PRIVADO'")
 	List<Instituicao> findAllByTipoInstituicaoPrivadoAndAtivoTrue();
-	
+
 	@Query("select i from Instituicao i where i.ativo=true and i.tipoInstituicao='PUBLICO'")
 	List<Instituicao> findAllByTipoInstituicaoPublicoAndAtivoTrue();
 
@@ -30,9 +30,21 @@ public interface InstituicaoRepository extends CrudRepository<Instituicao, Long>
 
 	Page<Instituicao> findAll(Pageable page);
 
-		@Query("select i from Instituicao i where "
+	@Query("select i from Instituicao i where "
 			+ "(UPPER(i.nome) like UPPER(:search) or UPPER(i.sigla) like UPPER(:search) or CAST(i.numeroInscricao as text) like UPPER(:search) "
 			+ "or CAST(i.numeroControle as text) like UPPER(:search) or UPPER(i.tipoInstituicao) like UPPER(:search))")
 	Page<Instituicao> findAllBySearch(Pageable page, @Param("search") String search);
+
+	@Query("select i from Instituicao i where i.ativo=true and i.tipoInstituicao='PRIVADO' and "
+			+ "(UPPER(i.nome) like UPPER(:search) or UPPER(i.sigla) like UPPER(:search)) ")
+	Collection<Instituicao> findAllByTipoInstituicaoPrivadoAndAtivoTrueAndNomeContainingIgnoreCaseOrSiglaContainingIgnoreCase(@Param("search") String search);
+
+	@Query("select i from Instituicao i where i.ativo=true and i.tipoInstituicao='PUBLICO' and "
+			+ "(UPPER(i.nome) like UPPER(:search) or UPPER(i.sigla) like UPPER(:search)) ")
+	Collection<Instituicao> findAllByTipoInstituicaoPublicoAndAtivoTrueAndNomeContainingIgnoreCaseOrSiglaContainingIgnoreCase(@Param("search") String search);
+
+	@Query("select i from Instituicao i where i.ativo=true and "
+			+ "(UPPER(i.nome) like UPPER(:search) or UPPER(i.sigla) like UPPER(:search)) ")
+	Collection<Instituicao> findAllByAtivoTrueAndNomeContainingIgnoreCaseOrSiglaContainingIgnoreCase(@Param("search") String search);
 
 }

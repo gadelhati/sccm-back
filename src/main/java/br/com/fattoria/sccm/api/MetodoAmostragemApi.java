@@ -22,8 +22,10 @@ public class MetodoAmostragemApi {
 	
 	private String descricao;
 	
+	private boolean ativo;
+	
 	public MetodoAmostragem toEntity() {
-		return new MetodoAmostragem(id, descricao);
+		return new MetodoAmostragem(id, descricao, ativo);
 	}
 	
 }

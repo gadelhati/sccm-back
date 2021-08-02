@@ -14,10 +14,13 @@ public class MetodoAmostragemModel extends RepresentationModel<MetodoAmostragemM
 	private Long id;
 	
 	private String descricao;
+	
+	private boolean ativo;
 
 	public MetodoAmostragemModel(MetodoAmostragem metodoAmostragem) {
 		this.id = metodoAmostragem.getId();
 		this.descricao = metodoAmostragem.getDescricao();
+		this.ativo = metodoAmostragem.isAtivo();
 		add(linkTo(MetodoAmostragemController.class).withRel("metodoAmostragem"));        
 	}
 	

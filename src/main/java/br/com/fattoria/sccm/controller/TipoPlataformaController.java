@@ -143,5 +143,25 @@ public class TipoPlataformaController {
     	            }).orElseThrow(() -> new NotFoundException("Plataforma não encontrada"));
     	
     }
+    
+	@GetMapping("/tipos_plataforma/ativos")
+    @ApiOperation(value = "Retorna uma lista de tipo plataformas")
+    @ApiResponses(value = {
+        @ApiResponse(code = 200, message = "Retorna a lista de tipo plataformas"),
+    })
+	public ResponseEntity<CollectionModel<TipoPlataformaModel>> getAllAtivos() {
+    	
+    	log.info("listando tipoPlataforma");
+    	 
+    	Collection<TipoPlataforma> lista = (Collection<TipoPlataforma>) tipoPlataformaRepository.findAllByAtivoTrue();
+    	
+    	TipoPlataformaModelAssembler assembler = new TipoPlataformaModelAssembler(); 
+    	CollectionModel<TipoPlataformaModel> listPlataformaResource = assembler.toCollectionModel(lista);
+    	
+    	final String uriString = ServletUriComponentsBuilder.fromCurrentRequest().build().toUriString();
+    	listPlataformaResource.add(Link.of(uriString, "self"));
+    	
+	    return ResponseEntity.ok(listPlataformaResource);
+	}
 
 }

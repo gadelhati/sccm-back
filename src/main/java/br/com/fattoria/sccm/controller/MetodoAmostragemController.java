@@ -134,5 +134,25 @@ public class MetodoAmostragemController {
     	 return metodoAmostragem.map(p -> {metodoAmostragemRepository.deleteById(id); 
     	 return ResponseEntity.noContent().build();}).orElseThrow(() -> new NotFoundException("Método Amostragem não encontrado"));    	
     }
+    
+	@GetMapping("/metodos_amostragem/ativos")
+    @ApiOperation(value = "Retorna uma lista de Metodo Amostragem")
+    @ApiResponses(value = {
+        @ApiResponse(code = 200, message = "Retorna a lista de Metodo Amostragem"),
+    })
+	public ResponseEntity<CollectionModel<MetodoAmostragemModel>> getAllAtivos() {
+    	
+    	log.info("listando Metodo Amostragem");
+    	 
+    	Collection<MetodoAmostragem> lista = (Collection<MetodoAmostragem>) metodoAmostragemRepository.findAllByAtivoTrue();
+    	
+    	MetodoAmostragemModelAssembler assembler = new MetodoAmostragemModelAssembler(); 
+    	CollectionModel<MetodoAmostragemModel> listPlataformaResource = assembler.toCollectionModel(lista);
+    	
+    	final String uriString = ServletUriComponentsBuilder.fromCurrentRequest().build().toUriString();
+    	listPlataformaResource.add(Link.of(uriString, "self"));
+    	
+	    return ResponseEntity.ok(listPlataformaResource);
+	}
 
 }
