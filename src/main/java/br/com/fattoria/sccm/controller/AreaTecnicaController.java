@@ -124,12 +124,14 @@ public class AreaTecnicaController {
     @ApiOperation(value = "Deleta uma Area Técnica")
     public ResponseEntity<?> delete(@PathVariable Long id) throws NotFoundException{
     	
-    	 log.info("plataforma por id "+id);
+    	 log.info("Área Técnica por id "+id);
     	
     	 Optional<AreaTecnica> areaTecnica = areaTecnicaRepository.findById(id);
     	 
-    	 return areaTecnica.map(p -> {areaTecnicaRepository.deleteById(id);
-    	 return ResponseEntity.noContent().build();}).orElseThrow(() -> new NotFoundException("Area Técnica não encontrada"));    	
+    	 return areaTecnica.map(p -> {
+    		 areaTecnicaRepository.deleteById(id);    		 
+    		 return ResponseEntity.noContent().build();
+    	 }).orElseThrow(() -> new NotFoundException("Area Técnica não encontrada"));    	
     }
 	
 }
