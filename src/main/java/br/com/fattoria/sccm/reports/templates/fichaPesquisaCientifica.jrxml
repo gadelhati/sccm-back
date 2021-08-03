@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="fichaPesquisaCientifica" pageWidth="595" pageHeight="900" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="16a947a1-b653-4543-ae1f-21aed7900de5">
 	<property name="ireport.zoom" value="2.3579476910000357"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="606"/>
+	<property name="ireport.y" value="1704"/>
 	<style name="table">
 		<box>
 			<pen lineWidth="1.0" lineColor="#000000"/>
@@ -730,36 +730,6 @@ Objetivo da Coleta]]></text>
 				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{listaDocumentos})]]></dataSourceExpression>
 				<subreportExpression><![CDATA[$P{SUB_DOCUMENTOS}]]></subreportExpression>
 			</subreport>
-			<textField>
-				<reportElement positionType="Float" x="0" y="116" width="185" height="20" uuid="8c1566d4-4aad-4691-9a56-475a1f865d99"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle"/>
-				<textFieldExpression><![CDATA[$F{nome_assinatura1}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement positionType="Float" x="192" y="116" width="178" height="20" uuid="52a56345-b589-425f-b344-7a3a55390df8"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle"/>
-				<textFieldExpression><![CDATA[$F{nome_assinatura2}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement positionType="Float" x="377" y="116" width="178" height="20" uuid="eb112bd6-7254-4c93-b687-ff30ed255fbc"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle"/>
-				<textFieldExpression><![CDATA[$F{nome_assinatura3}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement positionType="Float" x="0" y="135" width="185" height="20" uuid="b5a68a5a-86ca-4770-8c94-39d7d53cecc7"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle"/>
-				<textFieldExpression><![CDATA[$F{patente1}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement positionType="Float" x="192" y="135" width="178" height="20" uuid="b184be97-8529-4a7e-bb62-4ef29f5f1795"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle"/>
-				<textFieldExpression><![CDATA[$F{patente2}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement positionType="Float" x="377" y="135" width="178" height="20" uuid="9c58efd1-7234-43ab-8ccf-d0afcf248712"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle"/>
-				<textFieldExpression><![CDATA[$F{patente3}]]></textFieldExpression>
-			</textField>
 			<textField>
 				<reportElement positionType="Float" x="0" y="154" width="185" height="20" uuid="6b571ba6-06f3-4c92-bfac-b2ee7d18e45e"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>

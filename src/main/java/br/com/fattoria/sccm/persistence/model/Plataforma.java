@@ -50,6 +50,9 @@ public class Plataforma implements Serializable {
 	private TipoPlataforma tipoPlataforma;
 	
 	private boolean ativo;
+	
+	@Column(name = "abreviacao")
+	private String abreviacao;
 
 	
 }

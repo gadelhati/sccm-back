@@ -22,10 +22,12 @@ public class PlataformaApi {
 	
 	private Long idTipoPlataforma;
 	
+	private String abreviacao; 
+	
 	private boolean ativo;
 
 	public Plataforma toEntity() {
-		return new Plataforma(id, nome, indicativoVisual, null, null, ativo);
+		return new Plataforma(id, nome, indicativoVisual, null, null, ativo, abreviacao);
 	}
 	
 
