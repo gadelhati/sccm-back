@@ -694,7 +694,7 @@ public class PesquisaCientificaController {
     })
 	public ResponseEntity<CollectionModel<PesquisaCientificaModel>> getAllByNumeroPC(@RequestBody SearchApi searchApi) {
     	
-    	Collection<PesquisaCientifica> lista = (Collection<PesquisaCientifica>) pesquisaCientificaRepository.findByNumeroPCContainingIgnoreCase(
+    	Collection<PesquisaCientifica> lista = (Collection<PesquisaCientifica>) pesquisaCientificaRepository.findTop10ByNumeroPCContainingIgnoreCase(
     			searchApi.getSearch() != null ? searchApi.getSearch() : "");
     	
     	PesquisaCientificaModelAssembler assembler = new PesquisaCientificaModelAssembler(); 
