@@ -319,7 +319,7 @@ public class PesquisaCientificaController {
     })
 	public ResponseEntity<CollectionModel<PesquisaCientificaModel>> getAll() {
     	
-    	Collection<PesquisaCientifica> lista = (Collection<PesquisaCientifica>) pesquisaCientificaRepository.findAll(Sort.by("numeroPC").descending());
+    	Collection<PesquisaCientifica> lista = (Collection<PesquisaCientifica>) pesquisaCientificaRepository.findAll(Sort.by("id").descending());
     	
     	PesquisaCientificaModelAssembler assembler = new PesquisaCientificaModelAssembler(); 
     	CollectionModel<PesquisaCientificaModel> listResource = assembler.toCollectionModel(lista);
@@ -339,7 +339,7 @@ public class PesquisaCientificaController {
 		
 		log.info("paginando pesquisas_cientificas "+search);
 		
-		PageRequest pageRequest = PageRequest.of(page, size, Sort.by("numeroPC").descending());
+		PageRequest pageRequest = PageRequest.of(page, size, Sort.by("id").descending());
     	
     	Page<PesquisaCientifica> lista = null;
     	
