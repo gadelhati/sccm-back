@@ -66,8 +66,12 @@ public class RelatorioController {
 		*/
 		ReportRelatorio report = new ReportRelatorio(dto);
 		
-		ByteArrayOutputStream baos = new ByteArrayOutputStream();		
-		report.geraPDF(baos);
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		try {			
+			report.geraPDF(baos);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		
 		return ResponseEntity.ok()
 				.contentType(MediaType.parseMediaType("application/pdf"))
