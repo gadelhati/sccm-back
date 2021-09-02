@@ -1,4 +1,4 @@
-package br.com.fattoria.sccm.reports.templates.busines;
+package br.com.fattoria.sccm.busines;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

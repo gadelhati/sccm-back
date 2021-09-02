@@ -1,21 +1,10 @@
 package br.com.fattoria.sccm.reports.data;
 
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Collection;
-import java.util.List;
 
 import br.com.fattoria.sccm.dto.ListagemSynopDTO;
 import br.com.fattoria.sccm.dto.QuantitativoDTO;
-import br.com.fattoria.sccm.persistence.model.AreaConhecimento;
-import br.com.fattoria.sccm.persistence.model.Comissao;
-import br.com.fattoria.sccm.persistence.model.Equipamento;
-import br.com.fattoria.sccm.persistence.model.Instituicao;
 import br.com.fattoria.sccm.persistence.model.PesquisaCientifica;
-import br.com.fattoria.sccm.persistence.model.Plataforma;
-import br.com.fattoria.sccm.persistence.model.Sigilo;
-import br.com.fattoria.sccm.persistence.model.Situacao;
-import br.com.fattoria.sccm.persistence.model.TipoDado;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -35,7 +24,7 @@ public class RelatoriosDTO {
 	
 	private int qtdPCRecebidosNovo;
 	
-	/*private Collection<QuantitativoDTO> tiposComissao;
+	private Collection<QuantitativoDTO> tiposComissao;
 	
 	private Collection<QuantitativoDTO> dadosEquipamentosRecebidos;
 	
@@ -55,6 +44,6 @@ public class RelatoriosDTO {
 	
 	private Collection<QuantitativoDTO> midiasParticularesPorSituacoes;
 	
-	private Collection<QuantitativoDTO> midiasDiversasPorSituacoes;*/
+	private Collection<QuantitativoDTO> midiasDiversasPorSituacoes;
 	
 }

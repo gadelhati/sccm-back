@@ -42,7 +42,7 @@ public class RelatorioController {
 		
 		dto.setQtdPCRecebidosNovo(relatorioRepository.countByDataCadastroBetween(periodo).intValue());
 		
-		/*dto.setTiposComissao(relatorioRepository.countByDataCadastroBetweenGroupByTipoComissao(periodo));
+		dto.setTiposComissao(relatorioRepository.countByDataCadastroBetweenGroupByTipoComissao(periodo));
 		
 		dto.setDadosEquipamentosRecebidos(relatorioRepository.countByDataCadastroBetweenGroupByEquipamentos(periodo));
 		
@@ -63,20 +63,34 @@ public class RelatorioController {
 		dto.setMidiasParticularesPorSituacoes(relatorioRepository.countMidiasParticularesByDataCadastroBetweenGroupBySituacao(periodo));
 		
 		dto.setMidiasDiversasPorSituacoes(relatorioRepository.countMidiasDiversasByDataCadastroBetweenGroupBySituacao(periodo));
-		*/
-		ReportRelatorio report = new ReportRelatorio(dto);
 		
+		
+		ReportRelatorio report = new ReportRelatorio(dto);
+
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		try {			
 			report.geraPDF(baos);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+
+		/*
+		report.addParametro("IMG_LOGO", ReportFichaPesquisaCientifica.class.
+				getResourceAsStream("/br/com/fattoria/sccm/reports/img/logo-chm.png"));
+		
+		byte[] arquivo = report.geraPDF();
+		
+		FileOutputStream fos = new FileOutputStream("E:\\Everton\\Área de Trabalho\\arq"+System.currentTimeMillis()+".pdf");
+		fos.write(arquivo);
+		fos.flush();
+		fos.close();*/
+		
+		//report.geraPDF("E:\\Everton\\Área de Trabalho\\teste"+System.currentTimeMillis()+".pdf");
 		
 		return ResponseEntity.ok()
 				.contentType(MediaType.parseMediaType("application/pdf"))
-				.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=Relatorio.pdf\"")								
-				.body(baos.toByteArray());
+				.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"Relatorio.pdf\"")								
+				.body(baos);
 		
 	}
 	

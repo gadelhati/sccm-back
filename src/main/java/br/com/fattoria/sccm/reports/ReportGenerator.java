@@ -155,6 +155,8 @@ public abstract class ReportGenerator<T> {
 	/**
 	 * 
 	 * @param out
+	 * @throws IOException 
+	 * @throws  
 	 */
 	public void geraPDF(OutputStream out) {
 		try {
@@ -163,6 +165,15 @@ public abstract class ReportGenerator<T> {
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new ReportException(e);
+		} finally {
+			if (out != null) {
+				try {
+					out.flush();
+					out.close();
+				} catch (IOException e) {
+					throw new ReportException(e);
+				}
+			}
 		}
 	}
 
@@ -189,6 +200,7 @@ public abstract class ReportGenerator<T> {
 	/**
 	 * 
 	 * @return
+	 * @throws IOException 
 	 */
 	public void geraPNG(OutputStream out) {
 		try {
@@ -197,14 +209,24 @@ public abstract class ReportGenerator<T> {
 			ImageIO.write(image, "png", out);
 		} catch (Exception e) {
 			throw new ReportException(e);
+		} finally {
+			if (out != null) {
+				try {
+					out.flush();
+					out.close();
+				} catch (IOException e) {
+					throw new ReportException(e);
+				}
+			}
 		}
 	}
 
 	/**
 	 * 
 	 * @return
+	 * @throws IOException 
 	 */
-	public byte[] geraPDF() {
+	public byte[] geraPDF() throws IOException {
 		ByteArrayOutputStream stream = new ByteArrayOutputStream();
 		geraPDF(stream);
 		return stream.toByteArray();
@@ -213,8 +235,9 @@ public abstract class ReportGenerator<T> {
 	/**
 	 * 
 	 * @return
+	 * @throws IOException 
 	 */
-	public byte[] geraPNG() {
+	public byte[] geraPNG() throws IOException {
 		ByteArrayOutputStream stream = new ByteArrayOutputStream();
 		geraPNG(stream);
 		return stream.toByteArray();
@@ -223,16 +246,18 @@ public abstract class ReportGenerator<T> {
 	/**
 	 * 
 	 * @return
+	 * @throws IOException 
 	 */
-	public InputStream geraPDFStream() {
+	public InputStream geraPDFStream() throws IOException {
 		return new ByteArrayInputStream(geraPDF());
 	}
 
 	/**
 	 * 
 	 * @return
+	 * @throws IOException 
 	 */
-	public InputStream geraPNGStream() {
+	public InputStream geraPNGStream() throws IOException {
 		return new ByteArrayInputStream(geraPNG());
 	}
 
@@ -291,6 +316,14 @@ public abstract class ReportGenerator<T> {
 
 		} catch (Exception e) {
 			throw new ReportException(e);
+		} finally {
+			if (out != null) {
+				try {
+					out.close();
+				} catch (IOException e) {
+					throw new ReportException(e);
+				}
+			}
 		}
 	}
 
