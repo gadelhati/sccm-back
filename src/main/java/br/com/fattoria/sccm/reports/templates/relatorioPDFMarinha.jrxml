@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="relatorioPDFMarinha" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="ae84f59f-59b8-4dcb-8410-57d27d42c9bf">
+	<property name="ireport.zoom" value="1.6105100000000014"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<field name="periodoInicial" class="java.lang.String"/>
+	<field name="periodoFinal" class="java.lang.String"/>
+	<field name="qtdPCRecebidosNovo" class="java.lang.Number"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="85" splitType="Stretch">
+			<rectangle>
+				<reportElement mode="Opaque" x="0" y="0" width="555" height="85" forecolor="#000000" backcolor="#34704B" uuid="1c204330-3dc9-468f-8197-a5230703ba24"/>
+			</rectangle>
+			<textField>
+				<reportElement x="435" y="60" width="120" height="20" uuid="952d5c87-3744-487e-862c-62835f650ed6"/>
+				<textElement>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA["À: " +  $F{periodoFinal}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="435" y="17" width="120" height="20" uuid="21c8c726-d9fb-4719-9984-61a8e97e634d"/>
+				<textElement>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA["De: " +  $F{periodoInicial}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="99" y="0" width="337" height="85" forecolor="#FFFFFF" uuid="379267aa-6f09-4ca5-af56-59accaffa926"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="16" isBold="true"/>
+				</textElement>
+				<text><![CDATA[RELATÓRIO DE CONTROLE DE RECEBIMENTOS DE DADOS]]></text>
+			</staticText>
+		</band>
+	</title>
+	<detail>
+		<band height="125" splitType="Stretch">
+			<staticText>
+				<reportElement x="264" y="65" width="100" height="20" uuid="2afccbd6-e12a-495b-ad9c-0b14c31e8c17"/>
+				<text><![CDATA[qtdPCRecebidosNovo]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="364" y="65" width="100" height="20" uuid="ec18b610-9b9b-46ed-b56d-146094eb431b"/>
+				<textFieldExpression><![CDATA[$F{qtdPCRecebidosNovo}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

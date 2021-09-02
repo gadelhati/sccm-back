@@ -379,5 +379,5 @@ public class RelatorioRepositoryImpl implements RelatorioRepository {
 		
 		return collection;
 	}
-
+	
 }
