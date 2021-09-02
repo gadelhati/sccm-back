@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.List;
 
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
@@ -37,14 +38,14 @@ public interface InstituicaoRepository extends CrudRepository<Instituicao, Long>
 
 	@Query("select i from Instituicao i where i.ativo=true and i.tipoInstituicao='PRIVADO' and "
 			+ "(UPPER(i.nome) like UPPER(:search) or UPPER(i.sigla) like UPPER(:search)) ")
-	Collection<Instituicao> findAllByTipoInstituicaoPrivadoAndAtivoTrueAndNomeContainingIgnoreCaseOrSiglaContainingIgnoreCase(@Param("search") String search);
+	Page<Instituicao> findAllByTipoInstituicaoPrivadoAndAtivoTrueAndNomeContainingIgnoreCaseOrSiglaContainingIgnoreCase(@Param("search") String search, Pageable page);
 
 	@Query("select i from Instituicao i where i.ativo=true and i.tipoInstituicao='PUBLICO' and "
 			+ "(UPPER(i.nome) like UPPER(:search) or UPPER(i.sigla) like UPPER(:search)) ")
-	Collection<Instituicao> findAllByTipoInstituicaoPublicoAndAtivoTrueAndNomeContainingIgnoreCaseOrSiglaContainingIgnoreCase(@Param("search") String search);
+	Page<Instituicao> findAllByTipoInstituicaoPublicoAndAtivoTrueAndNomeContainingIgnoreCaseOrSiglaContainingIgnoreCase(@Param("search") String search, Pageable page);
 
 	@Query("select i from Instituicao i where i.ativo=true and "
 			+ "(UPPER(i.nome) like UPPER(:search) or UPPER(i.sigla) like UPPER(:search)) ")
-	Collection<Instituicao> findAllByAtivoTrueAndNomeContainingIgnoreCaseOrSiglaContainingIgnoreCase(@Param("search") String search);
+	Page<Instituicao> findAllByAtivoTrueAndNomeContainingIgnoreCaseOrSiglaContainingIgnoreCase(@Param("search") String search, Pageable page);
 
 }

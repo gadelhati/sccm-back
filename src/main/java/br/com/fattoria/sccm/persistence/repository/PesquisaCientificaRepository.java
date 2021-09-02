@@ -20,7 +20,7 @@ public interface PesquisaCientificaRepository extends CrudRepository<PesquisaCie
 	
 	Collection<PesquisaCientifica> findAll(Sort sort);
 	
-	Collection<PesquisaCientifica> findByNumeroPCContainingIgnoreCase(String numeroPC);
+	Collection<PesquisaCientifica> findTop10ByNumeroPCContainingIgnoreCase(String numeroPC);
 	
 	Page<PesquisaCientifica> findAll(Pageable page);
 	

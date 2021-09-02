@@ -300,10 +300,10 @@ public class InstituicaoController {
     	
     	log.info("listando instituicao");
     	 
-    	Collection<Instituicao> lista = (Collection<Instituicao>) instituicaoRepository.findAllByAtivoTrueAndNomeContainingIgnoreCaseOrSiglaContainingIgnoreCase(searchApi.getSearch() != null ? "%"+searchApi.getSearch()+"%" : "");
+    	Page<Instituicao> lista = (Page<Instituicao>) instituicaoRepository.findAllByAtivoTrueAndNomeContainingIgnoreCaseOrSiglaContainingIgnoreCase(searchApi.getSearch() != null ? "%"+searchApi.getSearch()+"%" : "", PageRequest.of(0, 10));
     	
     	InstituicaoModelAssembler assembler = new InstituicaoModelAssembler(); 
-    	CollectionModel<InstituicaoModel> listInstituicaoResource = assembler.toCollectionModel(lista);
+    	CollectionModel<InstituicaoModel> listInstituicaoResource = assembler.toCollectionModel(lista.getContent());
     	
     	final String uriString = ServletUriComponentsBuilder.fromCurrentRequest().build().toUriString();
     	listInstituicaoResource.add(Link.of(uriString, "self"));
@@ -320,10 +320,10 @@ public class InstituicaoController {
     	
     	log.info("listando instituicao");
     	 
-    	Collection<Instituicao> lista = (Collection<Instituicao>) instituicaoRepository.findAllByTipoInstituicaoPrivadoAndAtivoTrueAndNomeContainingIgnoreCaseOrSiglaContainingIgnoreCase(searchApi.getSearch() != null ? "%"+searchApi.getSearch()+"%" : "");
+    	Page<Instituicao> lista = (Page<Instituicao>) instituicaoRepository.findAllByTipoInstituicaoPrivadoAndAtivoTrueAndNomeContainingIgnoreCaseOrSiglaContainingIgnoreCase(searchApi.getSearch() != null ? "%"+searchApi.getSearch()+"%" : "", PageRequest.of(0, 10));
     	
     	InstituicaoModelAssembler assembler = new InstituicaoModelAssembler(); 
-    	CollectionModel<InstituicaoModel> listInstituicaoResource = assembler.toCollectionModel(lista);
+    	CollectionModel<InstituicaoModel> listInstituicaoResource = assembler.toCollectionModel(lista.getContent());
     	
     	final String uriString = ServletUriComponentsBuilder.fromCurrentRequest().build().toUriString();
     	listInstituicaoResource.add(Link.of(uriString, "self"));
@@ -340,10 +340,10 @@ public class InstituicaoController {
     	
     	log.info("listando instituicao");
     	 
-    	Collection<Instituicao> lista = (Collection<Instituicao>) instituicaoRepository.findAllByTipoInstituicaoPublicoAndAtivoTrueAndNomeContainingIgnoreCaseOrSiglaContainingIgnoreCase(searchApi.getSearch() != null ? "%"+searchApi.getSearch()+"%" : "");
+    	Page<Instituicao> lista = (Page<Instituicao>) instituicaoRepository.findAllByTipoInstituicaoPublicoAndAtivoTrueAndNomeContainingIgnoreCaseOrSiglaContainingIgnoreCase(searchApi.getSearch() != null ? "%"+searchApi.getSearch()+"%" : "", PageRequest.of(0, 10));
     	
     	InstituicaoModelAssembler assembler = new InstituicaoModelAssembler(); 
-    	CollectionModel<InstituicaoModel> listInstituicaoResource = assembler.toCollectionModel(lista);
+    	CollectionModel<InstituicaoModel> listInstituicaoResource = assembler.toCollectionModel(lista.getContent());
     	
     	final String uriString = ServletUriComponentsBuilder.fromCurrentRequest().build().toUriString();
     	listInstituicaoResource.add(Link.of(uriString, "self"));
