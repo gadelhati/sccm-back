@@ -24,9 +24,9 @@ public class Periodo implements PeriodoData {
 		
 		StringBuilder stringBuilder = new StringBuilder();
 		if(dataInicio != null)
-			stringBuilder.append("Data Inicio" + dateFormat.format(dataInicio.getTime()));
+			stringBuilder.append("Data Inicio " + dateFormat.format(dataInicio.getTime()));
 		if(dataFim != null)
-			stringBuilder.append("Data Fim" + dateFormat.format(dataFim.getTime()));
+			stringBuilder.append("Data Fim " + dateFormat.format(dataFim.getTime()));
 		
 		return stringBuilder.toString();
 	}

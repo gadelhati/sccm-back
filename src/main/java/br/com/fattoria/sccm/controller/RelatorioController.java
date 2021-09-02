@@ -1,6 +1,6 @@
 package br.com.fattoria.sccm.controller;
 
-import java.io.ByteArrayOutputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 
@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.com.fattoria.sccm.api.Periodo;
 import br.com.fattoria.sccm.persistence.repository.RelatorioRepository;
+import br.com.fattoria.sccm.reports.ReportFichaPesquisaCientifica;
 import br.com.fattoria.sccm.reports.ReportRelatorio;
 import br.com.fattoria.sccm.reports.data.RelatoriosDTO;
 import io.swagger.annotations.Api;
@@ -31,7 +32,7 @@ public class RelatorioController {
 	}
 
 	@PostMapping({"/relatorio/pdf"})
-	public ResponseEntity<?> getPDF(@RequestBody Periodo periodo) throws IOException, JRException {
+	public ResponseEntity<byte[]> getPDF(@RequestBody Periodo periodo) throws IOException, JRException {
 		
 		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 		
@@ -42,7 +43,7 @@ public class RelatorioController {
 		
 		dto.setQtdPCRecebidosNovo(relatorioRepository.countByDataCadastroBetween(periodo).intValue());
 		
-		/*dto.setTiposComissao(relatorioRepository.countByDataCadastroBetweenGroupByTipoComissao(periodo));
+		dto.setTiposComissao(relatorioRepository.countByDataCadastroBetweenGroupByTipoComissao(periodo));
 		
 		dto.setDadosEquipamentosRecebidos(relatorioRepository.countByDataCadastroBetweenGroupByEquipamentos(periodo));
 		
@@ -63,16 +64,26 @@ public class RelatorioController {
 		dto.setMidiasParticularesPorSituacoes(relatorioRepository.countMidiasParticularesByDataCadastroBetweenGroupBySituacao(periodo));
 		
 		dto.setMidiasDiversasPorSituacoes(relatorioRepository.countMidiasDiversasByDataCadastroBetweenGroupBySituacao(periodo));
-		*/
+		
+		
 		ReportRelatorio report = new ReportRelatorio(dto);
 		
-		ByteArrayOutputStream baos = new ByteArrayOutputStream();		
-		report.geraPDF(baos);
+		report.addParametro("IMG_LOGO", ReportFichaPesquisaCientifica.class.
+				getResourceAsStream("/br/com/fattoria/sccm/reports/img/logo-chm.png"));
+		
+		byte[] arquivo = report.geraPDF();
+		
+		FileOutputStream fos = new FileOutputStream("E:\\Everton\\Área de Trabalho\\arq"+System.currentTimeMillis()+".pdf");
+		fos.write(arquivo);
+		fos.flush();
+		fos.close();
+		
+		//report.geraPDF("E:\\Everton\\Área de Trabalho\\teste"+System.currentTimeMillis()+".pdf");
 		
 		return ResponseEntity.ok()
 				.contentType(MediaType.parseMediaType("application/pdf"))
-				.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=Relatorio.pdf\"")								
-				.body(baos.toByteArray());
+				.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"RelatorioDeControleDeRecebimentosDeDados.pdf\"")								
+				.body(arquivo);
 		
 	}
 	
