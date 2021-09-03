@@ -17,8 +17,6 @@ public class Periodo implements PeriodoData {
 	
 	private Calendar dataFim;
 	
-	private String teste;
-	
 	public String toString(){
 		SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 		

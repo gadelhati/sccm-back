@@ -372,7 +372,6 @@ public class ShipSynopController {
     	log.info("periodo => ", periodo);
     	log.info("inicio => ", periodo.getDataInicio());
     	log.info("fim => ", periodo.getDataFim());
-    	log.info("teste => ", periodo.getTeste());
     	 
     	Collection<QuantitativoDTO> countByDataCadastroBetweenGroupBySituacao = relatorioRepository.sumModelosObservacoesMeteorologicasByDataCadastroBetweenGroupBySituacao(periodo, "ship");
     	
@@ -389,7 +388,6 @@ public class ShipSynopController {
     	log.info("periodo => ", periodo);
     	log.info("inicio => ", periodo.getDataInicio());
     	log.info("fim => ", periodo.getDataFim());
-    	log.info("teste => ", periodo.getTeste());
     	 
     	Collection<QuantitativoDTO> countByDataCadastroBetweenGroupBySituacao = relatorioRepository.sumModelosObservacoesMeteorologicasByDataCadastroBetweenGroupBySituacao(periodo, "synop");
     	
@@ -406,7 +404,6 @@ public class ShipSynopController {
     	log.info("periodo => ", periodo);
     	log.info("inicio => ", periodo.getDataInicio());
     	log.info("fim => ", periodo.getDataFim());
-    	log.info("teste => ", periodo.getTeste());
     	 
     	Collection<QuantitativoDTO> countByDataCadastroBetweenGroupBySituacao = relatorioRepository.sumInformacaoObservacoesMeteorologicasByDataCadastroBetweenGroupBySituacao(periodo, "ship");
     	
@@ -423,7 +420,6 @@ public class ShipSynopController {
     	log.info("periodo => ", periodo);
     	log.info("inicio => ", periodo.getDataInicio());
     	log.info("fim => ", periodo.getDataFim());
-    	log.info("teste => ", periodo.getTeste());
     	 
     	Collection<QuantitativoDTO> countByDataCadastroBetweenGroupBySituacao = relatorioRepository.sumInformacaoObservacoesMeteorologicasByDataCadastroBetweenGroupBySituacao(periodo, "synop");
     	
@@ -440,7 +436,6 @@ public class ShipSynopController {
     	log.info("periodo => ", periodo);
     	log.info("inicio => ", periodo.getDataInicio());
     	log.info("fim => ", periodo.getDataFim());
-    	log.info("teste => ", periodo.getTeste());
     	 
     	Collection<ListagemSynopDTO> countByDataCadastroBetweenGroupBySituacao = relatorioRepository.listagemDadosEstacoesMeteorologicasByDataCadastroBetweenGroupBySituacao(periodo);
     	

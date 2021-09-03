@@ -3,16 +3,19 @@ package br.com.fattoria.sccm.controller;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.fattoria.sccm.api.Periodo;
+import br.com.fattoria.sccm.converter.CalendarConverter;
 import br.com.fattoria.sccm.persistence.repository.RelatorioRepository;
 import br.com.fattoria.sccm.reports.ReportRelatorio;
 import br.com.fattoria.sccm.reports.data.RelatoriosDTO;
@@ -30,15 +33,18 @@ public class RelatorioController {
 		this.relatorioRepository = relatorioRepository;
 	}
 
-	@PostMapping({"/relatorio/pdf"})
-	public ResponseEntity<?> getPDF(@RequestBody Periodo periodo) throws IOException, JRException {
+	@GetMapping({"/relatorio/pdf"})
+	public ResponseEntity<?> getPDF(@RequestParam String dataInicio, @RequestParam String dataFim) throws IOException, JRException {
 		
-		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+		Periodo periodo = new Periodo(new GregorianCalendar(2021, Calendar.JANUARY, 1), new GregorianCalendar(2021, Calendar.SEPTEMBER, 1));
+		
+		Calendar dataInicioCalendar = CalendarConverter.parseToCalendar(dataInicio, "yyyy-MM-dd");
+		Calendar dataFimCalendar = CalendarConverter.parseToCalendar(dataInicio, "yyyy-MM-dd");
 		
 		RelatoriosDTO dto = new RelatoriosDTO();
 		
-		dto.setPeriodoInicial(sdf.format(periodo.getDataInicio().getTime()));
-		dto.setPeriodoFinal(sdf.format(periodo.getDataFim().getTime()));
+		dto.setPeriodoInicial(CalendarConverter.parseToString(dataInicioCalendar, "dd/MM/yyyy"));
+		dto.setPeriodoFinal(CalendarConverter.parseToString(dataFimCalendar, "dd/MM/yyyy"));
 		
 		dto.setQtdPCRecebidosNovo(relatorioRepository.countByDataCadastroBetween(periodo).intValue());
 		
