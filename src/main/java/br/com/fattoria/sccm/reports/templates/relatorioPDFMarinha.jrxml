@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="relatorioPDFMarinha" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="ae84f59f-59b8-4dcb-8410-57d27d42c9bf">
 	<property name="ireport.zoom" value="1.610510000000007"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="548"/>
+	<property name="ireport.y" value="1187"/>
 	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA["D:\\git-fitoteca\\sccm\\src\\main\\java\\br\\com\\fattoria\\sccm\\reports\\templates\\"]]></defaultValueExpression>
 	</parameter>
@@ -16,6 +16,7 @@
 	<parameter name="PARAM_INF_SYNOP" class="net.sf.jasperreports.engine.JasperReport"/>
 	<parameter name="PARAM_EMP_PARTICULAR" class="net.sf.jasperreports.engine.JasperReport"/>
 	<parameter name="PARAM_DIVERSOS" class="net.sf.jasperreports.engine.JasperReport"/>
+	<parameter name="PARAM_EST_METEOROLOGICAS" class="net.sf.jasperreports.engine.JasperReport"/>
 	<field name="periodoInicial" class="java.lang.String"/>
 	<field name="periodoFinal" class="java.lang.String"/>
 	<field name="qtdPCRecebidosNovo" class="java.lang.Number"/>
@@ -29,6 +30,7 @@
 	<field name="synopInformacoesPorSituacoes" class="java.util.List"/>
 	<field name="midiasParticularesPorSituacoes" class="java.util.List"/>
 	<field name="midiasDiversasPorSituacoes" class="java.util.List"/>
+	<field name="dadosEstacoesMeteorologicas" class="java.util.List"/>
 	<pageHeader>
 		<band height="85">
 			<rectangle>
@@ -62,7 +64,7 @@
 		</band>
 	</pageHeader>
 	<detail>
-		<band height="450" splitType="Stretch">
+		<band height="440" splitType="Stretch">
 			<rectangle>
 				<reportElement mode="Transparent" x="277" y="60" width="278" height="20" uuid="8dbe9e29-3673-4541-a710-ed005187eba7"/>
 			</rectangle>
@@ -331,16 +333,16 @@
 				<subreportExpression><![CDATA[$P{PARAM_PENDENCIA}]]></subreportExpression>
 			</subreport>
 			<break>
-				<reportElement positionType="Float" x="0" y="440" width="100" height="1" uuid="c48decfe-41f5-4694-b70c-0330492e0e37"/>
-			</break>
-			<break>
 				<reportElement x="0" y="190" width="100" height="1" uuid="e6bd6014-6316-48c4-8542-eca7e16a8424"/>
 			</break>
 			<break>
 				<reportElement x="0" y="270" width="100" height="1" uuid="463d0c6a-4511-4b48-ad8c-b17e1a7437d7"/>
 			</break>
+			<break>
+				<reportElement positionType="Float" x="0" y="430" width="100" height="1" uuid="c48decfe-41f5-4694-b70c-0330492e0e37"/>
+			</break>
 		</band>
-		<band height="380">
+		<band height="420">
 			<rectangle>
 				<reportElement x="0" y="20" width="555" height="20" uuid="76fce1a1-da64-4bfa-a8ba-61dc44b6b178"/>
 			</rectangle>
@@ -550,9 +552,6 @@
 				<subreportExpression><![CDATA[$P{PARAM_INF_SYNOP}]]></subreportExpression>
 			</subreport>
 			<break>
-				<reportElement x="0" y="350" width="100" height="1" uuid="f4ed70e2-df33-4b43-a187-16fc4c8c9edb"/>
-			</break>
-			<break>
 				<reportElement x="0" y="110" width="100" height="1" uuid="6d229b7b-5b45-4f39-9d53-fb299dd44ea4"/>
 			</break>
 			<break>
@@ -561,8 +560,27 @@
 			<break>
 				<reportElement x="0" y="270" width="100" height="1" uuid="02b70f77-b35f-40f8-821c-9cce5e9efbc8"/>
 			</break>
+			<break>
+				<reportElement x="0" y="410" width="100" height="1" uuid="f4ed70e2-df33-4b43-a187-16fc4c8c9edb"/>
+			</break>
+			<rectangle>
+				<reportElement positionType="Float" x="0" y="360" width="555" height="20" uuid="96a12ef8-7079-4b19-aafd-ff7c7fc1a998"/>
+			</rectangle>
+			<staticText>
+				<reportElement positionType="Float" mode="Opaque" x="0" y="360" width="555" height="20" backcolor="#999999" uuid="ebd4c64e-5c7b-4c75-99d1-4adead6c2771"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<text><![CDATA[2.5. Dados Recebidos por Estações Meteorológica Fixa Costeira (SYNOP):]]></text>
+			</staticText>
+			<subreport>
+				<reportElement x="0" y="380" width="555" height="20" uuid="5de822cd-ef55-4b8e-ac37-af4d456bedae"/>
+				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{dadosEstacoesMeteorologicas})]]></dataSourceExpression>
+				<subreportExpression><![CDATA[$P{PARAM_EST_METEOROLOGICAS}]]></subreportExpression>
+			</subreport>
 		</band>
-		<band height="140">
+		<band height="120">
 			<rectangle>
 				<reportElement x="0" y="20" width="555" height="20" uuid="492744d8-0301-42c5-a631-6b887760cd8b"/>
 			</rectangle>
@@ -624,10 +642,10 @@
 				<subreportExpression><![CDATA[$P{PARAM_EMP_PARTICULAR}]]></subreportExpression>
 			</subreport>
 			<break>
-				<reportElement x="0" y="120" width="100" height="1" uuid="95447794-2fbc-4c08-a680-8c505ec61b10"/>
+				<reportElement x="0" y="110" width="100" height="1" uuid="95447794-2fbc-4c08-a680-8c505ec61b10"/>
 			</break>
 		</band>
-		<band height="300">
+		<band height="120">
 			<rectangle>
 				<reportElement x="0" y="20" width="555" height="20" uuid="3adb3bc1-a0d2-4e98-8525-84cf0b293a28"/>
 			</rectangle>

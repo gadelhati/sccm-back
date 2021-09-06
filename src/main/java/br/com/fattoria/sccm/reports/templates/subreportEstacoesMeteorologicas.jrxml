@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="subreportEstacoesMeteorologicas" pageWidth="555" pageHeight="802" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="f44f27ff-4b76-4fd3-91f3-96c45b39404c">
+	<property name="ireport.zoom" value="2.853116706110003"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<field name="estacaoMeteorologica" class="java.lang.String"/>
+	<field name="codigoEstacaoMeteorologica" class="java.lang.String"/>
+	<field name="primeiroRecebimento" class="java.lang.String"/>
+	<field name="ultimoRecebimento" class="java.lang.String"/>
+	<field name="totalModelosRecebidos" class="java.lang.String"/>
+	<field name="totalModelosDigitados" class="java.lang.String"/>
+	<title>
+		<band height="20">
+			<rectangle>
+				<reportElement x="0" y="0" width="250" height="20" uuid="9314e923-18e9-47c3-b0a9-79107401cd5b"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="250" y="0" width="45" height="20" uuid="5bdba076-afba-4a18-814d-356f0be15991"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="295" y="0" width="60" height="20" uuid="92a3e994-a0f3-43eb-847e-d96db018d4c7"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="415" y="0" width="70" height="20" uuid="56b1ae3a-604a-49c8-8a27-e8036b5e6ef8"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="355" y="0" width="60" height="20" uuid="71d8b895-e5ac-4286-8834-adf9aaca171e"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="485" y="0" width="70" height="20" uuid="b5b0aa74-39f5-4d72-940b-280756c89065"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="0" y="0" width="250" height="20" uuid="de55268e-4563-47d2-af34-ca0d33ab582d"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font isBold="true"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<text><![CDATA[Estação]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="250" y="0" width="45" height="20" uuid="4cba9f0b-cb97-460c-b39d-c4bc3f821550"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Cód.
+Estação]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="295" y="0" width="60" height="20" uuid="9eeea1e5-dd03-4c5a-96f6-90e2d976fd5a"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Primeiro Recebimento]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="355" y="0" width="60" height="20" uuid="a5c23ce3-6c8a-404c-9e3f-cdda583a08a0"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Último Recebimento]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="415" y="0" width="70" height="20" uuid="249136b9-7145-4b51-b265-124db402ee2a"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Modelos Recebidos]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="485" y="0" width="70" height="20" uuid="dae217f7-baec-436f-a8e9-b535f3cb150d"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7" isBold="true" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[Modelos Digitados]]></text>
+			</staticText>
+		</band>
+	</title>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<rectangle>
+				<reportElement x="0" y="0" width="250" height="20" uuid="9221da73-98b2-4ff3-bbfa-9d1330bfecda"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="250" y="0" width="45" height="20" uuid="b917354a-42a9-4bb7-b74d-456bf1f11d6b"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="295" y="0" width="60" height="20" uuid="12f03303-ccf0-4ff1-8d1a-248cdca31c39"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="415" y="0" width="70" height="20" uuid="4a537882-5a29-47a3-899a-e73c8f705007"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="355" y="0" width="60" height="20" uuid="cce87152-ee2e-44ac-a6e7-9b7c4889b195"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="485" y="0" width="70" height="20" uuid="87839b73-5a5a-4b86-9c2a-623d4eabb886"/>
+			</rectangle>
+			<textField>
+				<reportElement x="0" y="0" width="250" height="20" uuid="9cf8e2ab-43fd-4569-b060-5dcd7eeba06f"/>
+				<textElement verticalAlignment="Middle">
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{estacaoMeteorologica}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="250" y="0" width="45" height="20" uuid="ea3f7f8b-1d73-49b1-b1a1-95895a6e5ca4"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{codigoEstacaoMeteorologica}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="295" y="0" width="60" height="20" uuid="14c8128f-b665-498b-85fe-5fbecf70ca75"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{primeiroRecebimento}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="355" y="0" width="60" height="20" uuid="69b21b4d-90a1-4d1f-8e35-e2ae47156873"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ultimoRecebimento}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="415" y="0" width="70" height="20" uuid="00cb96a4-a0a9-4491-bc2a-225f9b7e0643"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{totalModelosRecebidos}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="485" y="0" width="70" height="20" uuid="df22e639-f9c4-47e4-acd6-11b3e1f01233"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{totalModelosDigitados}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

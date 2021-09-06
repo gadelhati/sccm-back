@@ -41,10 +41,10 @@ public class RelatorioController {
 	@GetMapping({"/relatorio/pdf"})
 	public ResponseEntity<?> getPDF(@RequestParam String dataInicio, @RequestParam String dataFim) throws IOException, JRException {
 		
-		Periodo periodo = new Periodo(new GregorianCalendar(2021, Calendar.JANUARY, 1), new GregorianCalendar(2021, Calendar.SEPTEMBER, 1));
-		
 		Calendar dataInicioCalendar = CalendarConverter.parseToCalendar(dataInicio, "yyyy-MM-dd");
-		Calendar dataFimCalendar = CalendarConverter.parseToCalendar(dataInicio, "yyyy-MM-dd");
+		Calendar dataFimCalendar = CalendarConverter.parseToCalendar(dataFim, "yyyy-MM-dd");
+		
+		Periodo periodo = new Periodo(dataInicioCalendar, dataFimCalendar);
 		
 		RelatoriosDTO dto = new RelatoriosDTO();
 		
@@ -82,7 +82,7 @@ public class RelatorioController {
 		
 		dto.setSynopInformacoesPorSituacoes(relatorioRepository.sumInformacaoObservacoesMeteorologicasByDataCadastroBetweenGroupBySituacao(periodo, "synop"));
 		
-		/*dto.setDadosEstacoesMeteorologicas(relatorioRepository.listagemDadosEstacoesMeteorologicasByDataCadastroBetweenGroupBySituacao(periodo));*/
+		dto.setDadosEstacoesMeteorologicas(relatorioRepository.listagemDadosEstacoesMeteorologicasByDataCadastroBetweenGroupBySituacao(periodo));
 		
 		dto.setMidiasParticularesPorSituacoes(relatorioRepository.countMidiasParticularesByDataCadastroBetweenGroupBySituacao(periodo));
 		
@@ -120,29 +120,20 @@ public class RelatorioController {
 				.getResourceAsStream("/br/com/fattoria/sccm/reports/templates/subreportQTDInfSYNOP.jasper"));
 		
 		report.addJasperSubReport("PARAM_EMP_PARTICULAR", RelatoriosDTO.class
-				.getResourceAsStream("/br/com/fattoria/sccm/reports/templates/subreportQTDInfSYNOP.jasper"));
+				.getResourceAsStream("/br/com/fattoria/sccm/reports/templates/subreportEmpParticular.jasper"));
 		
 		report.addJasperSubReport("PARAM_DIVERSOS", RelatoriosDTO.class
-				.getResourceAsStream("/br/com/fattoria/sccm/reports/templates/subreportQTDInfSYNOP.jasper"));
-
-		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-		try {			
-			report.geraPDF(baos);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+				.getResourceAsStream("/br/com/fattoria/sccm/reports/templates/subreportDiversos.jasper"));
+		
+		report.addJasperSubReport("PARAM_EST_METEOROLOGICAS", RelatoriosDTO.class
+				.getResourceAsStream("/br/com/fattoria/sccm/reports/templates/subreportEstacoesMeteorologicas.jasper"));
 		
 		byte[] arquivo = report.geraPDF();
-		
-		FileOutputStream fos = new FileOutputStream("C:\\Users\\Victor\\Desktop\\arq"+System.currentTimeMillis()+".pdf");
-		fos.write(arquivo);
-		fos.flush();
-		fos.close();
 		
 		return ResponseEntity.ok()
 				.contentType(MediaType.parseMediaType("application/pdf"))
 				.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"Relatorio.pdf\"")								
-				.body(baos);
+				.body(arquivo);
 		
 	}
 	
