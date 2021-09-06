@@ -1,10 +1,11 @@
 package br.com.fattoria.sccm.reports.data;
 
+import java.math.BigDecimal;
 import java.util.Collection;
 
 import br.com.fattoria.sccm.dto.ListagemSynopDTO;
+import br.com.fattoria.sccm.dto.PendenciaDTO;
 import br.com.fattoria.sccm.dto.QuantitativoDTO;
-import br.com.fattoria.sccm.persistence.model.PesquisaCientifica;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -26,11 +27,15 @@ public class RelatoriosDTO {
 	
 	private Collection<QuantitativoDTO> tiposComissao;
 	
+	private BigDecimal quantidadeTipoComissao;
+	
+	private String descricaoTipoComissao;
+	
 	private Collection<QuantitativoDTO> dadosEquipamentosRecebidos;
 	
 	private Collection<QuantitativoDTO> porSituacao;
 	
-	private Collection<PesquisaCientifica> pesquisaRecebidasPendentes;
+	private Collection<PendenciaDTO> pesquisaRecebidasPendentes;
 	
 	private Collection<QuantitativoDTO> shipModeloPorSituacoes;
 	

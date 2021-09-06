@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="subreportQTDInfSHIP" pageWidth="555" pageHeight="802" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="d71d0b0b-3988-46ad-8042-3bd394e76433">
+	<property name="ireport.zoom" value="1.9487171000000014"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<field name="quantidade" class="java.lang.Long"/>
+	<field name="descricao" class="java.lang.String"/>
+	<field name="porcentagem" class="java.math.BigDecimal"/>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<rectangle>
+				<reportElement x="0" y="0" width="185" height="20" uuid="61dfb55a-93c8-43e4-a339-f5a574b4dbda"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="185" y="0" width="185" height="20" uuid="a28b1264-43f7-4083-a91b-c1a8ff261e92"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="370" y="0" width="185" height="20" uuid="f577705a-224f-40ad-b5a8-f0c8257645a4"/>
+			</rectangle>
+			<textField>
+				<reportElement x="370" y="0" width="185" height="20" uuid="0b9fa921-9311-402c-810a-598ba60fe676"/>
+				<textElement verticalAlignment="Middle">
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{porcentagem} + "%"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="0" width="185" height="20" uuid="4d94a006-e3dd-4a7e-a0b3-b9ad5435097a"/>
+				<textElement verticalAlignment="Middle">
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{descricao}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="185" y="0" width="185" height="20" uuid="1f40d49f-e710-4126-ad39-745cb82dbce9"/>
+				<textElement verticalAlignment="Middle">
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{quantidade}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<summary>
+		<band height="270">
+			<pieChart>
+				<chart>
+					<reportElement x="0" y="20" width="555" height="250" uuid="f0190a0e-e553-4c8d-a845-6d8ebd310154"/>
+					<chartTitle/>
+					<chartSubtitle/>
+					<chartLegend/>
+				</chart>
+				<pieDataset>
+					<keyExpression><![CDATA[$F{descricao}]]></keyExpression>
+					<valueExpression><![CDATA[$F{porcentagem}]]></valueExpression>
+				</pieDataset>
+				<piePlot>
+					<plot/>
+					<itemLabel/>
+				</piePlot>
+			</pieChart>
+		</band>
+	</summary>
+</jasperReport>
