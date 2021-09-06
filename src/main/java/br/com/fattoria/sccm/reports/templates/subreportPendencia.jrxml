@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="subreportPendencia" pageWidth="555" pageHeight="802" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="abd1b1e8-cf37-4866-898c-494efe80700d">
+	<property name="ireport.zoom" value="2.853116706110003"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<field name="pc" class="java.lang.String"/>
+	<field name="instituicao" class="java.lang.String"/>
+	<field name="plataforma" class="java.lang.String"/>
+	<field name="dataInicio" class="java.lang.String"/>
+	<field name="dataFim" class="java.lang.String"/>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<rectangle>
+				<reportElement x="0" y="0" width="60" height="20" uuid="61b35f55-04d8-4431-bdb6-98bd3d106a4f"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="435" y="0" width="59" height="20" uuid="ccf19162-2b4c-453b-86f4-1e04f160ace5"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="60" y="0" width="120" height="20" uuid="30c8da50-9cbb-4937-ba4c-f824297f4702"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="494" y="0" width="61" height="20" uuid="8f468650-9f2e-40e7-ab39-91beb95566e7"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="180" y="0" width="255" height="20" uuid="aa029119-6b6c-4c0a-8864-c43c72b04dba"/>
+			</rectangle>
+			<textField>
+				<reportElement x="0" y="0" width="60" height="20" uuid="581a6c2e-3fcc-48a1-95fc-8b1886d18ea1"/>
+				<textElement verticalAlignment="Middle">
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{pc}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="60" y="0" width="120" height="20" uuid="fadfbd86-ad88-40cc-a81d-f0c1e9523da8"/>
+				<textElement verticalAlignment="Middle">
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{instituicao}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="180" y="0" width="255" height="20" uuid="f88624aa-cd61-4c0f-8ed9-283f1d9852a1"/>
+				<textElement verticalAlignment="Middle">
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{instituicao}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="435" y="0" width="59" height="20" uuid="756be2a5-b455-4bc4-9ef5-18afdd7c318d"/>
+				<textElement verticalAlignment="Middle">
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dataInicio}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="494" y="0" width="61" height="20" uuid="c1040cb9-d2c0-4072-8d5d-1748ee2a09b6"/>
+				<textElement verticalAlignment="Middle">
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dataFim}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

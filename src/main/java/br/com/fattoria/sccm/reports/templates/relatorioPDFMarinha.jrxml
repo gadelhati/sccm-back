@@ -1,22 +1,693 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="relatorioPDFMarinha" pageWidth="595" pageHeight="842" whenNoDataType="NoDataSection" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="ae84f59f-59b8-4dcb-8410-57d27d42c9bf">
-	<property name="ireport.zoom" value="1.6105100000000014"/>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="relatorioPDFMarinha" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="ae84f59f-59b8-4dcb-8410-57d27d42c9bf">
+	<property name="ireport.zoom" value="1.610510000000007"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.y" value="548"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["D:\\git-fitoteca\\sccm\\src\\main\\java\\br\\com\\fattoria\\sccm\\reports\\templates\\"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="PARAM_TIPOS_COMISSAO" class="net.sf.jasperreports.engine.JasperReport"/>
+	<parameter name="PARAM_DADOS_RECEBIDOS" class="net.sf.jasperreports.engine.JasperReport"/>
+	<parameter name="PARAM_SITUACAO" class="net.sf.jasperreports.engine.JasperReport"/>
+	<parameter name="PARAM_PENDENCIA" class="net.sf.jasperreports.engine.JasperReport"/>
+	<parameter name="PARAM_MOD_SHIP" class="net.sf.jasperreports.engine.JasperReport"/>
+	<parameter name="PARAM_INF_SHIP" class="net.sf.jasperreports.engine.JasperReport"/>
+	<parameter name="PARAM_MOD_SYNOP" class="net.sf.jasperreports.engine.JasperReport"/>
+	<parameter name="PARAM_INF_SYNOP" class="net.sf.jasperreports.engine.JasperReport"/>
+	<parameter name="PARAM_EMP_PARTICULAR" class="net.sf.jasperreports.engine.JasperReport"/>
+	<parameter name="PARAM_DIVERSOS" class="net.sf.jasperreports.engine.JasperReport"/>
 	<field name="periodoInicial" class="java.lang.String"/>
 	<field name="periodoFinal" class="java.lang.String"/>
 	<field name="qtdPCRecebidosNovo" class="java.lang.Number"/>
-	<background>
-		<band splitType="Stretch"/>
-	</background>
-	<title>
-		<band height="85" splitType="Stretch">
+	<field name="tiposComissao" class="java.util.List"/>
+	<field name="dadosEquipamentosRecebidos" class="java.util.List"/>
+	<field name="porSituacao" class="java.util.List"/>
+	<field name="pesquisaRecebidasPendentes" class="java.util.List"/>
+	<field name="shipModeloPorSituacoes" class="java.util.List"/>
+	<field name="shipInformacoesPorSituacoes" class="java.util.List"/>
+	<field name="synopModeloPorSituacoes" class="java.util.List"/>
+	<field name="synopInformacoesPorSituacoes" class="java.util.List"/>
+	<field name="midiasParticularesPorSituacoes" class="java.util.List"/>
+	<field name="midiasDiversasPorSituacoes" class="java.util.List"/>
+	<pageHeader>
+		<band height="85">
 			<rectangle>
 				<reportElement mode="Opaque" x="0" y="0" width="555" height="85" forecolor="#000000" backcolor="#34704B" uuid="1c204330-3dc9-468f-8197-a5230703ba24"/>
 			</rectangle>
+			<textField>
+				<reportElement x="435" y="60" width="120" height="20" forecolor="#FFFFFF" uuid="952d5c87-3744-487e-862c-62835f650ed6"/>
+				<textElement>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA["À: " +  $F{periodoFinal}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="435" y="17" width="120" height="20" forecolor="#FFFFFF" uuid="21c8c726-d9fb-4719-9984-61a8e97e634d"/>
+				<textElement>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA["De: " +  $F{periodoInicial}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="99" y="0" width="337" height="85" forecolor="#FFFFFF" uuid="379267aa-6f09-4ca5-af56-59accaffa926"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="16" isBold="true"/>
+				</textElement>
+				<text><![CDATA[RELATÓRIO DE CONTROLE DE RECEBIMENTOS DE DADOS]]></text>
+			</staticText>
+			<image hAlign="Center" vAlign="Middle" isUsingCache="true">
+				<reportElement x="1" y="0" width="98" height="85" uuid="da4e3302-6393-4f64-89cf-e4b63a2b4368"/>
+				<imageExpression><![CDATA[$P{REPORT_PARAMETERS_MAP}.get("IMG_LOGO")]]></imageExpression>
+			</image>
 		</band>
-	</title>
+	</pageHeader>
 	<detail>
-		<band height="125" splitType="Stretch"/>
+		<band height="450" splitType="Stretch">
+			<rectangle>
+				<reportElement mode="Transparent" x="277" y="60" width="278" height="20" uuid="8dbe9e29-3673-4541-a710-ed005187eba7"/>
+			</rectangle>
+			<rectangle>
+				<reportElement mode="Transparent" x="0" y="60" width="277" height="20" uuid="34563246-778f-4399-aef1-d44abda9ff93"/>
+			</rectangle>
+			<rectangle>
+				<reportElement mode="Transparent" x="0" y="20" width="555" height="20" uuid="046f5cd9-4985-4a6e-8bf1-e1ea729e5f15"/>
+			</rectangle>
+			<staticText>
+				<reportElement mode="Opaque" x="0" y="20" width="555" height="20" backcolor="#666666" uuid="7e56bd98-6127-44bb-80ba-056649f2466e"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font isBold="true"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<text><![CDATA[1. PESQUISAS CIENTÍFICAS]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement mode="Transparent" x="0" y="40" width="555" height="20" uuid="763fe276-4298-463d-bdb3-71da1dace1f5"/>
+			</rectangle>
+			<staticText>
+				<reportElement mode="Opaque" x="0" y="40" width="555" height="20" backcolor="#999999" uuid="955291b5-ba60-459d-812c-8045b1b52569"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<text><![CDATA[1.1. Quantitativo de pc recebidos:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="60" width="277" height="20" uuid="4bd855d6-444f-498b-bfaf-6590d76afdd5"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<text><![CDATA[Recebidos]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="277" y="60" width="278" height="20" uuid="52712c30-fc00-40b4-be3b-24e2f75a1b7f"/>
+				<textElement verticalAlignment="Middle">
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{qtdPCRecebidosNovo}]]></textFieldExpression>
+			</textField>
+			<rectangle>
+				<reportElement mode="Transparent" x="0" y="100" width="555" height="20" uuid="e6f38e60-ac7f-4379-81d8-9bdd1c0663d2"/>
+			</rectangle>
+			<staticText>
+				<reportElement mode="Opaque" x="0" y="100" width="555" height="20" backcolor="#999999" uuid="ec66af97-1fae-4745-8ac7-d4739c614077"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<text><![CDATA[1.2. Estatísticas:]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement mode="Transparent" x="0" y="120" width="555" height="20" uuid="e2984c37-7b62-4fb8-bd6d-da65b2d8a139"/>
+			</rectangle>
+			<staticText>
+				<reportElement mode="Opaque" x="0" y="120" width="555" height="20" backcolor="#CCCCCC" uuid="9e0f2a8d-05b1-4435-a8e1-92c24574e564"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<text><![CDATA[1.2.1. Tipos de Comissão]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement x="370" y="140" width="185" height="20" uuid="b4848a64-7b02-4ebf-871b-e50753abf3e0"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="185" y="140" width="185" height="20" uuid="11c933f4-d7c5-48d7-bb24-edc403655903"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="0" y="140" width="185" height="20" uuid="be129ba8-cce0-4403-8cac-4bde47b48766"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="370" y="140" width="185" height="20" uuid="dbc537a9-414a-4077-89ae-7f80eaceb6ff"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<text><![CDATA[Percentagem(%)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="185" y="140" width="185" height="20" uuid="ba797a59-b254-4e04-baeb-3a36aaad0984"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<text><![CDATA[Quantidade]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="140" width="185" height="20" uuid="caf8ac9c-f5eb-472c-bc1d-0ba1d5bf49be"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<text><![CDATA[Tipos Comissão]]></text>
+			</staticText>
+			<subreport>
+				<reportElement x="0" y="160" width="555" height="20" uuid="0408e7e1-be22-434b-95de-783f3c9dff51"/>
+				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{tiposComissao})]]></dataSourceExpression>
+				<subreportExpression><![CDATA[$P{PARAM_TIPOS_COMISSAO}]]></subreportExpression>
+			</subreport>
+			<rectangle>
+				<reportElement positionType="Float" mode="Transparent" x="0" y="200" width="555" height="20" uuid="3f6214ae-c0b8-4dcd-91c6-526576621ccf"/>
+			</rectangle>
+			<staticText>
+				<reportElement positionType="Float" mode="Opaque" x="0" y="200" width="555" height="20" backcolor="#CCCCCC" uuid="699cc290-2aed-4320-87e7-95af0f990df6"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<text><![CDATA[1.2.2. Dados(por equipamentos) recebidos]]></text>
+			</staticText>
+			<subreport>
+				<reportElement positionType="Float" x="0" y="240" width="555" height="20" uuid="790354c1-1eeb-4449-9931-33063626f4e1"/>
+				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{tiposComissao})]]></dataSourceExpression>
+				<subreportExpression><![CDATA[$P{PARAM_DADOS_RECEBIDOS}]]></subreportExpression>
+			</subreport>
+			<rectangle>
+				<reportElement positionType="Float" x="370" y="220" width="185" height="20" uuid="fbaeaefa-f98b-48ca-b055-3367a96b224d"/>
+			</rectangle>
+			<rectangle>
+				<reportElement positionType="Float" x="185" y="220" width="185" height="20" uuid="18f1405b-6b87-4582-a132-f7f826294ba3"/>
+			</rectangle>
+			<rectangle>
+				<reportElement positionType="Float" x="0" y="220" width="185" height="20" uuid="6f97ecef-61f7-4aa8-8bda-f1a857008bf6"/>
+			</rectangle>
+			<staticText>
+				<reportElement positionType="Float" x="370" y="220" width="185" height="20" uuid="7560ba99-c1e7-4699-868b-4ef938f51712"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<text><![CDATA[Percentagem(%)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="Float" x="185" y="220" width="185" height="20" uuid="2411811b-12e7-47d8-ae06-6d85cd53bbfd"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<text><![CDATA[Quantidade]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="Float" x="0" y="220" width="185" height="20" uuid="e9546293-c570-42f1-91e7-7838ba84c681"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<text><![CDATA[Dados por Equipamentos]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement positionType="Float" x="0" y="300" width="185" height="20" uuid="f8ddc0ab-1d0f-4f8d-ad16-83c50e66ce80"/>
+			</rectangle>
+			<rectangle>
+				<reportElement positionType="Float" x="185" y="300" width="185" height="20" uuid="940d859b-3739-46cd-8489-fd3e8656c6b2"/>
+			</rectangle>
+			<rectangle>
+				<reportElement positionType="Float" mode="Transparent" x="0" y="280" width="555" height="20" uuid="28ed0da7-fbc2-4557-82ce-764542a5c40f"/>
+			</rectangle>
+			<rectangle>
+				<reportElement positionType="Float" x="370" y="300" width="185" height="20" uuid="bfdfaf36-d87d-4083-af13-bdc583ace510"/>
+			</rectangle>
+			<staticText>
+				<reportElement positionType="Float" mode="Opaque" x="0" y="280" width="555" height="20" backcolor="#CCCCCC" uuid="e20b5575-29b1-4ddc-aa0f-9c269d90fc2a"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<text><![CDATA[1.2.3. Situação]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="Float" x="185" y="300" width="185" height="20" uuid="d5543a09-6269-4e2b-9efd-95ad44b366b2"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<text><![CDATA[Quantidade]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="Float" x="0" y="300" width="185" height="20" uuid="a8cca410-308d-4358-bda1-18ba898c35b4"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<text><![CDATA[Situação]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="Float" x="370" y="300" width="185" height="20" uuid="91f08084-dd2a-4964-93de-df214ce06da8"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<text><![CDATA[Percentagem(%)]]></text>
+			</staticText>
+			<subreport>
+				<reportElement positionType="Float" x="0" y="320" width="555" height="20" uuid="f88bb99a-4690-41b8-a5b6-b326afff990c"/>
+				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{porSituacao})]]></dataSourceExpression>
+				<subreportExpression><![CDATA[$P{PARAM_SITUACAO}]]></subreportExpression>
+			</subreport>
+			<rectangle>
+				<reportElement positionType="Float" x="0" y="360" width="555" height="20" uuid="9842e757-10e9-4aee-896f-b2de5054de16"/>
+			</rectangle>
+			<staticText>
+				<reportElement positionType="Float" mode="Opaque" x="0" y="360" width="555" height="20" backcolor="#999999" uuid="d14245c8-6b81-475d-a9f7-fceb6d25f397"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<text><![CDATA[1.3. Pendências de Dados e Documentos]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement positionType="Float" x="0" y="380" width="60" height="20" uuid="fa558149-a6c9-4034-be40-2fbd9625256b"/>
+			</rectangle>
+			<rectangle>
+				<reportElement positionType="Float" x="495" y="380" width="60" height="20" uuid="bd8e7443-e469-4fc7-b286-0bf2dfe509a2"/>
+			</rectangle>
+			<rectangle>
+				<reportElement positionType="Float" x="435" y="380" width="60" height="20" uuid="b1f40bc9-ae9f-4255-9ec9-749543c38bf6"/>
+			</rectangle>
+			<rectangle>
+				<reportElement positionType="Float" x="60" y="380" width="120" height="20" uuid="f66958ef-0162-46b7-b809-17d21fddbfc1"/>
+			</rectangle>
+			<rectangle>
+				<reportElement positionType="Float" x="180" y="380" width="255" height="20" uuid="e4eb536e-cf7b-47d9-a55a-e7fa56fd6a88"/>
+			</rectangle>
+			<staticText>
+				<reportElement positionType="Float" x="0" y="380" width="60" height="20" uuid="39ba36f0-a26a-4ff9-83c1-59f39eb02557"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[PC]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="Float" x="60" y="380" width="120" height="20" uuid="deb12524-4efb-470b-b19f-9a74537f274c"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Instituição]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="Float" x="180" y="380" width="255" height="20" uuid="8061a7df-160a-4c01-afcd-8d39857d6fa0"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Plataforma]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="Float" x="435" y="380" width="60" height="20" uuid="c96e0868-112c-4f60-a5ab-266dc38687d9"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Dt. Inicio]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="Float" x="495" y="380" width="60" height="20" uuid="c6a4a4d6-e521-4e5c-a06d-2fa8b8adee4e"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Dt. Fim]]></text>
+			</staticText>
+			<subreport>
+				<reportElement positionType="Float" x="0" y="400" width="555" height="20" uuid="638f5fc6-c0a0-4607-ada6-eb2c8fe5ade2"/>
+				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{pesquisaRecebidasPendentes})]]></dataSourceExpression>
+				<subreportExpression><![CDATA[$P{PARAM_PENDENCIA}]]></subreportExpression>
+			</subreport>
+			<break>
+				<reportElement positionType="Float" x="0" y="440" width="100" height="1" uuid="c48decfe-41f5-4694-b70c-0330492e0e37"/>
+			</break>
+			<break>
+				<reportElement x="0" y="190" width="100" height="1" uuid="e6bd6014-6316-48c4-8542-eca7e16a8424"/>
+			</break>
+			<break>
+				<reportElement x="0" y="270" width="100" height="1" uuid="463d0c6a-4511-4b48-ad8c-b17e1a7437d7"/>
+			</break>
+		</band>
+		<band height="380">
+			<rectangle>
+				<reportElement x="0" y="20" width="555" height="20" uuid="76fce1a1-da64-4bfa-a8ba-61dc44b6b178"/>
+			</rectangle>
+			<staticText>
+				<reportElement mode="Opaque" x="0" y="20" width="555" height="20" backcolor="#666666" uuid="fb4006bd-6b1b-4058-81e3-64db8559e57c"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<text><![CDATA[2. OBSERVAÇÃO METEOROLÓGICAS(SHIP/SYNOP)]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement x="0" y="40" width="555" height="20" uuid="c3da183d-87f2-404d-8ebd-a387bd1a55d0"/>
+			</rectangle>
+			<staticText>
+				<reportElement mode="Opaque" x="0" y="40" width="555" height="20" backcolor="#999999" uuid="946bb0f2-a256-4487-9f75-14258328588f"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<text><![CDATA[2.1. Quantitativo de Modelos de Observação Meteorológica - SHIP ]]></text>
+			</staticText>
+			<subreport>
+				<reportElement x="0" y="80" width="555" height="20" uuid="79b9b8aa-2a08-401a-8b1d-2a8f054702f5"/>
+				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{shipModeloPorSituacoes})]]></dataSourceExpression>
+				<subreportExpression><![CDATA[$P{PARAM_MOD_SHIP}]]></subreportExpression>
+			</subreport>
+			<rectangle>
+				<reportElement positionType="Float" x="0" y="120" width="555" height="20" uuid="7644f594-cb1f-45a6-901d-c880876b0d1f"/>
+			</rectangle>
+			<rectangle>
+				<reportElement positionType="Float" x="185" y="140" width="185" height="20" uuid="f7374c4e-8b8e-4ad4-8850-eac43758adbf"/>
+			</rectangle>
+			<rectangle>
+				<reportElement positionType="Float" x="0" y="140" width="185" height="20" uuid="a91dda13-c364-408c-a69a-de9b69975529"/>
+			</rectangle>
+			<rectangle>
+				<reportElement positionType="Float" x="369" y="140" width="186" height="20" uuid="39b67b32-decd-460e-8597-a970f28a6ab7"/>
+			</rectangle>
+			<staticText>
+				<reportElement positionType="Float" mode="Opaque" x="0" y="120" width="555" height="20" backcolor="#999999" uuid="ddb73dc0-ae4f-46e2-9430-c5be9c3c6b14"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<text><![CDATA[2.2. Quantitativo de Informações de Observação Meteorologica - SHIP
+]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="Float" x="0" y="140" width="185" height="20" uuid="a3ecd5fc-251b-430e-93c6-8a24cab31a52"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<text><![CDATA[Situação]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="Float" x="369" y="140" width="186" height="20" uuid="816ff6d5-0734-430f-898b-c2a150c4cbb6"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<text><![CDATA[Percentagem(%)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="Float" x="185" y="140" width="185" height="20" uuid="d9bae52f-a18f-49d5-9782-381b039f11fe"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<text><![CDATA[Quantidade]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement positionType="Float" x="185" y="60" width="185" height="20" uuid="7b936122-33f4-4001-b7d9-09403941b5b1"/>
+			</rectangle>
+			<rectangle>
+				<reportElement positionType="Float" x="0" y="60" width="185" height="20" uuid="b5d14fc6-3ed8-48ac-9003-34c7dcdf76f5"/>
+			</rectangle>
+			<rectangle>
+				<reportElement positionType="Float" x="369" y="60" width="186" height="20" uuid="e90e3b9f-02e0-45ea-9c9b-dd70cb97ee11"/>
+			</rectangle>
+			<staticText>
+				<reportElement positionType="Float" x="0" y="60" width="185" height="20" uuid="42706067-2f6a-4cd8-b29e-918295470bbe"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<text><![CDATA[Situação]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="Float" x="185" y="60" width="185" height="20" uuid="ddee6b11-ca81-49f4-87cf-5650ac235caa"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<text><![CDATA[Quantidade]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="Float" x="369" y="60" width="186" height="20" uuid="1ff9a5f0-e566-4751-9bbd-e971219949d9"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<text><![CDATA[Percentagem(%)]]></text>
+			</staticText>
+			<subreport>
+				<reportElement positionType="Float" x="0" y="160" width="555" height="20" uuid="112c4bea-6bd9-44a3-9a0e-a9dd9a9a72df"/>
+				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{shipInformacoesPorSituacoes})]]></dataSourceExpression>
+				<subreportExpression><![CDATA[$P{PARAM_INF_SHIP}]]></subreportExpression>
+			</subreport>
+			<rectangle>
+				<reportElement positionType="Float" x="0" y="200" width="555" height="20" uuid="ee4c74e3-4657-45c1-b8f9-eccadc2607a2"/>
+			</rectangle>
+			<rectangle>
+				<reportElement positionType="Float" x="369" y="220" width="186" height="20" uuid="bb7247f9-03c8-4cbf-a9bb-a467ed7d6fc0"/>
+			</rectangle>
+			<rectangle>
+				<reportElement positionType="Float" x="0" y="220" width="185" height="20" uuid="99c805fb-cb62-4e21-b6ef-55b26769ecef"/>
+			</rectangle>
+			<rectangle>
+				<reportElement positionType="Float" x="185" y="220" width="185" height="20" uuid="dba673ed-2179-4f01-aa57-d7ac195eeec1"/>
+			</rectangle>
+			<staticText>
+				<reportElement positionType="Float" x="370" y="220" width="186" height="20" uuid="3a4e10e4-7537-4637-a69b-1f7989086245"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<text><![CDATA[Percentagem(%)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="Float" x="185" y="220" width="185" height="20" uuid="82684d03-3726-476e-8a99-47e9c7f32324"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<text><![CDATA[Quantidade]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="Float" x="0" y="220" width="185" height="20" uuid="e12ca032-fe7d-4100-aa13-81c1fe517241"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<text><![CDATA[Situação]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="Float" mode="Opaque" x="0" y="200" width="555" height="20" backcolor="#999999" uuid="f2b48af3-4ae9-46e2-b76e-a0fab6bacccf"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<text><![CDATA[2.3. Quantitativo de Modelos de Observação Meteorológica - SYNOP]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement positionType="Float" x="0" y="280" width="555" height="20" uuid="db9a1d1b-3fdc-4133-83cd-84785b374dc9"/>
+			</rectangle>
+			<rectangle>
+				<reportElement positionType="Float" x="0" y="300" width="185" height="20" uuid="e93c6349-ac92-4a48-aa5f-671809ea9471"/>
+			</rectangle>
+			<rectangle>
+				<reportElement positionType="Float" x="184" y="300" width="185" height="20" uuid="302f74f0-e7ef-4270-bc31-56f9cd21c5c4"/>
+			</rectangle>
+			<rectangle>
+				<reportElement positionType="Float" x="369" y="300" width="186" height="20" uuid="77497c27-ebe8-4b23-9497-41f982fcb65d"/>
+			</rectangle>
+			<staticText>
+				<reportElement positionType="Float" mode="Opaque" x="0" y="280" width="555" height="20" backcolor="#999999" uuid="f11e800d-9779-462e-a5dd-374c399d7c1e"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<text><![CDATA[2.4. Quantitativo de Informações de Observação Meteorológica - SYNOP]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="Float" x="0" y="300" width="185" height="20" uuid="9fe530f4-b901-43bb-901b-c39af2070328"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<text><![CDATA[Situação]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="Float" x="185" y="300" width="185" height="20" uuid="488f8a6f-7d70-4ff2-beba-7c58faf46318"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<text><![CDATA[Quantidade]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="Float" x="369" y="300" width="186" height="20" uuid="8433c6d2-6411-44ac-9399-eead9b3f6baa"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<text><![CDATA[Percentagem(%)]]></text>
+			</staticText>
+			<subreport>
+				<reportElement positionType="Float" x="0" y="240" width="555" height="20" uuid="1f9d43f6-16ea-464e-98a2-dde6b13dffce"/>
+				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{synopModeloPorSituacoes})]]></dataSourceExpression>
+				<subreportExpression><![CDATA[$P{PARAM_INF_SYNOP}]]></subreportExpression>
+			</subreport>
+			<subreport>
+				<reportElement positionType="Float" x="0" y="320" width="555" height="20" uuid="395d37b9-52b2-471c-9b0b-ff533a18cd18"/>
+				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{synopInformacoesPorSituacoes})]]></dataSourceExpression>
+				<subreportExpression><![CDATA[$P{PARAM_INF_SYNOP}]]></subreportExpression>
+			</subreport>
+			<break>
+				<reportElement x="0" y="350" width="100" height="1" uuid="f4ed70e2-df33-4b43-a187-16fc4c8c9edb"/>
+			</break>
+			<break>
+				<reportElement x="0" y="110" width="100" height="1" uuid="6d229b7b-5b45-4f39-9d53-fb299dd44ea4"/>
+			</break>
+			<break>
+				<reportElement x="0" y="190" width="100" height="1" uuid="e9cc40d8-79c2-496b-a103-922f19660309"/>
+			</break>
+			<break>
+				<reportElement x="0" y="270" width="100" height="1" uuid="02b70f77-b35f-40f8-821c-9cce5e9efbc8"/>
+			</break>
+		</band>
+		<band height="140">
+			<rectangle>
+				<reportElement x="0" y="20" width="555" height="20" uuid="492744d8-0301-42c5-a631-6b887760cd8b"/>
+			</rectangle>
+			<staticText>
+				<reportElement mode="Opaque" x="0" y="20" width="555" height="20" backcolor="#666666" uuid="edde5470-5c5c-4011-880a-80732f5d6b7c"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<text><![CDATA[3. RELATÓRIO DE ANÁLISE DE EMPRESA PARTICULAR]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement positionType="Float" x="0" y="40" width="555" height="20" uuid="ac18a01a-7426-4a50-a806-9dbaad991190"/>
+			</rectangle>
+			<staticText>
+				<reportElement positionType="Float" mode="Opaque" x="0" y="40" width="555" height="20" backcolor="#999999" uuid="10e9427b-2949-4ea9-be61-c159a4d079ed"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<text><![CDATA[3.1. Quantitativo de Relatórios de Análise:]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement positionType="Float" x="0" y="60" width="185" height="20" uuid="365a0e79-4f0d-4cfa-bc1f-666268a5d5bd"/>
+			</rectangle>
+			<rectangle>
+				<reportElement positionType="Float" x="185" y="60" width="185" height="20" uuid="54b52591-7ced-4ec8-9e12-5d0bd985b351"/>
+			</rectangle>
+			<rectangle>
+				<reportElement positionType="Float" x="369" y="60" width="186" height="20" uuid="c82e8838-dd22-422a-a287-e218e920ab14"/>
+			</rectangle>
+			<staticText>
+				<reportElement positionType="Float" x="0" y="60" width="185" height="20" uuid="c9f6c3b7-ab4c-48d5-a26d-b60d535ee62f"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<text><![CDATA[Situação]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="Float" x="185" y="60" width="185" height="20" uuid="bf77fa0a-a10e-4dc9-aed7-86860c1fa137"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<text><![CDATA[Quantidade]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="Float" x="369" y="60" width="186" height="20" uuid="e5788d60-5be0-4486-b258-e57cbf99a87c"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<text><![CDATA[Percentagem(%)]]></text>
+			</staticText>
+			<subreport>
+				<reportElement x="0" y="80" width="555" height="20" uuid="4f02acc8-3b64-43da-8eaf-79616581479e"/>
+				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{midiasParticularesPorSituacoes})]]></dataSourceExpression>
+				<subreportExpression><![CDATA[$P{PARAM_EMP_PARTICULAR}]]></subreportExpression>
+			</subreport>
+			<break>
+				<reportElement x="0" y="120" width="100" height="1" uuid="95447794-2fbc-4c08-a680-8c505ec61b10"/>
+			</break>
+		</band>
+		<band height="300">
+			<rectangle>
+				<reportElement x="0" y="20" width="555" height="20" uuid="3adb3bc1-a0d2-4e98-8525-84cf0b293a28"/>
+			</rectangle>
+			<rectangle>
+				<reportElement positionType="Float" x="0" y="40" width="555" height="20" uuid="5b7ddb57-0c4f-4a1c-9466-460eefb9d06e"/>
+			</rectangle>
+			<rectangle>
+				<reportElement positionType="Float" x="0" y="60" width="185" height="20" uuid="8dfa6d81-2967-4270-a669-58ebdbaa1613"/>
+			</rectangle>
+			<rectangle>
+				<reportElement positionType="Float" x="185" y="60" width="185" height="20" uuid="d569c3f1-ac6a-411f-a0fa-14e98b6a06aa"/>
+			</rectangle>
+			<rectangle>
+				<reportElement positionType="Float" x="369" y="60" width="186" height="20" uuid="fcce933c-3480-4206-b017-c0c21b2dfbbc"/>
+			</rectangle>
+			<staticText>
+				<reportElement mode="Opaque" x="0" y="20" width="555" height="20" backcolor="#666666" uuid="b7d42621-48fc-45b6-adb2-36c25f92302f"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<text><![CDATA[4. DIVERSOS]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="Float" mode="Opaque" x="0" y="40" width="555" height="20" backcolor="#999999" uuid="f105dd20-9e40-4fcd-8d97-86584e2fc94d"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<text><![CDATA[4.1 Quantitativo de Mídias Digitais Referentes a Documentos Diversos:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="Float" x="0" y="60" width="185" height="20" uuid="59fdfb42-1dc5-4905-b0d3-89b023829122"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<text><![CDATA[Situação]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="Float" x="185" y="60" width="185" height="20" uuid="e7a3fe98-ac35-4727-8a7d-fe33e5d3a6af"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<text><![CDATA[Quantidade]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="Float" x="369" y="60" width="186" height="20" uuid="ee0a3310-9874-4f6d-88aa-45aa2cacdd16"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<text><![CDATA[Percentagem(%)]]></text>
+			</staticText>
+			<subreport>
+				<reportElement x="0" y="80" width="555" height="20" uuid="559aa9e0-7bce-433a-857e-7859fef54f4d"/>
+				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{midiasDiversasPorSituacoes})]]></dataSourceExpression>
+				<subreportExpression><![CDATA[$P{PARAM_DIVERSOS}]]></subreportExpression>
+			</subreport>
+		</band>
 	</detail>
 </jasperReport>
