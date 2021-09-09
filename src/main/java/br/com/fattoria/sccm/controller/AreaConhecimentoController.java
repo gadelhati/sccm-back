@@ -52,16 +52,16 @@ public class AreaConhecimentoController {
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "Area Conhecimento criada"),
     })
-	ResponseEntity<AreaConhecimentoModel> create(@Valid @RequestBody AreaConhecimentoApi areaConhecimento) throws URISyntaxException{
+	ResponseEntity<AreaConhecimentoModel> create(@Valid @RequestBody AreaConhecimentoApi areaConhecimento) throws URISyntaxException {
 		
 		log.info("criando area de conhecimento");
 	
 		AreaConhecimento areaConhecimentoEntity = areaConhecimento.toEntity();
         
-    	AreaConhecimentoModelAssembler assembler = new AreaConhecimentoModelAssembler(); 
-    	AreaConhecimentoModel paisModel = assembler.toModel(areaConhecimentoRepository.save(areaConhecimentoEntity));
- 
-        
+		AreaConhecimentoModelAssembler assembler = new AreaConhecimentoModelAssembler();
+		
+		AreaConhecimentoModel areaConhecimentoModel = assembler.toModel(areaConhecimentoRepository.save(areaConhecimentoEntity));
+	    
         final URI uri = 
                 MvcUriComponentsBuilder.fromController(getClass())
                     .path("/{id}")
@@ -69,7 +69,7 @@ public class AreaConhecimentoController {
                     .toUri();
         
         return ResponseEntity.created(uri)
-                .body(paisModel);
+                .body(areaConhecimentoModel);
 	}
 	
 	@PutMapping("/areas_conhecimento/{id}")

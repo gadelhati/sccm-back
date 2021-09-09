@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="relatorioPDFMarinha" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="ae84f59f-59b8-4dcb-8410-57d27d42c9bf">
 	<property name="ireport.zoom" value="1.610510000000007"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="1187"/>
+	<property name="ireport.y" value="0"/>
 	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA["D:\\git-fitoteca\\sccm\\src\\main\\java\\br\\com\\fattoria\\sccm\\reports\\templates\\"]]></defaultValueExpression>
 	</parameter>
@@ -575,7 +575,7 @@
 				<text><![CDATA[2.5. Dados Recebidos por Estações Meteorológica Fixa Costeira (SYNOP):]]></text>
 			</staticText>
 			<subreport>
-				<reportElement x="0" y="380" width="555" height="20" uuid="5de822cd-ef55-4b8e-ac37-af4d456bedae"/>
+				<reportElement positionType="Float" x="0" y="380" width="555" height="20" uuid="5de822cd-ef55-4b8e-ac37-af4d456bedae"/>
 				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{dadosEstacoesMeteorologicas})]]></dataSourceExpression>
 				<subreportExpression><![CDATA[$P{PARAM_EST_METEOROLOGICAS}]]></subreportExpression>
 			</subreport>

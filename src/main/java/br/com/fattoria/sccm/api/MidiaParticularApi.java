@@ -18,13 +18,13 @@ public class MidiaParticularApi {
 	
 	private String comissaoProjeto;
 	
-	private Long numeroAutorizacao;
+	private String numeroAutorizacao;
 	
-	private Long numeroRA;
+	private String numeroRA;
 	
 	private String numeroFicha;
 	
-	private Long codigoC;
+	private String codigoC;
 	
 	private Calendar data;
 	

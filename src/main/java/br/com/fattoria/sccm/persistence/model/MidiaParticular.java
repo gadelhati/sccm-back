@@ -49,16 +49,16 @@ public class MidiaParticular {
 	private String comissaoProjeto;
 	
 	@Column(name="numero_autorizacao")
-	private Long numeroAutorizacao;
+	private String numeroAutorizacao;
 	
 	@Column(name="numero_ra")
-	private Long numeroRA;
+	private String numeroRA;
 	
 	@Column(name="numero_ficha")
 	private String numeroFicha;
 	
 	@Column(name="codigo_c")
-	private Long codigoC;
+	private String codigoC;
 	
 	@Temporal(TemporalType.DATE)
 	private Calendar data;
