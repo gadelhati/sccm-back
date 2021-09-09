@@ -1,12 +1,9 @@
 package br.com.fattoria.sccm.controller;
 
-import java.io.ByteArrayOutputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Calendar;
 import java.util.Collection;
-import java.util.GregorianCalendar;
 import java.util.LinkedList;
 
 import org.springframework.http.HttpHeaders;
