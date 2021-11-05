@@ -14,6 +14,7 @@ import java.util.Optional;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
+import org.keycloak.representations.AccessToken;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -100,6 +101,7 @@ import br.com.fattoria.sccm.reports.data.EquipamentoDTO;
 import br.com.fattoria.sccm.reports.data.FichaPesquisaCientificaDTO;
 import br.com.fattoria.sccm.reports.data.TipoDadoDTO;
 import br.com.fattoria.sccm.service.DocumentStorageService;
+import br.com.fattoria.sccm.service.KeycloakAuthenticationTokenUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -173,9 +175,13 @@ public class PesquisaCientificaController {
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "Pesquisa Cientifica criada"),
     })
-	ResponseEntity<PesquisaCientificaModel> create(@Valid @RequestBody PesquisaCientificaApi api) throws URISyntaxException {
+	ResponseEntity<PesquisaCientificaModel> create(@Valid @RequestBody PesquisaCientificaApi api, HttpServletRequest request) throws URISyntaxException {
+		
+		AccessToken accessToken = KeycloakAuthenticationTokenUtil.getAccessToken(request);
 		
 		log.info("Salvando "+api);
+		
+		log.info("Usuario " + accessToken.getGivenName());
 		
 		Optional<Plataforma> plataforma = plataformaRepository.findById(api.getIdPlataforma());
 		
@@ -192,6 +198,7 @@ public class PesquisaCientificaController {
         entityPC.setInstituicao(instituicao.get());
         entityPC.setSigilo(sigilo.get());
         entityPC.setSituacao(situacao.get());
+        entityPC.setUsuarioCadastro(accessToken.getGivenName() + " " + accessToken.getFamilyName());
         
 		String sequence = sequenceGenerator.getSequence(SequenceModel.build("NUMERO_PC"));
 		log.info("Numero PC gerado "+sequence);

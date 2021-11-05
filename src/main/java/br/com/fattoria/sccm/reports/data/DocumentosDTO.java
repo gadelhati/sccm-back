@@ -30,7 +30,7 @@ public class DocumentosDTO {
 		this.anexo = documento.getAnexo();
 		this.tipoAnexo = documento.getTipoAnexo().getDescricao();
 		this.destino = documento.getDestino().getDestino();
-		this.dataRecebimento = sdf.format(documento.getDataRecebimento().getTime());		
+		this.dataRecebimento = documento.getDataRecebimento() != null ? sdf.format(documento.getDataRecebimento().getTime()) : null;		
 	}
 	
 	public List<DocumentosDTO> getListToListDTO(List<Documento> lista) {

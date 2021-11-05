@@ -52,6 +52,8 @@ public class PesquisaCientificaModel  extends RepresentationModel<PesquisaCienti
 	
 	private String indiceH;
 	
+	private String usuarioCadastro;
+	
 	public PesquisaCientificaModel(PesquisaCientifica pesquisaCientifica) {		
 		this.id                   = pesquisaCientifica.getId();
 		this.numeroPC             = pesquisaCientifica.getNumeroPC();
@@ -68,8 +70,9 @@ public class PesquisaCientificaModel  extends RepresentationModel<PesquisaCienti
 		this.limiteSulLatitude    = pesquisaCientifica.getLimiteSulLatitude();
 		this.limiteLesteLongitude = pesquisaCientifica.getLimiteLesteLongitude();
 		this.limiteOesteLongitude = pesquisaCientifica.getLimiteOesteLongitude();
+		this.usuarioCadastro      = pesquisaCientifica.getUsuarioCadastro();
 		this.numeroIEPortariaAutorizacaoPesquisa = pesquisaCientifica.getNumeroIEPortariaAutorizacaoPesquisa();
-		this.indiceH = pesquisaCientifica.getIndiceH();
+		this.indiceH = pesquisaCientifica.getIndiceH();		
 		
 		add(linkTo(methodOn(PesquisaCientificaController.class).getAll()).withRel("pesquisas_cientificas"));
 		add(linkTo(methodOn(PesquisaCientificaController.class).getById(pesquisaCientifica.getId())).withSelfRel());

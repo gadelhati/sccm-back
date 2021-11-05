@@ -114,6 +114,9 @@ public class PesquisaCientifica implements Serializable {
     joinColumns = {@JoinColumn(name="fk_pesquisa_cientifica")}, 
     inverseJoinColumns = {@JoinColumn(name="fk_equipamento")})
 	private List<Equipamento> listaEquipamentos;
+	
+	@Column(name = "usuario_cadastro")
+	private String usuarioCadastro;
 
 	@Transient
 	private List<TipoDado> listaTiposDados;
