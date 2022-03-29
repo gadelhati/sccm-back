@@ -2,16 +2,6 @@ package br.com.fattoria.sccm.api;
 
 import java.util.Calendar;
 
-import javax.persistence.Column;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-
-import br.com.fattoria.sccm.persistence.model.Comissao;
-import br.com.fattoria.sccm.persistence.model.Destino;
-import br.com.fattoria.sccm.persistence.model.PesquisaCientifica;
-import br.com.fattoria.sccm.persistence.model.Plataforma;
 import br.com.fattoria.sccm.persistence.model.ShipSynop;
 import lombok.AllArgsConstructor;
 import lombok.Data;
