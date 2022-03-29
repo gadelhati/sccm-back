@@ -130,7 +130,6 @@ public class AreaConhecimentoController {
     	
     	 log.info("plataforma por id "+id);
     	
-    	 areaConhecimentoRepository.deleteById(id);
     	 Optional<AreaConhecimento> areaConhecimento = areaConhecimentoRepository.findById(id);
     	 
     	 return areaConhecimento.map(

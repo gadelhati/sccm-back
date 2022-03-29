@@ -21,7 +21,7 @@ public interface EstacaoMeteorologicaRepository extends CrudRepository<EstacaoMe
 	Page<EstacaoMeteorologica> findAll(Pageable page);
 
 	@Query("select p from EstacaoMeteorologica p where "
-		+ "(UPPER(p.nome) like UPPER(:search))")
+		+ "((UPPER(p.nome) like UPPER(:search)) or str(p.codigo) like :search)")
 	Page<EstacaoMeteorologica> findAllBySearch(Pageable page, @Param("search") String search);
 
 }
