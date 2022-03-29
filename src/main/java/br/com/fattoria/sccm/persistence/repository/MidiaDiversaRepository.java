@@ -17,7 +17,8 @@ public interface MidiaDiversaRepository extends CrudRepository<MidiaDiversa, Lon
 	Page<MidiaDiversa> findAll(Pageable page);
 
 	@Query("select m from MidiaDiversa m where "
-		+ "(UPPER(m.numeroOficio) like UPPER(:search) or UPPER(m.situacao.descricao) like UPPER(:search))")
+		+ "(UPPER(m.numeroOficio) like UPPER(:search) or UPPER(m.situacao.descricao) like UPPER(:search) "
+		+ "or UPPER(m.conteudo) like UPPER(:search) or UPPER(m.numeroH) like UPPER(:search) or STR(m.codigo) like UPPER(:search))")
 	Page<MidiaDiversa> findAllBySearch(Pageable page, @Param("search") String search);
 
 }
