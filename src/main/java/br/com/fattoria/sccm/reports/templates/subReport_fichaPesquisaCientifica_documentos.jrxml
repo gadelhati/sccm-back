@@ -73,26 +73,26 @@ WHERE
 	<detail>
 		<band height="20" splitType="Stretch">
 			<rectangle>
-				<reportElement x="0" y="0" width="555" height="20" uuid="31adc1b6-3396-46ee-971b-6b50763db6a7"/>
+				<reportElement x="0" y="0" width="555" height="20" isPrintWhenDetailOverflows="true" uuid="31adc1b6-3396-46ee-971b-6b50763db6a7"/>
 			</rectangle>
-			<textField>
+			<textField isBlankWhenNull="true">
 				<reportElement x="0" y="0" width="240" height="20" uuid="3027565b-da44-410c-9479-29affdc17ad3"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<paragraph leftIndent="2"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{anexo}]]></textFieldExpression>
 			</textField>
-			<textField>
-				<reportElement x="240" y="0" width="100" height="20" uuid="46574257-dd31-4436-8e52-92c43722adc6"/>
+			<textField isBlankWhenNull="true">
+				<reportElement x="240" y="0" width="100" height="20" isPrintWhenDetailOverflows="true" uuid="46574257-dd31-4436-8e52-92c43722adc6"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{tipoAnexo}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField isBlankWhenNull="true">
 				<reportElement x="340" y="0" width="100" height="20" uuid="f627ab60-079f-4d5a-8e79-481d9df3d4cb"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{destino}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField isBlankWhenNull="true">
 				<reportElement x="440" y="0" width="115" height="20" uuid="21d17f1d-5815-4ae0-9cba-87a3f80774ea"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{dataRecebimento}]]></textFieldExpression>
