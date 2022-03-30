@@ -40,21 +40,21 @@ WHERE
 				<text><![CDATA[Documentos e Mídias Enviados e Recebidos]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="1" y="20" width="240" height="18" backcolor="#CCCCCC" uuid="6df27ac9-db2e-4af4-ad18-2956c200e31f"/>
+				<reportElement mode="Opaque" x="1" y="20" width="200" height="18" backcolor="#CCCCCC" uuid="6df27ac9-db2e-4af4-ad18-2956c200e31f"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font isBold="true"/>
 				</textElement>
 				<text><![CDATA[Anexo]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="240" y="20" width="100" height="18" backcolor="#CCCCCC" uuid="7d8bdac5-255d-44d3-bae7-8cd184256c87"/>
+				<reportElement mode="Opaque" x="200" y="20" width="100" height="18" backcolor="#CCCCCC" uuid="7d8bdac5-255d-44d3-bae7-8cd184256c87"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font isBold="true"/>
 				</textElement>
 				<text><![CDATA[Tipo]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="340" y="20" width="100" height="18" backcolor="#CCCCCC" uuid="cadc1789-bd14-4082-aceb-c742104c2aa3"/>
+				<reportElement mode="Opaque" x="300" y="20" width="140" height="18" backcolor="#CCCCCC" uuid="cadc1789-bd14-4082-aceb-c742104c2aa3"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font isBold="true"/>
 				</textElement>
@@ -73,27 +73,27 @@ WHERE
 	<detail>
 		<band height="20" splitType="Stretch">
 			<rectangle>
-				<reportElement x="0" y="0" width="555" height="20" isPrintWhenDetailOverflows="true" uuid="31adc1b6-3396-46ee-971b-6b50763db6a7"/>
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" isPrintRepeatedValues="false" x="0" y="0" width="555" height="20" isPrintWhenDetailOverflows="true" uuid="31adc1b6-3396-46ee-971b-6b50763db6a7"/>
 			</rectangle>
-			<textField isBlankWhenNull="true">
-				<reportElement x="0" y="0" width="240" height="20" uuid="3027565b-da44-410c-9479-29affdc17ad3"/>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" isPrintRepeatedValues="false" x="0" y="0" width="200" height="20" isPrintWhenDetailOverflows="true" uuid="3027565b-da44-410c-9479-29affdc17ad3"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<paragraph leftIndent="2"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{anexo}]]></textFieldExpression>
 			</textField>
-			<textField isBlankWhenNull="true">
-				<reportElement x="240" y="0" width="100" height="20" isPrintWhenDetailOverflows="true" uuid="46574257-dd31-4436-8e52-92c43722adc6"/>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" isPrintRepeatedValues="false" x="200" y="0" width="100" height="20" isPrintWhenDetailOverflows="true" uuid="46574257-dd31-4436-8e52-92c43722adc6"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{tipoAnexo}]]></textFieldExpression>
 			</textField>
-			<textField isBlankWhenNull="true">
-				<reportElement x="340" y="0" width="100" height="20" uuid="f627ab60-079f-4d5a-8e79-481d9df3d4cb"/>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" isPrintRepeatedValues="false" x="300" y="0" width="140" height="20" isPrintWhenDetailOverflows="true" uuid="f627ab60-079f-4d5a-8e79-481d9df3d4cb"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{destino}]]></textFieldExpression>
 			</textField>
-			<textField isBlankWhenNull="true">
-				<reportElement x="440" y="0" width="115" height="20" uuid="21d17f1d-5815-4ae0-9cba-87a3f80774ea"/>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" isPrintRepeatedValues="false" x="440" y="0" width="115" height="20" isPrintWhenDetailOverflows="true" uuid="21d17f1d-5815-4ae0-9cba-87a3f80774ea"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{dataRecebimento}]]></textFieldExpression>
 			</textField>
