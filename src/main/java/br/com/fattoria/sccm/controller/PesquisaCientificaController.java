@@ -565,7 +565,9 @@ public class PesquisaCientificaController {
 	@GetMapping({"/pesquisas_cientificas/pdf", "/pesquisas_cientificas/{id}/pdf"})
 	public ResponseEntity<?> getPDF(@PathVariable Long id) throws IOException, JRException {
 		
-		FichaPesquisaCientificaDTO dto = pesquisaCientificaRepository.getIdFichaPesquisaCientificaView(id);
+		List<FichaPesquisaCientificaDTO> dtoList = pesquisaCientificaRepository.getIdFichaPesquisaCientificaView(id);
+		
+		FichaPesquisaCientificaDTO dto = dtoList.get(0);
 		
 		AreaConhecimentoDTO areaConhecimentoDTO = new AreaConhecimentoDTO();		
 		dto.setListaAreaConhecimento(areaConhecimentoDTO.getListToListDTO(areaConhecimentoRepository.findAllByPesquisaCientificaId(id)));

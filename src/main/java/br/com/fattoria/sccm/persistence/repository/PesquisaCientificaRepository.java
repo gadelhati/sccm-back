@@ -1,6 +1,7 @@
 package br.com.fattoria.sccm.persistence.repository;
 
 import java.util.Collection;
+import java.util.List;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -89,13 +90,13 @@ public interface PesquisaCientificaRepository extends CrudRepository<PesquisaCie
 			"LEFT JOIN ControleInterno ci " + 
 			"ON " + 
 			"    pc.id = ci.pesquisaCientifica.id " +
-			"AND  ci.dataRecebimento = (SELECT MAX(c.dataRecebimento) FROM ControleInterno c WHERE c.pesquisaCientifica.id = pc.id)" + 
+//			"AND  ci.dataRecebimento = (SELECT MAX(c.dataRecebimento) FROM ControleInterno c WHERE c.pesquisaCientifica.id = pc.id)" + 
 			"LEFT JOIN Instituicao iCI " + 
 			"ON " + 
 			"    iCI.id = ci.instituicao.id " + 
 			"WHERE " + 
-			"    pc.id = :id")
-	FichaPesquisaCientificaDTO getIdFichaPesquisaCientificaView(@Param("id") Long id);
+			"    pc.id = :id order by ci.dataRecebimento desc, ci.id desc")
+	List<FichaPesquisaCientificaDTO> getIdFichaPesquisaCientificaView(@Param("id") Long id);
 
 	@Query("select pc from PesquisaCientifica pc where "
 			+ "(UPPER(pc.comissao.nomeComissao) like UPPER(:search) or UPPER(pc.instituicao.nome) like UPPER(:search) "

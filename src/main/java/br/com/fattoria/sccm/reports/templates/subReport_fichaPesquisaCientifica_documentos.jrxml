@@ -72,31 +72,31 @@ WHERE
 	</title>
 	<detail>
 		<band height="20" splitType="Stretch">
-			<rectangle>
-				<reportElement positionType="Float" stretchType="RelativeToTallestObject" isPrintRepeatedValues="false" x="0" y="0" width="555" height="20" isPrintWhenDetailOverflows="true" uuid="31adc1b6-3396-46ee-971b-6b50763db6a7"/>
-			</rectangle>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement positionType="Float" stretchType="RelativeToTallestObject" isPrintRepeatedValues="false" x="0" y="0" width="200" height="20" isPrintWhenDetailOverflows="true" uuid="3027565b-da44-410c-9479-29affdc17ad3"/>
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" isPrintRepeatedValues="false" mode="Transparent" x="0" y="0" width="199" height="20" isPrintWhenDetailOverflows="true" uuid="3027565b-da44-410c-9479-29affdc17ad3"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<paragraph leftIndent="2"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{anexo}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement positionType="Float" stretchType="RelativeToTallestObject" isPrintRepeatedValues="false" x="200" y="0" width="100" height="20" isPrintWhenDetailOverflows="true" uuid="46574257-dd31-4436-8e52-92c43722adc6"/>
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" isPrintRepeatedValues="false" mode="Transparent" x="199" y="0" width="101" height="20" isPrintWhenDetailOverflows="true" uuid="46574257-dd31-4436-8e52-92c43722adc6"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{tipoAnexo}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement positionType="Float" stretchType="RelativeToTallestObject" isPrintRepeatedValues="false" x="300" y="0" width="140" height="20" isPrintWhenDetailOverflows="true" uuid="f627ab60-079f-4d5a-8e79-481d9df3d4cb"/>
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" isPrintRepeatedValues="false" mode="Transparent" x="300" y="0" width="140" height="20" isPrintWhenDetailOverflows="true" uuid="f627ab60-079f-4d5a-8e79-481d9df3d4cb"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{destino}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement positionType="Float" stretchType="RelativeToTallestObject" isPrintRepeatedValues="false" x="440" y="0" width="115" height="20" isPrintWhenDetailOverflows="true" uuid="21d17f1d-5815-4ae0-9cba-87a3f80774ea"/>
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" isPrintRepeatedValues="false" mode="Transparent" x="440" y="0" width="115" height="20" isPrintWhenDetailOverflows="true" uuid="21d17f1d-5815-4ae0-9cba-87a3f80774ea"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{dataRecebimento}]]></textFieldExpression>
 			</textField>
+			<rectangle>
+				<reportElement positionType="Float" stretchType="RelativeToBandHeight" mode="Transparent" x="0" y="0" width="555" height="20" isPrintWhenDetailOverflows="true" backcolor="#CCCCCC" uuid="0276278d-0425-4842-bae4-53ab7571e5cd"/>
+			</rectangle>
 		</band>
 	</detail>
 </jasperReport>
