@@ -54,7 +54,7 @@ public interface PesquisaCientificaRepository extends CrudRepository<PesquisaCie
 			"    ''      AS telefoneinstituicao, " + 
 			"    ''      AS outrasinstituicoes, " + 
 			"    ci.recibo, " + 
-			"    ci.numeroOficio || TO_CHAR(ci.dataOficio, 'DD/MM/YYYY') AS oficio, " + 
+			"    ci.numeroOficio || ' ' || TO_CHAR(ci.dataOficio, 'DD/MM/YYYY') AS oficio, " + 
 			"    pc.numeroPC  AS fitoteca, " + 
 			"    ci.arquivoTecnico, " + 
 			"    ci.formaEnvio, " + 

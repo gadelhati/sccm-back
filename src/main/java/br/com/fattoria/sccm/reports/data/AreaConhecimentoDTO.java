@@ -18,7 +18,7 @@ public class AreaConhecimentoDTO {
 	private String nome;	
 
 	public AreaConhecimentoDTO(AreaConhecimento areaConhecimento) {
-		this.nome = areaConhecimento.getDescricao();
+		this.nome = areaConhecimento.getNome();
 	}
 	
 	public List<AreaConhecimentoDTO> getListToListDTO(List<AreaConhecimento> lista) {
